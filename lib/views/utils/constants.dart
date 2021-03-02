@@ -18,3 +18,9 @@ class Constants {
   static final int sixtyMinutes = 60;
 }
 
+class HomeScreenConstant {
+  static final String HOME_LABEL = 'Trang chủ';
+  static final String NOTIFICATION_LABEL = 'Thông báo';
+  static final String ACCOUNT_LABEL = 'Tài khoản';
+  static final String NEAR_STORE_TEXT = 'Cửa hàng gần tôi';
+}
