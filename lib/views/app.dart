@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'ui/home.dart';
+import 'ui/search.dart';
 import 'utils/constants.dart';
 
 class CustomerCheapee extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Constants.appTitle,
+      title: Constants.APP_TITLE,
       theme: ThemeData(
         primaryColor: Colors.white,
-        accentColor: AppColors.green2BAE68,
+        accentColor: AppColors.GREEN_2BAE68,
       ),
       initialRoute: '/',
       routes: {

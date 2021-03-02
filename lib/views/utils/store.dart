@@ -37,19 +37,19 @@ class NearStoreWidget extends StatelessWidget {
                       style: CommonWidgetUtils.getCommonTextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.black626262,
+                        color: AppColors.BLACK_626262,
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Text(
-                          Constants.kmDistance.replaceAll(
-                              Constants.replacedNumberVariable,
+                          Constants.KM_DISTANCE.replaceAll(
+                              Constants.REPLACE_NUMBER_VARIABLE,
                               store.getDistance.toString()),
                           style: CommonWidgetUtils.getCommonTextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.greyADADAD,
+                            color: AppColors.GREY_ADADAD,
                             fontSize: 16,
                           ),
                         ),
@@ -57,7 +57,7 @@ class NearStoreWidget extends StatelessWidget {
                           '${CommonUtils.convertMinuteToStringTime(420)}-${CommonUtils.convertMinuteToStringTime(1320)}',
                           style: CommonWidgetUtils.getCommonTextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.greyADADAD,
+                            color: AppColors.GREY_ADADAD,
                             fontSize: 16,
                           ),
                         ),
