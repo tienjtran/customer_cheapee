@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
+import 'package:customer_cheapee/views/ui/search.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -93,8 +94,10 @@ class HomeFragment extends StatefulWidget {
 }
 
 class _HomeFragmentState extends State<HomeFragment> {
-  double contextHeight;
-  double contextWidth;
+  String _result = '';
+
+  double _contextHeight;
+  double _contextWidth;
   List<SuggestedItemModel> suggestingItemList = [
     new SuggestedItemModel(
       imagePath: 'assets/images/coca.jpg',
@@ -158,8 +161,8 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    contextHeight = MediaQuery.of(context).size.height;
-    contextWidth = MediaQuery.of(context).size.width;
+    _contextHeight = MediaQuery.of(context).size.height;
+    _contextWidth = MediaQuery.of(context).size.width;
     return ListView.builder(
       itemBuilder: (context, i) {
         int listIndex = i - 3;
@@ -208,7 +211,7 @@ class _HomeFragmentState extends State<HomeFragment> {
             ],
           ),
           Divider(
-            color: AppColors.greyECECEC,
+            color: AppColors.GREY_ECECEC,
             thickness: 3.0,
             endIndent: 200,
           ),
@@ -219,24 +222,51 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget _buildSearchWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(contextWidth * 0.042, contextHeight * 0.031,
-          contextWidth * 0.042, contextHeight * 0.031),
+      padding: EdgeInsets.fromLTRB(
+          _contextWidth * 0.042,
+          _contextHeight * 0.031,
+          _contextWidth * 0.042,
+          _contextHeight * 0.031),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Container(
-              color: AppColors.greyF0F0F0,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 23.3,
-                    color: Colors.black,
-                  ),
+            child: GestureDetector(
+              child: Container(
+                height: 35.0,
+                color: AppColors.GREY_F0F0F0,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.search,
+                      size: 30.0,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      (_result?.isEmpty ?? true)
+                          ? HomeScreenConstant.SEARCH_EMPTY_SENTENCE
+                          : _result,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: ((_result?.isEmpty ?? true)
+                            ? Colors.grey
+                            : Colors.black),
+                      ),
+                    ),
+                  ],
                 ),
-                style: TextStyle(fontSize: 18.0),
               ),
+              onTap: () async {
+                await showSearch(
+                  context: context,
+                  delegate: SearchScreenDelegate(),
+                ).then((value) => setState(() {
+                      _result = value;
+                    }));
+              },
             ),
           ),
           IconButton(
@@ -244,7 +274,7 @@ class _HomeFragmentState extends State<HomeFragment> {
               Icons.shopping_cart,
               color: Colors.black,
             ),
-            iconSize: contextWidth * 0.1,
+            iconSize: _contextWidth * 0.1,
             onPressed: () {},
           )
         ],
@@ -254,11 +284,11 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget _buildSuggestedWidget(BuildContext context) {
     return Container(
-        color: AppColors.green2BAE68,
+        color: AppColors.GREEN_2BAE68,
         child: Center(
           child: Container(
               height: 210,
-              width: contextWidth,
+              width: _contextWidth,
               margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
               decoration: BoxDecoration(
                 color: Colors.white,

@@ -1,5 +1,3 @@
-import 'package:matcher/matcher.dart';
-
 class SuggestedItemModel {
   String imagePath;
   String text;
