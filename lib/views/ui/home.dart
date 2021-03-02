@@ -1,10 +1,10 @@
 import 'package:customer_cheapee/models/store.dart';
-import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
+import 'package:customer_cheapee/views/models/output/home.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +12,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  double contextHeight;
+  double contextWidth;
+  String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
+
   static const List<Widget> _fragmentOptions = <Widget>[
     HomeFragment(),
     Text(
@@ -32,8 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+    contextHeight = MediaQuery.of(context).size.height;
+    contextWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -46,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           iconSize: 30.0,
         ),
-        title: Text('203 Đương Ngô Đình chiểu phường 7 quận 10'),
+        title: Text(positionSearch),
       ),
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
@@ -60,14 +64,15 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(
             Icons.home_outlined,
           ),
-          label: 'Trang chủ',
+          label: HomeScreenConstant.HOME_LABEL,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_outlined),
-          label: 'Thông báo',
+          label: HomeScreenConstant.NOTIFICATION_LABEL,
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), label: 'Tài khoản'),
+            icon: Icon(Icons.person_outline),
+            label: HomeScreenConstant.ACCOUNT_LABEL),
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Theme.of(context).accentColor,
@@ -88,49 +93,101 @@ class HomeFragment extends StatefulWidget {
 }
 
 class _HomeFragmentState extends State<HomeFragment> {
+  double contextHeight;
+  double contextWidth;
+  List<SuggestedItemModel> suggestingItemList = [
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/coca.jpg',
+      text: 'Nước ngọt',
+    ),
+  ];
+  List<Store> storeList = [
+    new Store(
+      name: 'Bách hóa xanh',
+      imagePath:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
+      openTime: 450,
+      closeTime: 1320,
+      distance: 2.1,
+    ),
+    Store(
+      name: 'Bách hóa xanh',
+      imagePath:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
+      openTime: 450,
+      closeTime: 1320,
+      distance: 2.1,
+    ),
+    Store(
+      name: 'Bách hóa xanh',
+      imagePath:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
+      openTime: 450,
+      closeTime: 1320,
+      distance: 2.1,
+    ),
+    Store(
+      name: 'Bách hóa xanh',
+      imagePath:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
+      openTime: 450,
+      closeTime: 1320,
+      distance: 2.1,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    contextHeight = MediaQuery.of(context).size.height;
+    contextWidth = MediaQuery.of(context).size.width;
     return ListView.builder(
       itemBuilder: (context, i) {
+        int listIndex = i - 3;
+        if (listIndex > (storeList.length - 1)) {
+          return null;
+        }
+
         switch (i) {
           case 0:
-            return SearchWidget();
+            return _buildSearchWidget(context);
           case 1:
-            return SuggestedCategoryWidget();
+            return _buildSuggestedWidget(context);
           case 2:
-            return _buildNearStoreText();
+            return _buildNearStoreText(context);
           default:
-            return _buildNearStoreItem(i, context);
+            return _buildNearStoreItem(listIndex, context);
         }
       },
     );
   }
 
   Widget _buildNearStoreItem(int i, BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
-
-    if (i.isOdd)
-      return Divider(
-        indent: contextWidth * 0.031,
-        endIndent: contextWidth * 0.031,
-        thickness: 4.0,
-      );
-    else {
-      return NearStoreWidget(
-        store: Store(
-          name: 'Bách hóa xanh',
-          imagePath:
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-          openTime: 450,
-          closeTime: 1320,
-          distance: 2.1,
-        ),
-      );
-    }
+    return NearStoreWidget(
+      store: storeList[i],
+    );
   }
 
-  Widget _buildNearStoreText() {
+  Widget _buildNearStoreText(context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -138,7 +195,7 @@ class _HomeFragmentState extends State<HomeFragment> {
           Row(
             children: <Widget>[
               Text(
-                "Cửa hàng gần tôi",
+                HomeScreenConstant.NEAR_STORE_TEXT,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               SizedBox(
@@ -159,13 +216,8 @@ class _HomeFragmentState extends State<HomeFragment> {
       ),
     );
   }
-}
 
-class SearchWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+  Widget _buildSearchWidget(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(contextWidth * 0.042, contextHeight * 0.031,
           contextWidth * 0.042, contextHeight * 0.031),
@@ -193,18 +245,14 @@ class SearchWidget extends StatelessWidget {
               color: Colors.black,
             ),
             iconSize: contextWidth * 0.1,
+            onPressed: () {},
           )
         ],
       ),
     );
   }
-}
 
-class SuggestedCategoryWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+  Widget _buildSuggestedWidget(BuildContext context) {
     return Container(
         color: AppColors.green2BAE68,
         child: Center(
@@ -226,16 +274,13 @@ class SuggestedCategoryWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[0],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[1],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[2],
                       ),
                     ],
                   ),
@@ -243,16 +288,13 @@ class SuggestedCategoryWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[3],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[4],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[5],
                       ),
                     ],
                   ),
