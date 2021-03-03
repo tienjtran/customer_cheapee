@@ -16,6 +16,10 @@ class Constants {
   static const String REPLACE_NUMBER_VARIABLE = '{number}';
 
   static const int SIXTY_MINUTES = 60;
+
+  static const String US_REGION = 'en_US';
+
+  static const String INTEGER_NUMBER_PATTERN = "###";
 }
 
 class HomeScreenConstant {
@@ -23,5 +27,5 @@ class HomeScreenConstant {
   static const String NOTIFICATION_LABEL = 'Thông báo';
   static const String ACCOUNT_LABEL = 'Tài khoản';
   static const String NEAR_STORE_TEXT = 'Cửa hàng gần tôi';
-  static const String SEARCH_EMPTY_SENTENCE = 'Bạn đang kiếm gì?';
+  static const String SEARCH_EMPTY_SENTENCE = 'Bạn đang muốn mua gì?';
 }

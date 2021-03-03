@@ -1,6 +1,6 @@
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_cheapee/models/store.dart';
+import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 
 class NearStoreWidget extends StatelessWidget {
