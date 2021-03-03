@@ -1,4 +1,6 @@
+import 'package:customer_cheapee/views/utils/search.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_cheapee/views/models/output/search.dart';
 
 class SearchScreenDelegate extends SearchDelegate {
   String strResult;
@@ -32,9 +34,7 @@ class SearchScreenDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    strResult = query;
-    Navigator.pop(context, strResult);
-    return Container();
+    return ResultSearchScreen();
   }
 
   @override
@@ -50,9 +50,56 @@ class SearchScreenDelegate extends SearchDelegate {
           ),
           onTap: () {
             strResult = resultList[index];
-            Navigator.pop(context, strResult);
+            query = strResult;
+            showResults(context);
           },
         );
+      },
+    );
+  }
+}
+
+class ResultSearchScreen extends StatefulWidget {
+  @override
+  _ResultSearchScreenState createState() => _ResultSearchScreenState();
+}
+
+class _ResultSearchScreenState extends State<ResultSearchScreen> {
+  double _contextHeight;
+  double _contextWidth;
+  List<SearchResultOutputModel> dataResults =
+      List<SearchResultOutputModel>.generate(10, (index) {
+    return new SearchResultOutputModel(
+      imagePath: 'assets/images/rau-ma.jpg',
+      name: 'Rau chân vịt ${index}',
+      category: 'Thức ăn',
+      daysLeft: 5,
+      currentPrice: 120000,
+      oldPrice: 80000,
+      isLike: true,
+    );
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    _contextHeight = MediaQuery.of(context).size.height;
+    _contextWidth = MediaQuery.of(context).size.width;
+    return ListView.builder(
+      itemBuilder: (context, i) {
+        if (i.isOdd) {
+          return Divider(
+            indent: _contextHeight * 0.031,
+            endIndent: _contextWidth * 0.031,
+            thickness: 2.5,
+          );
+        } else {
+          final index = i ~/ 2;
+          if (index >= dataResults.length) {
+            return null;
+          }
+          SearchResultOutputModel model = dataResults[index];
+          return SearchResultItemWidget(model);
+        }
       },
     );
   }

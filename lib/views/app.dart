@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'ui/home.dart';
-import 'ui/search.dart';
 import 'utils/constants.dart';
 
 class CustomerCheapee extends StatelessWidget {

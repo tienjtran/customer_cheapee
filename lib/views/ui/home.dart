@@ -1,4 +1,4 @@
-import 'package:customer_cheapee/models/store.dart';
+import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
