@@ -12,8 +12,9 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _close() {
-    Navigator.pop(context);
-  }
+      Navigator.pop(context);
+    }
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -75,10 +76,10 @@ class ConfirmOrder extends StatelessWidget {
     MoneyFormatterOutput mfo = new FlutterMoneyFormatter(
         amount: order.getTotal,
         settings: MoneyFormatterSettings(
-          symbol: 'VND',
+          symbol: 'đ',
           thousandSeparator: '.',
           decimalSeparator: ',',
-          symbolAndNumberSeparator: ' ',
+          symbolAndNumberSeparator: '',
           fractionDigits: 0,
         )).output;
     return Column(
@@ -100,7 +101,19 @@ class ConfirmOrder extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(order.getQuantity.toString() + ' sản phẩm'),
-            Text('Tổng cộng: ' + mfo.symbolOnRight),
+            Container(
+              child: Row(
+                children: [
+                  Text('Tổng cộng: '),
+                  Text(
+                    mfo.symbolOnLeft,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
         const Divider(
