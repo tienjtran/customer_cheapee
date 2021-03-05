@@ -31,12 +31,7 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 40),
               child: Row(
                 children: [
-                  Text(
-                    'Order',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
+                  Text('Order'),
                 ],
               ),
             ),
@@ -47,44 +42,68 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(CupertinoIcons.clock),
+                      icon: Icon(
+                        CupertinoIcons.clock,
+                        color: Colors.black,
+                      ),
                       onPressed: null,
                       iconSize: 50,
                     ),
-                    Text('Chờ xác nhận'),
+                    Text(
+                      'Chờ xác nhận',
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.directions_bike_outlined),
+                      icon: Icon(
+                        Icons.directions_bike_outlined,
+                        color: Colors.black,
+                      ),
                       onPressed: null,
                       iconSize: 50,
                     ),
-                    Text('Chờ lấy hàng'),
+                    Text(
+                      'Chờ lấy hàng',
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.shopping_basket_outlined),
+                      icon: Icon(
+                        Icons.shopping_basket_outlined,
+                        color: Colors.black,
+                      ),
                       onPressed: null,
                       iconSize: 50,
                     ),
-                    Text('Chờ thanh toán'),
+                    Text(
+                      'Chờ thanh toán',
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ],
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.history),
+                      icon: Icon(
+                        Icons.history,
+                        color: Colors.black,
+                      ),
                       onPressed: null,
                       iconSize: 50,
                     ),
-                    Text('Lịch sử mua hàng'),
+                    Text(
+                      'Lịch sử',
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ],
                 ),
               ],
@@ -133,12 +152,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             Container(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Text(
-                                'Cửa hàng yêu thích',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
+                              child: Text('Cửa hàng yêu thích'),
                             )
                           ],
                         ),
@@ -168,7 +182,6 @@ class ProfileScreen extends StatelessWidget {
                               child: Text(
                                 'Đăng xuất',
                                 style: TextStyle(
-                                  fontSize: 20,
                                   color: Colors.red,
                                 ),
                               ),
