@@ -2,30 +2,59 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color GREY_F0F0F0 = Color(0xfff0f0f0);
+
   static const Color GREY_ECECEC = Color(0xffececec);
+
   static const Color GREEN_2BAE68 = Color(0xff2bae68);
+
   static const Color GREY_ADADAD = Color(0xffadadad);
+
   static const Color BLACK_626262 = Color(0xff626262);
+
+  static const Color GREY_424242 = Color(0xff424242);
 }
 
 class Constants {
-  static const String APP_TITLE = "Cheappe";
+  static const String appTitle = "Cheappe";
 
-  static const String KM_DISTANCE = "{number} km";
+  static const double appBarFontSize = 23;
 
-  static const String REPLACE_NUMBER_VARIABLE = '{number}';
+  static const String kmDistance = "{number} km";
 
-  static const int SIXTY_MINUTES = 60;
+  static const String replaceNubmerVariable = '{number}';
 
-  static const String US_REGION = 'en_US';
+  static const int sixtyMinutes = 60;
 
-  static const String INTEGER_NUMBER_PATTERN = "###";
+  static const String usRegion = 'en_US';
+
+  static const String integerNumberPattern = "###,000";
+
+  static const String no = 'Không';
+
+  static const String accept = 'Đồng ý';
+
+  static const String beforeRemoveSentence =
+      'Bạn có chắc muốn bỏ sản phẩm này?';
+
+  static const String order = 'Đặt hàng';
+
+  static const String total = 'Tổng tiền';
 }
 
 class HomeScreenConstant {
-  static const String HOME_LABEL = 'Trang chủ';
-  static const String NOTIFICATION_LABEL = 'Thông báo';
-  static const String ACCOUNT_LABEL = 'Tài khoản';
-  static const String NEAR_STORE_TEXT = 'Cửa hàng gần tôi';
-  static const String SEARCH_EMPTY_SENTENCE = 'Bạn đang muốn mua gì?';
+  static const String homeLabel = 'Trang chủ';
+
+  static const String noticationLabel = 'Thông báo';
+
+  static const String accountLabel = 'Tài khoản';
+
+  static const String nearStoreText = 'Cửa hàng gần tôi';
+
+  static const String searchEmptySentence = 'Bạn đang muốn mua gì?';
+}
+
+class NamedRoutes {
+  static const String cartRoute = '/cart';
+
+  static const String homeRoute = '/';
 }

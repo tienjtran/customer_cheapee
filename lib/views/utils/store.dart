@@ -44,8 +44,8 @@ class NearStoreWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Text(
-                          Constants.KM_DISTANCE.replaceAll(
-                              Constants.REPLACE_NUMBER_VARIABLE,
+                          Constants.kmDistance.replaceAll(
+                              Constants.replaceNubmerVariable,
                               store.getDistance.toString()),
                           style: CommonWidgetUtils.getCommonTextStyle(
                             fontWeight: FontWeight.bold,

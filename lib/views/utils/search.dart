@@ -95,7 +95,8 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
               Row(
                 children: [
                   Text(
-                    'đ ${CommonUtils.convertDoubleToIntegerString(this.widget._model.currentPrice)}',
+                    CommonUtils.convertDoubleToMoney(
+                        this.widget._model.currentPrice),
                     style: TextStyle(
                       color: Theme.of(context).accentColor,
                       fontWeight: FontWeight.bold,
@@ -105,7 +106,8 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
                     width: 30,
                   ),
                   Text(
-                    'đ ${CommonUtils.convertDoubleToIntegerString(this.widget._model.currentPrice)}',
+                    CommonUtils.convertDoubleToMoney(
+                        this.widget._model.oldPrice),
                     style: TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.grey,

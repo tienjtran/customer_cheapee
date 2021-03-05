@@ -64,15 +64,15 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(
             Icons.home_outlined,
           ),
-          label: HomeScreenConstant.HOME_LABEL,
+          label: HomeScreenConstant.homeLabel,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_outlined),
-          label: HomeScreenConstant.NOTIFICATION_LABEL,
+          label: HomeScreenConstant.noticationLabel,
         ),
         BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            label: HomeScreenConstant.ACCOUNT_LABEL),
+            label: HomeScreenConstant.accountLabel),
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Theme.of(context).accentColor,
@@ -197,7 +197,7 @@ class _HomeFragmentState extends State<HomeFragment> {
           Row(
             children: <Widget>[
               Text(
-                HomeScreenConstant.NEAR_STORE_TEXT,
+                HomeScreenConstant.nearStoreText,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               SizedBox(
@@ -246,7 +246,7 @@ class _HomeFragmentState extends State<HomeFragment> {
                     ),
                     Text(
                       (_result?.isEmpty ?? true)
-                          ? HomeScreenConstant.SEARCH_EMPTY_SENTENCE
+                          ? HomeScreenConstant.searchEmptySentence
                           : _result,
                       style: TextStyle(
                         fontSize: 15.0,
@@ -270,15 +270,19 @@ class _HomeFragmentState extends State<HomeFragment> {
           ),
           IconButton(
             icon: Icon(
-              Icons.shopping_cart,
+              Icons.shopping_cart_outlined,
               color: Colors.black,
             ),
             iconSize: _contextWidth * 0.1,
-            onPressed: () {},
+            onPressed: _navigateToCartScreen,
           )
         ],
       ),
     );
+  }
+
+  void _navigateToCartScreen() {
+    Navigator.pushNamed(context, NamedRoutes.cartRoute);
   }
 
   Widget _buildSuggestedWidget(BuildContext context) {
