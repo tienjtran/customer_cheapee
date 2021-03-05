@@ -1,9 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:customer_cheapee/views/ui/order.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    void _openOrderScreen() {
+      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => OrderScreen()));
+    }
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -43,10 +47,10 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: Icon(
-                        CupertinoIcons.clock,
+                        Icons.timer_outlined,
                         color: Colors.black,
                       ),
-                      onPressed: null,
+                      onPressed: _openOrderScreen,
                       iconSize: 50,
                     ),
                     Text(
