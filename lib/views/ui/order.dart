@@ -1,4 +1,5 @@
 import 'package:customer_cheapee/views/models/output/orderModel.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
@@ -73,15 +74,6 @@ class ConfirmOrder extends StatelessWidget {
   }
 
   Widget _orderBuilder(OrderModel order) {
-    MoneyFormatterOutput mfo = new FlutterMoneyFormatter(
-        amount: order.getTotal,
-        settings: MoneyFormatterSettings(
-          symbol: 'đ',
-          thousandSeparator: '.',
-          decimalSeparator: ',',
-          symbolAndNumberSeparator: '',
-          fractionDigits: 0,
-        )).output;
     return Column(
       children: [
         Row(
@@ -106,7 +98,7 @@ class ConfirmOrder extends StatelessWidget {
                 children: [
                   Text('Tổng cộng: '),
                   Text(
-                    mfo.symbolOnLeft,
+                    CommonUtils.convertDoubleToMoney(order.total),
                     style: TextStyle(
                       color: Colors.red,
                     ),
