@@ -1,4 +1,5 @@
 import 'package:customer_cheapee/views/models/output/store.dart';
+import 'package:customer_cheapee/views/ui/profile.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,12 @@ class _HomeScreenState extends State<HomeScreen> {
   double contextWidth;
   String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
 
-  static const List<Widget> _fragmentOptions = <Widget>[
+  static List<Widget> _fragmentOptions = <Widget>[
     HomeFragment(),
     Text(
       'Index 1: Notification',
     ),
-    Text(
-      'Index 2: Account',
-    ),
+    ProfileScreen(),
   ];
 
   int _selectedIndex = 0;
