@@ -1,5 +1,7 @@
+import 'package:customer_cheapee/views/models/output/notification.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
+import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +18,32 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double contextHeight;
   double contextWidth;
-  String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
+  static String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
 
-  static List<Widget> _fragmentOptions = <Widget>[
+  List<Widget> fragmentOptions = <Widget>[
     HomeFragment(),
-    Text(
-      'Index 1: Notification',
-    ),
+    NotificationFragment(),
     ProfileScreen(),
+  ];
+
+  List<Widget> appbarOptions = <Widget>[
+    AppBar(
+      leading: IconButton(
+        icon: Icon(
+          Icons.location_on_outlined,
+          color: Colors.black,
+        ),
+        iconSize: 20,
+      ),
+      title: Text(
+        positionSearch,
+        style: TextStyle(fontSize: Constants.appBarFontSize),
+      ),
+    ),
+    AppBar(
+      title: Text('Thông báo'),
+    ),
+    null,
   ];
 
   int _selectedIndex = 0;
@@ -41,18 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        toolbarHeight: contextHeight * 0.083,
-        leading: IconButton(
-          icon: Icon(
-            Icons.location_on,
-            color: Colors.black,
-          ),
-          iconSize: 30.0,
-        ),
-        title: Text(positionSearch),
-      ),
-      body: _buildBody(),
+      appBar: buildAppbar(),
+      body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
@@ -80,8 +90,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildBody() {
-    return _fragmentOptions.elementAt(this._selectedIndex);
+  Widget buildBody() {
+    return fragmentOptions.elementAt(this._selectedIndex);
+  }
+
+  Widget buildAppbar() {
+    return appbarOptions.elementAt(this._selectedIndex);
+  }
+}
+
+class NotificationFragment extends StatelessWidget {
+  NotificationFragment({Key key}) : super(key: key);
+
+  List<NotificationItemOutputModel> modelList = List<
+          NotificationItemOutputModel>.generate(
+      10,
+      (index) => new NotificationItemOutputModel(
+          'Đơn hàng đã hoàn tất',
+          'Đơn hàng tại bách hóa xanh Le văn việt đã hoàn tất cảm ơn các bạn đã chọn Cheapê cho hôm nay',
+          '10 phút trước'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index.isOdd) {
+            return Divider(
+              thickness: 1,
+              indent: 50,
+              endIndent: 50,
+            );
+          }
+          int position = index ~/ 2;
+
+          if (position >= modelList.length) {
+            return null;
+          }
+
+          return NotificationItemWidget(
+            model: modelList[position],
+          );
+        },
+      ),
+    );
   }
 }
 

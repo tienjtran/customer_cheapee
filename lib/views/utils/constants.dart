@@ -12,12 +12,14 @@ class AppColors {
   static const Color BLACK_626262 = Color(0xff626262);
 
   static const Color GREY_424242 = Color(0xff424242);
+
+  static const Color GREY_929292 = Color(0xff929292);
 }
 
 class Constants {
   static const String appTitle = "Cheappe";
 
-  static const double appBarFontSize = 23;
+  static const double appBarFontSize = 18;
 
   static const String kmDistance = "{number} km";
 
