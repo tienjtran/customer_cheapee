@@ -1,6 +1,7 @@
 import 'package:customer_cheapee/views/models/output/notification.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
+import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double contextHeight;
   double contextWidth;
   static String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
+  int quantity = 3;
 
   List<Widget> fragmentOptions = <Widget>[
     HomeFragment(),
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? FloatingActionButton(
               onPressed: _navigateToCartScreen,
               backgroundColor: AppColors.white,
-              child: CartIconWidget(),
+              child: CartIconWidget(quantity),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(
@@ -165,68 +167,76 @@ class HomeFragment extends StatefulWidget {
 }
 
 class _HomeFragmentState extends State<HomeFragment> {
-  String _result = '';
-
+  List<String> promotionImagePath = [
+    'https://vuakhuyenmai.vn/wp-content/uploads/2021/01/vinmart-khuyen-mai-50off-5-1-2021.jpg',
+    'https://www.bigc.vn/files/banners/2020/november/december/si-u-sale-1212-cover-blog-big-c.png',
+    'https://cdn.tgdd.vn/Files/2020/05/19/1256620/tung-bung-khai-truong-sieu-thi-bach-hoa-xanh-online-tai-buon-ma-thuot-mua-hang-giam-gia-len-den-50-202005251049459813.png',
+  ];
+  String _result;
   double _contextHeight;
   double _contextWidth;
   List<SuggestedItemModel> suggestingItemList = [
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://photosfine.files.wordpress.com/2012/04/white-background-fruit-and-vegetables-2.jpg',
+      text: 'Rau củ',
     ),
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://bizweb.dktcdn.net/thumb/1024x1024/100/391/207/products/500mlrevive.jpg?v=1606706069087',
+      text: 'Giải khát',
     ),
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://nguoivietkhoedep.net/wp-content/uploads/2020/05/thitcatuoi_hhuu_thumb-300x291.jpg',
+      text: 'Tươi sống',
     ),
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://media1.nguoiduatin.vn/media/nguyen-hoang-yen/2019/05/03/do-hop-ha-long.jpg',
+      text: 'Đồ hộp',
     ),
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://shelbyreport.nyc3.cdn.digitaloceanspaces.com/wp-content/uploads/2018/08/PRO-SNICKERS.jpg',
+      text: 'Bánh kẹo',
     ),
     new SuggestedItemModel(
-      imagePath: 'assets/images/coca.jpg',
-      text: 'Nước ngọt',
+      imagePath:
+          'https://anh.eva.vn/upload/3-2018/images/2018-08-03/an-qua-nhieu-trai-cay-khong-tot-nhung-an-5-loai-qua-nay-cang-nhieu-cang-tot-cho-suc-khoe-trai-cay1-15331132143471276157929-1533265891-782-width600height450.jpg',
+      text: 'Trái cây',
     ),
   ];
   List<Store> storeList = [
     new Store(
-      name: 'Bách hóa xanh',
+      name: 'Bách hóa xanh Lê Văn Việt',
       imagePath:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
       openTime: 450,
       closeTime: 1320,
-      distance: 2.1,
+      distance: 1.1,
     ),
     Store(
-      name: 'Bách hóa xanh',
-      imagePath:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-      openTime: 450,
-      closeTime: 1320,
-      distance: 2.1,
+      name: 'Vinmart Man Thiện',
+      imagePath: 'https://cf.shopee.vn/file/270eae8e452c431ec9689d4deb109f1b',
+      openTime: 480,
+      closeTime: 1380,
+      distance: 2.0,
     ),
     Store(
-      name: 'Bách hóa xanh',
-      imagePath:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-      openTime: 450,
-      closeTime: 1320,
-      distance: 2.1,
+      name: 'Familymart khu công nghệ cao',
+      imagePath: 'https://static.ybox.vn/2020/9/2/1599540305734-logo.jpg',
+      openTime: 420,
+      closeTime: 1440,
+      distance: 3.1,
     ),
     Store(
-      name: 'Bách hóa xanh',
+      name: 'Bách hóa xanh xa lộ Hà Nội',
       imagePath:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
       openTime: 450,
       closeTime: 1320,
-      distance: 2.1,
+      distance: 3.5,
     ),
   ];
 
@@ -236,32 +246,34 @@ class _HomeFragmentState extends State<HomeFragment> {
     _contextWidth = MediaQuery.of(context).size.width;
     return ListView.builder(
       itemBuilder: (context, i) {
-        int listIndex = i - 3;
+        int listIndex = i - 4;
         if (listIndex > (storeList.length - 1)) {
           return null;
         }
 
         switch (i) {
           case 0:
-            return _buildSearchWidget(context);
+            return buildSearchWidget(context);
           case 1:
-            return _buildSuggestedWidget(context);
+            return buildPromotioncarousel(context);
           case 2:
-            return _buildNearStoreText(context);
+            return buildSuggestedWidget(context);
+          case 3:
+            return buildNearStoreText(context);
           default:
-            return _buildNearStoreItem(listIndex, context);
+            return buildNearStoreItem(listIndex, context);
         }
       },
     );
   }
 
-  Widget _buildNearStoreItem(int i, BuildContext context) {
+  Widget buildNearStoreItem(int i, BuildContext context) {
     return NearStoreWidget(
       store: storeList[i],
     );
   }
 
-  Widget _buildNearStoreText(context) {
+  Widget buildNearStoreText(context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -293,13 +305,9 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
-  Widget _buildSearchWidget(BuildContext context) {
+  Widget buildSearchWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(
-          _contextWidth * 0.042,
-          _contextHeight * 0.031,
-          _contextWidth * 0.042,
-          _contextHeight * 0.031),
+      padding: EdgeInsets.only(top: 15, left: 10, right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -343,7 +351,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
-  Widget _buildSuggestedWidget(BuildContext context) {
+  Widget buildSuggestedWidget(BuildContext context) {
     return Container(
         color: AppColors.strongGreen,
         child: Center(
@@ -393,10 +401,35 @@ class _HomeFragmentState extends State<HomeFragment> {
               )),
         ));
   }
+
+  Widget buildPromotioncarousel(BuildContext context) {
+    return SizedBox(
+      height: 200.0,
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 15,
+          bottom: 15,
+        ),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            if (index < promotionImagePath.length) {
+              return HomePromotionWidget(
+                imagePath: promotionImagePath[index],
+              );
+            }
+            return null;
+          },
+        ),
+      ),
+    );
+  }
 }
 
 class CartIconWidget extends StatelessWidget {
-  const CartIconWidget({Key key}) : super(key: key);
+  CartIconWidget(this.quantity);
+
+  int quantity;
 
   @override
   Widget build(BuildContext context) {
@@ -425,7 +458,7 @@ class CartIconWidget extends StatelessWidget {
                 color: AppColors.lightGreen,
               ),
               child: Text(
-                '2',
+                quantity.toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
