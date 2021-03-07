@@ -14,7 +14,7 @@ class NearStoreWidget extends StatelessWidget {
     double contextWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.fromLTRB(17, 10, 17, 10),
-      height: 75,
+      height: 80,
       child: Column(
         children: <Widget>[
           Row(
@@ -28,16 +28,17 @@ class NearStoreWidget extends StatelessWidget {
               ),
               Container(
                 width: contextWidth * 0.5,
+                height: 50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
                       store.name,
                       style: CommonWidgetUtils.getCommonTextStyle(
-                        fontSize: 20,
+                        fontSize: AppFontSizes.largeSize,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.BLACK_626262,
+                        color: AppColors.black,
                       ),
                     ),
                     Row(
@@ -49,16 +50,16 @@ class NearStoreWidget extends StatelessWidget {
                               store.getDistance.toString()),
                           style: CommonWidgetUtils.getCommonTextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.GREY_ADADAD,
-                            fontSize: 16,
+                            color: AppColors.strongGrey,
+                            fontSize: AppFontSizes.smallSize,
                           ),
                         ),
                         Text(
                           '${CommonUtils.convertMinuteToStringTime(420)}-${CommonUtils.convertMinuteToStringTime(1320)}',
                           style: CommonWidgetUtils.getCommonTextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.GREY_ADADAD,
-                            fontSize: 16,
+                            color: AppColors.strongGrey,
+                            fontSize: AppFontSizes.smallSize,
                           ),
                         ),
                       ],

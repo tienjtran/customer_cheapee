@@ -44,10 +44,10 @@ class _CartScreenState extends State<CartScreen> {
           onPressed: _onPressArrowBackIos,
         ),
         title: Text(
-          'Cart',
+          Constants.cart,
           style: TextStyle(
-            fontSize: Constants.appBarFontSize,
-            color: AppColors.GREY_424242,
+            fontSize: AppFontSizes.largeSize,
+            color: AppColors.strongGrey,
           ),
         ),
       ),
@@ -63,14 +63,14 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(
                 shopName,
                 style: TextStyle(
-                  color: AppColors.GREY_424242,
-                  fontSize: 17,
+                  color: AppColors.strongGrey,
+                  fontSize: AppFontSizes.largeSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             Divider(
-              color: Colors.grey[400],
+              color: AppColors.lightGrey,
               thickness: 2,
             ),
             Expanded(
@@ -98,7 +98,7 @@ class _CartScreenState extends State<CartScreen> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: AppColors.GREY_ADADAD,
+                    color: AppColors.strongGrey,
                   ),
                 ),
               ),
@@ -113,16 +113,16 @@ class _CartScreenState extends State<CartScreen> {
                         Text(
                           Constants.total + ': ',
                           style: TextStyle(
-                            color: AppColors.GREY_424242,
-                            fontSize: 19,
+                            color: AppColors.strongGrey,
+                            fontSize: AppFontSizes.largeSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           CommonUtils.convertDoubleToMoney(total),
                           style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 19,
+                            color: AppColors.red,
+                            fontSize: AppFontSizes.largeSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -134,7 +134,7 @@ class _CartScreenState extends State<CartScreen> {
                       child: ElevatedButton(
                         child: Text(
                           Constants.order,
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: AppFontSizes.largeSize),
                         ),
                         style: ButtonStyle(
                           backgroundColor:

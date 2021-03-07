@@ -11,8 +11,8 @@ class CustomerCheapee extends StatelessWidget {
       title: Constants.appTitle,
       theme: ThemeData(
         primaryColor: Colors.white,
-        accentColor: AppColors.GREEN_2BAE68,
-        cursorColor: AppColors.GREEN_2BAE68,
+        accentColor: AppColors.strongGreen,
+        cursorColor: AppColors.strongGreen,
       ),
       initialRoute: NamedRoutes.homeRoute,
       routes: {

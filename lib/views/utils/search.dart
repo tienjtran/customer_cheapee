@@ -1,5 +1,6 @@
 import 'package:customer_cheapee/views/models/output/search.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class SearchResultItemWidget extends StatefulWidget {
@@ -49,13 +50,13 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
                         (this.widget._model.isLike)
                             ? Icons.favorite
                             : Icons.favorite_border,
-                        color: Colors.red,
+                        color: AppColors.red,
                         size: 18),
                     onPressed: _onPressedFavoritedIcon,
                   ),
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   shape: BoxShape.circle,
                 ),
                 width: 25,
@@ -71,7 +72,9 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
             children: [
               Text(
                 this.widget._model.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppFontSizes.largeSize),
               ),
               SizedBox(
                 height: 5,
@@ -110,8 +113,8 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
                         this.widget._model.oldPrice),
                     style: TextStyle(
                         decoration: TextDecoration.lineThrough,
-                        color: Colors.grey,
-                        fontSize: 15),
+                        color: AppColors.strongGrey,
+                        fontSize: AppFontSizes.mediumSize),
                   ),
                 ],
               )

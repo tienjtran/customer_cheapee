@@ -36,7 +36,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
           child: Text(
             Constants.no,
             style: TextStyle(
-              color: Colors.grey,
+              color: AppColors.strongGrey,
             ),
           ),
         ),
@@ -69,7 +69,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               value: this.widget.model.checked,
               onChanged: onChangedCheckBox,
               activeColor: Theme.of(context).accentColor,
-              checkColor: Colors.white,
+              checkColor: AppColors.white,
             ),
           ),
           Image.asset(
@@ -87,14 +87,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   this.widget.model.name,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: AppFontSizes.mediumSize,
                   ),
                 ),
                 Text(
                   CommonUtils.convertDoubleToMoney(this.widget.model.oldPrice),
                   style: TextStyle(
-                    color: AppColors.GREY_ADADAD,
-                    fontSize: 16,
+                    color: AppColors.lightGrey,
+                    fontSize: AppFontSizes.smallSize,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
@@ -102,9 +102,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   CommonUtils.convertDoubleToMoney(
                       this.widget.model.currentPrice),
                   style: TextStyle(
-                    color: Colors.red,
+                    color: AppColors.red,
                     fontWeight: FontWeight.w800,
-                    fontSize: 16,
+                    fontSize: AppFontSizes.smallSize,
                   ),
                 ),
                 SizedBox(
@@ -113,8 +113,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 Text(
                   'Còn ${this.widget.model.leftDays} ngày',
                   style: TextStyle(
-                    fontSize: 18,
-                    color: AppColors.GREY_424242,
+                    fontSize: AppFontSizes.smallSize,
+                    color: AppColors.strongGrey,
                   ),
                 ),
               ],
@@ -139,10 +139,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       ),
                       width: 30,
                       child: Center(
-                        child: Icon(
-                          Icons.remove,
-                          color: Colors.white,
-                        ),
+                        child: Icon(Icons.remove, color: Colors.white),
                       ),
                     ),
                     onTap: () {
@@ -158,7 +155,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   ),
                   Expanded(
                     child: Container(
-                      color: Colors.grey.shade100,
+                      color: AppColors.lightGrey,
                       child: Center(
                         child: TextFormField(
                           key: Key(this.widget.model.quantity.toString()),
@@ -169,7 +166,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
                           ],
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: AppFontSizes.largeSize,
                             fontWeight: FontWeight.bold,
                           ),
                           decoration: new InputDecoration(
@@ -197,7 +194,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       child: Center(
                         child: Icon(
                           Icons.add,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),
