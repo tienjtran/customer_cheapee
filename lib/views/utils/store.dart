@@ -13,7 +13,7 @@ class NearStoreWidget extends StatelessWidget {
     double contextHeight = MediaQuery.of(context).size.height;
     double contextWidth = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.fromLTRB(17, 10, 17, 10),
+      margin: EdgeInsets.fromLTRB(17, 5, 17, 5),
       height: 80,
       child: Column(
         children: <Widget>[
@@ -35,9 +35,10 @@ class NearStoreWidget extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       store.name,
+                      overflow: TextOverflow.ellipsis,
                       style: CommonWidgetUtils.getCommonTextStyle(
                         fontSize: AppFontSizes.largeSize,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w400,
                         color: AppColors.black,
                       ),
                     ),
@@ -49,7 +50,6 @@ class NearStoreWidget extends StatelessWidget {
                               Constants.replaceNubmerVariable,
                               store.getDistance.toString()),
                           style: CommonWidgetUtils.getCommonTextStyle(
-                            fontWeight: FontWeight.bold,
                             color: AppColors.strongGrey,
                             fontSize: AppFontSizes.smallSize,
                           ),
@@ -57,7 +57,6 @@ class NearStoreWidget extends StatelessWidget {
                         Text(
                           '${CommonUtils.convertMinuteToStringTime(420)}-${CommonUtils.convertMinuteToStringTime(1320)}',
                           style: CommonWidgetUtils.getCommonTextStyle(
-                            fontWeight: FontWeight.bold,
                             color: AppColors.strongGrey,
                             fontSize: AppFontSizes.smallSize,
                           ),
@@ -80,7 +79,7 @@ class NearStoreWidget extends StatelessWidget {
           Divider(
             indent: contextWidth * 0.031,
             endIndent: contextWidth * 0.031,
-            thickness: 3.5,
+            thickness: 2,
           ),
         ],
       ),

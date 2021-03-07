@@ -10,7 +10,7 @@ class NamingCategoryWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           IconButton(
-            icon: Image.asset(outputModel.getImagePath),
+            icon: Image.network(outputModel.getImagePath),
             iconSize: 50,
           ),
           Text(outputModel.getText),
