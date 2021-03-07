@@ -29,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.strongGreen,
                   radius: 40,
                 ),
                 Container(
@@ -60,7 +60,7 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.timer_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       onPressed: _navigateToConfirmOrderScreen,
                       iconSize: 30,
@@ -77,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.directions_bike_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       onPressed: _navigateToWaitToCollectScreen,
                       iconSize: 30,
@@ -94,7 +94,7 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.shopping_basket_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       onPressed: _navigateToWaitForPaymentScreen,
                       iconSize: 30,
@@ -111,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.history,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
                       onPressed: _navigateToOrderHistoryScreen,
                       iconSize: 30,
@@ -151,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                   Row(
@@ -177,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                   Row(
@@ -191,14 +191,14 @@ class ProfileScreen extends StatelessWidget {
                             Icon(
                               Icons.logout,
                               size: 30,
-                              color: Colors.red,
+                              color: AppColors.red,
                             ),
                             Container(
                               padding: const EdgeInsets.only(left: 20),
                               child: Text(
                                 'Đăng xuất',
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: AppColors.red,
                                 ),
                               ),
                             )
@@ -207,12 +207,12 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: Colors.red,
+                        color: AppColors.red,
                       ),
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                 ],
