@@ -9,48 +9,47 @@ class NotificationItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 60,
-        child: Flexible(
-          child: Row(
-            children: [
-              Container(
-                width: 30,
-                child: Center(
-                  child: Icon(Icons.mail_outline),
-                ),
-              ),
-              VerticalDivider(
-                thickness: 2,
-                color: AppColors.GREY_ADADAD,
-                width: 30,
-              ),
-              Expanded(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        model.status,
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        model.content,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: AppColors.GREY_929292,
-                        ),
-                      ),
-                      Text(model.time),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      height: 60,
+      child: Row(
+        children: [
+          Container(
+            width: 30,
+            child: Center(
+              child: Icon(Icons.mail_outline),
+            ),
           ),
-        ));
+          VerticalDivider(
+            thickness: 2,
+            color: AppColors.lightGrey,
+            width: 30,
+          ),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    model.status,
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    model.content,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.strongGrey,
+                    ),
+                  ),
+                  Text(model.time),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

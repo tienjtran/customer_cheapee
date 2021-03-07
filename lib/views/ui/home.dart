@@ -9,6 +9,7 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/ui/search.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,13 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         icon: Icon(
           Icons.location_on_outlined,
-          color: Colors.black,
+          color: AppColors.black,
         ),
         iconSize: 20,
       ),
       title: Text(
         positionSearch,
-        style: TextStyle(fontSize: Constants.appBarFontSize),
+        style: TextStyle(fontSize: AppFontSizes.largeSize),
       ),
     ),
     AppBar(
@@ -64,7 +65,25 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: buildAppbar(),
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: _navigateToCartScreen,
+              backgroundColor: AppColors.white,
+              child: CartIconWidget(),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    5,
+                  ),
+                ),
+              ),
+            )
+          : null,
     );
+  }
+
+  void _navigateToCartScreen() {
+    Navigator.pushNamed(context, NamedRoutes.cartRoute);
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {
@@ -251,7 +270,9 @@ class _HomeFragmentState extends State<HomeFragment> {
             children: <Widget>[
               Text(
                 HomeScreenConstant.nearStoreText,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppFontSizes.largeSize),
               ),
               SizedBox(
                 width: 15.0,
@@ -263,7 +284,7 @@ class _HomeFragmentState extends State<HomeFragment> {
             ],
           ),
           Divider(
-            color: AppColors.GREY_ECECEC,
+            color: AppColors.lightGrey,
             thickness: 3.0,
             endIndent: 200,
           ),
@@ -286,26 +307,22 @@ class _HomeFragmentState extends State<HomeFragment> {
             child: GestureDetector(
               child: Container(
                 height: 35.0,
-                color: AppColors.GREY_F0F0F0,
+                color: AppColors.lightGrey,
                 child: Row(
                   children: <Widget>[
                     Icon(
                       Icons.search,
                       size: 30.0,
-                      color: Colors.black,
+                      color: AppColors.strongGrey,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      (_result?.isEmpty ?? true)
-                          ? HomeScreenConstant.searchEmptySentence
-                          : _result,
+                      HomeScreenConstant.searchEmptySentence,
                       style: TextStyle(
-                        fontSize: 15.0,
-                        color: ((_result?.isEmpty ?? true)
-                            ? Colors.grey
-                            : Colors.black),
+                        fontSize: AppFontSizes.mediumSize,
+                        color: AppColors.strongGrey,
                       ),
                     ),
                   ],
@@ -321,33 +338,21 @@ class _HomeFragmentState extends State<HomeFragment> {
               },
             ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart_outlined,
-              color: Colors.black,
-            ),
-            iconSize: _contextWidth * 0.1,
-            onPressed: _navigateToCartScreen,
-          )
         ],
       ),
     );
   }
 
-  void _navigateToCartScreen() {
-    Navigator.pushNamed(context, NamedRoutes.cartRoute);
-  }
-
   Widget _buildSuggestedWidget(BuildContext context) {
     return Container(
-        color: AppColors.GREEN_2BAE68,
+        color: AppColors.strongGreen,
         child: Center(
           child: Container(
               height: 210,
               width: _contextWidth,
               margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
@@ -387,5 +392,50 @@ class _HomeFragmentState extends State<HomeFragment> {
                 ],
               )),
         ));
+  }
+}
+
+class CartIconWidget extends StatelessWidget {
+  const CartIconWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        child: Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              child: Icon(
+                FlutterIcons.bag_sli,
+                size: 35,
+                color: AppColors.strongGrey,
+              ),
+              margin: EdgeInsets.all(
+                5,
+              ),
+            ),
+            Container(
+              width: 15,
+              height: 15,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(2),
+                ),
+                color: AppColors.lightGreen,
+              ),
+              child: Text(
+                '2',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontSize: AppFontSizes.smallSize,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

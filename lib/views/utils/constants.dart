@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color GREY_F0F0F0 = Color(0xfff0f0f0);
+  static const Color strongGreen = Color(0xff2bae68);
 
-  static const Color GREY_ECECEC = Color(0xffececec);
+  static const Color lightGreen = Color(0xffc8e6c9);
 
-  static const Color GREEN_2BAE68 = Color(0xff2bae68);
+  static const Color strongGrey = Color(0xff616161);
 
-  static const Color GREY_ADADAD = Color(0xffadadad);
+  static const Color lightGrey = Color(0xffd6d6d6);
 
-  static const Color BLACK_626262 = Color(0xff626262);
+  static const Color black = Colors.black;
 
-  static const Color GREY_424242 = Color(0xff424242);
+  static const Color white = Colors.white;
 
-  static const Color GREY_929292 = Color(0xff929292);
+  static const Color red = Colors.red;
+}
+
+class AppFontSizes {
+  static const double smallSize = 12;
+  static const double mediumSize = 15;
+  static const double largeSize = 18;
 }
 
 class Constants {
-  static const String appTitle = "Cheappe";
+  static const String cart = 'Giỏ hàng';
 
-  static const double appBarFontSize = 18;
+  static const String appTitle = "Cheappe";
 
   static const String kmDistance = "{number} km";
 

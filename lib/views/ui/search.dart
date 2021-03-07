@@ -1,3 +1,4 @@
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/search.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/models/output/search.dart';
@@ -91,6 +92,7 @@ class _ResultSearchScreenState extends State<ResultSearchScreen> {
             indent: _contextHeight * 0.031,
             endIndent: _contextWidth * 0.031,
             thickness: 2.5,
+            color: AppColors.lightGrey,
           );
         } else {
           final index = i ~/ 2;
