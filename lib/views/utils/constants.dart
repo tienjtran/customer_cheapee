@@ -65,4 +65,6 @@ class NamedRoutes {
   static const String cartRoute = '/cart';
 
   static const String homeRoute = '/';
+
+  static const String orderRoute = '/order';
 }

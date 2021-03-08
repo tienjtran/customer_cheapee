@@ -13,13 +13,20 @@ List<String> _tabList = [
 class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //Set initialIndex for DefaultTabController
+    int index = ModalRoute.of(context).settings.arguments;
+    if (index == null) {
+      index = 0;
+    }
+
+    //Create _close method
     void _close() {
       Navigator.pop(context);
     }
 
     return DefaultTabController(
       length: 4,
-      initialIndex: 0,
+      initialIndex: index,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(

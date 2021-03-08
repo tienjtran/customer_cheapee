@@ -1,23 +1,35 @@
-import 'package:customer_cheapee/views/ui/order.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    void _openOrderScreen() {
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => OrderScreen()));
+    void _navigateToConfirmOrderScreen() {
+      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 0);
+    }
+
+    void _navigateToWaitToCollectScreen() {
+      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 1);
+    }
+
+    void _navigateToWaitForPaymentScreen() {
+      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 2);
+    }
+
+    void _navigateToOrderHistoryScreen() {
+      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 3);
     }
 
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
         child: Column(
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.strongGreen,
                   radius: 40,
                 ),
                 Container(
@@ -48,10 +60,10 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.timer_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
-                      onPressed: _openOrderScreen,
-                      iconSize: 50,
+                      onPressed: _navigateToConfirmOrderScreen,
+                      iconSize: 30,
                     ),
                     Text(
                       'Chờ xác nhận',
@@ -65,10 +77,10 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.directions_bike_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
-                      onPressed: null,
-                      iconSize: 50,
+                      onPressed: _navigateToWaitToCollectScreen,
+                      iconSize: 30,
                     ),
                     Text(
                       'Chờ lấy hàng',
@@ -82,10 +94,10 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.shopping_basket_outlined,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
-                      onPressed: null,
-                      iconSize: 50,
+                      onPressed: _navigateToWaitForPaymentScreen,
+                      iconSize: 30,
                     ),
                     Text(
                       'Chờ thanh toán',
@@ -99,10 +111,10 @@ class ProfileScreen extends StatelessWidget {
                     IconButton(
                       icon: Icon(
                         Icons.history,
-                        color: Colors.black,
+                        color: AppColors.black,
                       ),
-                      onPressed: null,
-                      iconSize: 50,
+                      onPressed: _navigateToOrderHistoryScreen,
+                      iconSize: 30,
                     ),
                     Text(
                       'Lịch sử',
@@ -139,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                   Row(
@@ -165,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                   Row(
@@ -179,14 +191,14 @@ class ProfileScreen extends StatelessWidget {
                             Icon(
                               Icons.logout,
                               size: 30,
-                              color: Colors.red,
+                              color: AppColors.red,
                             ),
                             Container(
                               padding: const EdgeInsets.only(left: 20),
                               child: Text(
                                 'Đăng xuất',
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: AppColors.red,
                                 ),
                               ),
                             )
@@ -195,12 +207,12 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: Colors.red,
+                        color: AppColors.red,
                       ),
                     ],
                   ),
                   Divider(
-                    color: Color.fromRGBO(263, 263, 263, 0.2),
+                    color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
                 ],

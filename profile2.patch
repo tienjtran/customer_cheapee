@@ -1,0 +1,71 @@
+Index: lib/views/ui/profile.dart
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- lib/views/ui/profile.dart	(revision 7d7a58d6749ee731fe9b9c223c30a7ae121288b5)
++++ lib/views/ui/profile.dart	(date 1615021931163)
+@@ -1,11 +1,25 @@
+ import 'package:customer_cheapee/views/ui/order.dart';
++import 'package:customer_cheapee/views/utils/constants.dart';
+ import 'package:flutter/material.dart';
+ 
+ class ProfileScreen extends StatelessWidget {
++  final List<int> _tabIndexList = [
++    0, 1, 2, 3
++  ];
++
+   @override
+   Widget build(BuildContext context) {
+-    void _openOrderScreen() {
+-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => OrderScreen()));
++    void _navigateToConfirmOrderScreen() {
++      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: _tabIndexList[0]);
++    }
++    void _navigateToWaitToCollectScreen() {
++      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: _tabIndexList[1]);
++    }
++    void _navigateToWaitForPaymentScreen() {
++      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: _tabIndexList[2]);
++    }
++    void _navigateToOrderHistoryScreen() {
++      Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: _tabIndexList[3]);
+     }
+ 
+     return Scaffold(
+@@ -50,7 +64,7 @@
+                         Icons.timer_outlined,
+                         color: Colors.black,
+                       ),
+-                      onPressed: _openOrderScreen,
++                      onPressed: _navigateToConfirmOrderScreen,
+                       iconSize: 50,
+                     ),
+                     Text(
+@@ -67,7 +81,7 @@
+                         Icons.directions_bike_outlined,
+                         color: Colors.black,
+                       ),
+-                      onPressed: null,
++                      onPressed: _navigateToWaitToCollectScreen,
+                       iconSize: 50,
+                     ),
+                     Text(
+@@ -84,7 +98,7 @@
+                         Icons.shopping_basket_outlined,
+                         color: Colors.black,
+                       ),
+-                      onPressed: null,
++                      onPressed: _navigateToWaitForPaymentScreen,
+                       iconSize: 50,
+                     ),
+                     Text(
+@@ -101,7 +115,7 @@
+                         Icons.history,
+                         color: Colors.black,
+                       ),
+-                      onPressed: null,
++                      onPressed: _navigateToOrderHistoryScreen,
+                       iconSize: 50,
+                     ),
+                     Text(
