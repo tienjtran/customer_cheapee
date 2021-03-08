@@ -67,4 +67,6 @@ class NamedRoutes {
   static const String homeRoute = '/';
 
   static const String orderRoute = '/order';
+
+  static const String loginRoute = '/login';
 }
