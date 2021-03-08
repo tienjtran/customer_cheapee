@@ -1,6 +1,7 @@
 import 'package:customer_cheapee/views/models/output/orderModel.dart';
 import 'package:customer_cheapee/views/models/output/product.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 List<String> _tabList = [
@@ -69,40 +70,95 @@ class OrderScreen extends StatelessWidget {
 class ConfirmOrder extends StatelessWidget {
   final List<OrderModel> orderModelList = [
     new OrderModel(
+      '1AK39FHX71N319A',
       'Bách hoá xanh Lã Xuân Oai',
-      2,
       1000000,
       'assets/images/bachhoaxanh.jpg',
-      new ProductModel(1, 'Thùng sữa Milo 24 lon', 600000, 400000, 3,
-          'assets/images/milo.jpg'),
+      List<ProductModel>.from([
+        new ProductModel(1, 'Thùng sữa Milo 24 lon', 600000, 400000, 3,
+            'assets/images/milo.jpg'),
+        new ProductModel(2, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+      ]),
+      List<int>.from([1, 1]),
+      new DateTime.utc(2021, 01, 26, 10, 59),
+      new DateTime.utc(2021, 03, 01, 10, 59),
     ),
     new OrderModel(
+      '2JAKX91L48N247Z',
       'GS 25 Lê Văn Việt',
-      3,
       1800000,
       'assets/images/gs25.jpg',
-      new ProductModel(2, 'Thùng nước ngọt Pepsi 24 lon', 600000, 400000, 4,
-          'assets/images/pepsi.png'),
+      List<ProductModel>.from([
+        new ProductModel(1, 'Thùng nước ngọt Pepsi 24 lon', 600000, 400000, 4,
+            'assets/images/pepsi.png'),
+        new ProductModel(2, 'Thùng sữa Milo 24 lon', 600000, 400000, 3,
+            'assets/images/milo.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+        new ProductModel(3, 'Thùng trà ô long Tea+ 24 chai', 800000, 600000, 7,
+            'assets/images/tea+.jpg'),
+      ]),
+      List<int>.from([1, 2, 1, 1, 1, 1, 1, 1]),
+      new DateTime.utc(2021, 02, 20, 11, 59),
+      new DateTime.utc(2021, 03, 01, 10, 59),
     ),
     new OrderModel(
+      '9DJ37DN8IMK2748',
       'GS 25 Lê Văn Việt',
-      7,
-      5500000,
+      1600000,
       'assets/images/gs25.jpg',
-      new ProductModel(2, 'Thùng nước ngọt Pepsi 24 lon', 600000, 400000, 7,
-          'assets/images/pepsi.png'),
+      List<ProductModel>.from([
+        new ProductModel(1, 'Thùng nước ngọt Pepsi 24 lon', 600000, 400000, 4,
+            'assets/images/pepsi.png'),
+      ]),
+      List<int>.from([4]),
+      new DateTime.utc(2021, 01, 10, 16, 59),
+      new DateTime.utc(2021, 03, 01, 10, 59),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    void _navigateToViewOrder0() {
+      Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+          arguments: orderModelList[0]);
+    }
+
+    void _navigateToViewOrder1() {
+      Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+          arguments: orderModelList[1]);
+    }
+
+    void _navigateToViewOrder2() {
+      Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+          arguments: orderModelList[2]);
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          _orderBuilder(orderModelList[0]),
-          _orderBuilder(orderModelList[1]),
-          _orderBuilder(orderModelList[2]),
+          InkWell(
+            child: _orderBuilder(orderModelList[0]),
+            onTap: _navigateToViewOrder0,
+          ),
+          InkWell(
+            child: _orderBuilder(orderModelList[1]),
+            onTap: _navigateToViewOrder1,
+          ),
+          InkWell(
+            child: _orderBuilder(orderModelList[2]),
+            onTap: _navigateToViewOrder2,
+          ),
         ],
       ),
     );
@@ -133,7 +189,7 @@ class ConfirmOrder extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    order.product.imagePath,
+                    order.productList[0].imagePath,
                     height: 70,
                     width: 70,
                   ),
@@ -143,12 +199,12 @@ class ConfirmOrder extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          order.product.getName,
+                          order.productList[0].getName,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
                           CommonUtils.convertDoubleToMoney(
-                              order.product.getPrice),
+                              order.productList[0].getPrice),
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.grey[400],
@@ -157,14 +213,14 @@ class ConfirmOrder extends StatelessWidget {
                         ),
                         Text(
                           CommonUtils.convertDoubleToMoney(
-                              order.product.getDiscountedPrice),
+                              order.productList[0].getDiscountedPrice),
                           style: TextStyle(
                             color: Colors.red,
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
                         Text(
-                          order.product.getRemainingDaysString + ' ngày',
+                          order.productList[0].getRemainingDaysString + ' ngày',
                           style: TextStyle(
                             color: Colors.grey,
                           ),
@@ -177,7 +233,7 @@ class ConfirmOrder extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.all(20),
-              child: Text('x1'),
+              child: Text('x' + order.quantityList[0].toString()),
             ),
           ],
         ),
@@ -209,7 +265,7 @@ class ConfirmOrder extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(order.getQuantity.toString() + ' sản phẩm'),
+            Text(order.productList.length.toString() + ' sản phẩm'),
             Container(
               padding: const EdgeInsets.all(10),
               child: Row(
