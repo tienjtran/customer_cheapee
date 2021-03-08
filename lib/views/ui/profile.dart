@@ -20,6 +20,10 @@ class ProfileScreen extends StatelessWidget {
       Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 3);
     }
 
+    void _navigateToViewProfileScreen() {
+      Navigator.pushNamed(context, NamedRoutes.viewProfileRoute);
+    }
+
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
@@ -128,27 +132,31 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 40),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              size: 30,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Text('Thông tin cá nhân'),
-                            )
-                          ],
+                  GestureDetector(
+                    // * Tap to move to ViewProfile Screen
+                    onTap: _navigateToViewProfileScreen,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.sticky_note_2_outlined,
+                                size: 30,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text('Thông tin cá nhân'),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
+                        Icon(Icons.arrow_forward_ios),
+                      ],
+                    ),
                   ),
                   Divider(
                     color: AppColors.lightGrey,
