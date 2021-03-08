@@ -47,6 +47,10 @@ class Constants {
   static const String order = 'Đặt hàng';
 
   static const String total = 'Tổng tiền';
+
+  static const String addToCart = 'Thêm vào giỏ hàng';
+
+  static const String quantity = 'Số lượng:';
 }
 
 class HomeScreenConstant {
