@@ -1,52 +1,27 @@
+import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 
-class Store {
+class NearStoreOutputModel {
+  String storeName;
   String imagePath;
-  String name;
   double distance;
-  int openTime;
-  int closeTime;
+  List<SuggestedProductModel> productList;
 
-  Store({this.imagePath, this.distance, this.name, this.openTime, this.closeTime});
+  NearStoreOutputModel(
+      this.storeName, this.imagePath, this.distance, this.productList);
 
-  set setDistance(double distance) {
-    this.distance = distance;
-  }
+  double get getDistance => this.distance;
 
-  double get getDistance {
-    return this.distance;
-  }
+  set setDistance(double distance) => this.distance = distance;
 
-  String get getImagePath {
-    return this.imagePath;
-  }
+  String get getImagePath => this.imagePath;
 
-  String get getName {
-    return this.name;
-  }
+  set setImagePath(String imagePath) => this.imagePath = imagePath;
 
-  int get getOpenTime {
-    return this.openTime;
-  }
+  get getStoreName => this.storeName;
 
-  int get getCloseTime {
-    return this.closeTime;
-  }
+  set setStoreName(storeName) => this.storeName = storeName;
 
-  set setImagePath(String imagePath)  {
-    this.imagePath = imagePath;
-  }
+  get getProductList => this.productList;
 
-  set setName(String name)  {
-    this.name = name;
-  }
-
-  set setOpenTime(int time)  {
-    this.openTime = time;
-  }
-
-  set setCloseTime(int time)  {
-    this.closeTime = time;
-  }
-
-
+  set setProductList(productList) => this.productList = productList;
 }

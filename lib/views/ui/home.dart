@@ -1,4 +1,5 @@
 import 'package:customer_cheapee/views/models/output/notification.dart';
+import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
@@ -207,36 +208,155 @@ class _HomeFragmentState extends State<HomeFragment> {
       text: 'Trái cây',
     ),
   ];
-  List<Store> storeList = [
-    new Store(
-      name: 'Bách hóa xanh Lê Văn Việt',
-      imagePath:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-      openTime: 450,
-      closeTime: 1320,
-      distance: 1.1,
+
+  List<NearStoreOutputModel> storeList = [
+    NearStoreOutputModel(
+      'Bách hóa xanh Bình Hưng Hòa',
+      'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg',
+      2.1,
+      [
+        SuggestedProductModel(
+            'Thùng mì hảo hảo',
+            'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+            50,
+            'đ 200.000',
+            'HSD còn 2 tháng'),
+        SuggestedProductModel(
+            'Thùng mì omachi',
+            'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+            70,
+            'đ 100.000',
+            'HSD còn 4 tháng'),
+        SuggestedProductModel(
+            'Thùng mì 3 miền',
+            'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+            80,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+        SuggestedProductModel(
+            'Thùng milo',
+            'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+            70,
+            'đ 180.000',
+            'HSD còn 84 ngày'),
+        SuggestedProductModel(
+            'Thùng 7upa 12 chai 1.5 lít',
+            'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+            20,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+      ],
     ),
-    Store(
-      name: 'Vinmart Man Thiện',
-      imagePath: 'https://cf.shopee.vn/file/270eae8e452c431ec9689d4deb109f1b',
-      openTime: 480,
-      closeTime: 1380,
-      distance: 2.0,
+    NearStoreOutputModel(
+      'Vinmart Man Thiện',
+      'https://isaac.vn/wp-content/uploads/2020/03/vinmart.01.jpg',
+      2.1,
+      [
+        SuggestedProductModel(
+            'Thùng Pepsi',
+            'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
+            50,
+            'đ 200.000',
+            'HSD còn 2 tháng'),
+        SuggestedProductModel(
+            'Nước Dasani 350ml',
+            'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
+            70,
+            'đ 10.000',
+            'HSD còn 4 tháng'),
+        SuggestedProductModel(
+            'Thùng Pepsi không calo',
+            'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
+            80,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+        SuggestedProductModel(
+            'Thùng Mirinda 12 chai 1.5 lít',
+            'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
+            70,
+            'đ 180.000',
+            'HSD còn 84 ngày'),
+        SuggestedProductModel(
+            'Thùng 7upa 12 chai 1.5 lít',
+            'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+            20,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+      ],
     ),
-    Store(
-      name: 'Familymart khu công nghệ cao',
-      imagePath: 'https://static.ybox.vn/2020/9/2/1599540305734-logo.jpg',
-      openTime: 420,
-      closeTime: 1440,
-      distance: 3.1,
+    NearStoreOutputModel(
+      'Circle K Man Thiện',
+      'https://i1.wp.com/discountsandsavings.ca/wp-content/uploads/2020/08/Screenshot_20200805-205026_Chrome.jpg?resize=800%2C341&ssl=1',
+      2.1,
+      [
+        SuggestedProductModel(
+            'Thùng mì hảo hảo',
+            'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+            50,
+            'đ 200.000',
+            'HSD còn 2 tháng'),
+        SuggestedProductModel(
+            'Thùng mì omachi',
+            'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+            70,
+            'đ 100.000',
+            'HSD còn 4 tháng'),
+        SuggestedProductModel(
+            'Thùng mì 3 miền',
+            'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+            80,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+        SuggestedProductModel(
+            'Thùng milo',
+            'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+            70,
+            'đ 180.000',
+            'HSD còn 84 ngày'),
+        SuggestedProductModel(
+            'Thùng 7upa 12 chai 1.5 lít',
+            'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+            20,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+      ],
     ),
-    Store(
-      name: 'Bách hóa xanh xa lộ Hà Nội',
-      imagePath:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-      openTime: 450,
-      closeTime: 1320,
-      distance: 3.5,
+    NearStoreOutputModel(
+      '7 Eleven FPT',
+      'https://searchlogovector.com/wp-content/uploads/2018/05/7-eleven-logo-vector.png',
+      2.1,
+      [
+        SuggestedProductModel(
+            'Thùng mì hảo hảo',
+            'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+            50,
+            'đ 200.000',
+            'HSD còn 2 tháng'),
+        SuggestedProductModel(
+            'Thùng mì omachi',
+            'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+            70,
+            'đ 100.000',
+            'HSD còn 4 tháng'),
+        SuggestedProductModel(
+            'Thùng mì 3 miền',
+            'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+            80,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+        SuggestedProductModel(
+            'Thùng milo',
+            'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+            70,
+            'đ 180.000',
+            'HSD còn 84 ngày'),
+        SuggestedProductModel(
+            'Thùng 7upa 12 chai 1.5 lít',
+            'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+            20,
+            'đ 180.000',
+            'HSD còn 3 tháng'),
+      ],
     ),
   ];
 
@@ -247,7 +367,8 @@ class _HomeFragmentState extends State<HomeFragment> {
     return ListView.builder(
       itemBuilder: (context, i) {
         int listIndex = i - 4;
-        if (listIndex > (storeList.length - 1)) {
+        int realIndex = listIndex ~/ 2;
+        if (realIndex > (storeList.length - 1)) {
           return null;
         }
 
@@ -261,7 +382,14 @@ class _HomeFragmentState extends State<HomeFragment> {
           case 3:
             return buildNearStoreText(context);
           default:
-            return buildNearStoreItem(listIndex, context);
+            if (listIndex.isOdd) {
+              return Divider(
+                indent: _contextHeight * 0.031,
+                endIndent: _contextWidth * 0.031,
+                thickness: 2,
+              );
+            }
+            return buildNearStoreItem(realIndex, context);
         }
       },
     );
@@ -269,7 +397,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget buildNearStoreItem(int i, BuildContext context) {
     return NearStoreWidget(
-      store: storeList[i],
+      storeList[i],
     );
   }
 
