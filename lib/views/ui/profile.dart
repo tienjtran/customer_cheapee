@@ -213,7 +213,8 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          NamedRoutes.loginRoute, (route) => false);
                     },
                   ),
                   Divider(
