@@ -19,31 +19,31 @@ class ProductDetailScreen extends StatelessWidget {
       new SuggestedProductModel(
           'Thùng Pepsi',
           'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
-          'đ 250.000',
+          20,
           'đ 200.000',
           'HSD còn 2 tháng'),
       new SuggestedProductModel(
           'Nước Dasani 350ml',
           'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
-          'đ 12.000',
+          30,
           'đ 10.000',
           'HSD còn 4 tháng'),
       new SuggestedProductModel(
           'Thùng Pepsi không calo',
           'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
-          'đ 230.000',
+          40,
           'đ 180.000',
           'HSD còn 3 tháng'),
       new SuggestedProductModel(
           'Thùng Mirinda 12 chai 1.5 lít',
           'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
-          'đ 230.000',
+          50,
           'đ 180.000',
           'HSD còn 84 ngày'),
       new SuggestedProductModel(
           'Thùng 7upa 12 chai 1.5 lít',
           'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-          'đ 230.000',
+          60,
           'đ 180.000',
           'HSD còn 3 tháng'),
     ];
@@ -323,16 +323,11 @@ class ProductDetailScreen extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    SuggestedProductWidget(
-                        suggestedProductModel: suggestedProductList[0]),
-                    SuggestedProductWidget(
-                        suggestedProductModel: suggestedProductList[1]),
-                    SuggestedProductWidget(
-                        suggestedProductModel: suggestedProductList[2]),
-                    SuggestedProductWidget(
-                        suggestedProductModel: suggestedProductList[3]),
-                    SuggestedProductWidget(
-                        suggestedProductModel: suggestedProductList[4]),
+                    SuggestedProductWidget(model: suggestedProductList[0]),
+                    SuggestedProductWidget(model: suggestedProductList[1]),
+                    SuggestedProductWidget(model: suggestedProductList[2]),
+                    SuggestedProductWidget(model: suggestedProductList[3]),
+                    SuggestedProductWidget(model: suggestedProductList[4]),
                   ],
                 ),
               ),

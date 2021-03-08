@@ -1,12 +1,12 @@
 class SuggestedProductModel {
   String name; //tên sản phẩm
   String imagePath; //link hình ảnh
-  String price; //giá niêm yết
+  int discount;
   String salePrice; //giá đã giảm
   String expiryDate; //HSD
 
-  SuggestedProductModel(
-      this.name, this.imagePath, this.price, this.salePrice, this.expiryDate);
+  SuggestedProductModel(this.name, this.imagePath, this.discount,
+      this.salePrice, this.expiryDate);
 
   get getName => this.name;
   set setName(String name) => this.name = name;
@@ -14,8 +14,8 @@ class SuggestedProductModel {
   get getImagePath => this.imagePath;
   set setImagePath(String imagePath) => this.imagePath = imagePath;
 
-  get getPrice => this.price;
-  set setPrice(String price) => this.price = price;
+  get getPrice => this.discount;
+  set setPrice(int discount) => this.discount = discount;
 
   get getSalePrice => this.salePrice;
   set setSalePrice(String salePrice) => this.salePrice = salePrice;
