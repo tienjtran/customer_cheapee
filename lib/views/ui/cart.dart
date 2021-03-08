@@ -14,11 +14,40 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   double total = 1000000;
   String shopName = 'Bách hóa xanh bình hưng hòa';
-  List<CartItemOutputModel> modelList =
-      List<CartItemOutputModel>.generate(20, (index) {
-    return new CartItemOutputModel('Sữa Milo ${index}',
-        'assets/images/milo.jpg', 300000, 400000, 5, index + 1, true);
-  });
+  List<CartItemOutputModel> modelList = [
+    CartItemOutputModel(
+        'Sữa Milo',
+        'https://www.zenmart.vn/Resources/Zenmart/Product/2020/02/2230/8934804034058-1-thung-sua-milo-it-duong-180ml-637181816727852931.jpg',
+        300000,
+        400000,
+        5,
+        1,
+        true),
+    CartItemOutputModel(
+        'Thùng coca 24 lon',
+        'https://product.hstatic.net/1000126467/product/thung_24_lon_nuoc_ngot_coca_cola_330ml.jpg',
+        50000,
+        300000,
+        5,
+        1,
+        true),
+    CartItemOutputModel(
+        'Thùng mì gói hảo hảo',
+        'https://tuoimart.vn/wp-content/uploads/2019/10/z1590737246700_fb4849deed1b275a9bcd032696c78e3d.jpg',
+        300000,
+        400000,
+        5,
+        1,
+        true),
+    CartItemOutputModel(
+        'Thùng bia heineken',
+        'https://csfood.vn/wp-content/uploads/2016/04/Bia-Heineken-Thung-1.jpg',
+        300000,
+        400000,
+        5,
+        1,
+        true),
+  ];
 
   void _onPressZeroQuantity(CartItemOutputModel model) {
     setState(() {
@@ -149,7 +178,33 @@ class _CartScreenState extends State<CartScreen> {
                             },
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              content: Text(
+                                  'Bạn có muốn đặt hàng những sản phẩm này?'),
+                              actions: [
+                                FlatButton(
+                                  textColor: AppColors.strongGrey,
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                  },
+                                  child: Text('Không'),
+                                ),
+                                FlatButton(
+                                  textColor: AppColors.strongGreen,
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                  },
+                                  child: Text('Đặt hàng'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

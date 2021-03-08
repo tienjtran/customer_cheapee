@@ -72,7 +72,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               checkColor: AppColors.white,
             ),
           ),
-          Image.asset(
+          Image.network(
             this.widget.model.imagePath,
             height: 60,
           ),
@@ -80,6 +80,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             width: 15,
           ),
           Container(
+            width: 150,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -89,6 +90,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     fontWeight: FontWeight.bold,
                     fontSize: AppFontSizes.mediumSize,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   CommonUtils.convertDoubleToMoney(this.widget.model.oldPrice),

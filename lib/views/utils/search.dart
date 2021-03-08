@@ -37,7 +37,7 @@ class _SearchResultItemWidgetState extends State<SearchResultItemWidget> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
+                  child: Image.network(
                     this.widget._model.imagePath,
                     height: 90,
                     width: 90,
