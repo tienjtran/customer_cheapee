@@ -73,4 +73,6 @@ class NamedRoutes {
   static const String orderRoute = '/order';
 
   static const String loginRoute = '/login';
+
+  static const String productDetailRoute = '/productDetail';
 }
