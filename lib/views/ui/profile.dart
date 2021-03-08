@@ -180,36 +180,42 @@ class ProfileScreen extends StatelessWidget {
                     color: AppColors.lightGrey,
                     endIndent: 50,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.logout,
-                              size: 30,
-                              color: AppColors.red,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Text(
-                                'Đăng xuất',
-                                style: TextStyle(
-                                  color: AppColors.red,
-                                ),
+                  InkWell(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.logout,
+                                size: 30,
+                                color: AppColors.red,
                               ),
-                            )
-                          ],
+                              Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text(
+                                  'Đăng xuất',
+                                  style: TextStyle(
+                                    color: AppColors.red,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios,
-                        color: AppColors.red,
-                      ),
-                    ],
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.red,
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          NamedRoutes.loginRoute, (route) => false);
+                    },
                   ),
                   Divider(
                     color: AppColors.lightGrey,
