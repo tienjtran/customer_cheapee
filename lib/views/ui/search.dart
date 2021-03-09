@@ -70,62 +70,78 @@ class _ResultSearchScreenState extends State<ResultSearchScreen> {
   double _contextWidth;
   List<SearchResultOutputModel> dataResults = [
     SearchResultOutputModel(
-      imagePath: 'https://cf.shopee.vn/file/11733ba78eb014870f11120d2674f22a',
-      name: 'Thùng mì vị hương',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
+      SearchStore('Bách hóa xanh Lê Văn Việt', 3600, 3600, 3.2, 4.5,
+          'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg'),
+      [
+        SearchItemModel(
+          'Thùng Pepsi 24 lon',
+          200000,
+          'https://lh3.googleusercontent.com/proxy/C29u6Zi2ZT2AMovG2n0eYQkqLZ2W5Ws7qEW9TvTfCSirRNxVgNy5XpooNc3KuLKjPoTIZM2VPqmrJjxA0_Xi8gDh4j4W5ylZqbuSaClcqEnrX_-TEWMy_e0assQm5QJOLA',
+        ),
+        SearchItemModel(
+          'Thùng coca 24 lon',
+          200000,
+          'https://sieuthitt.com/images/stories/virtuemart/product/cocaxuan.jpg',
+        ),
+      ],
     ),
     SearchResultOutputModel(
-      imagePath:
-          'https://salt.tikicdn.com/cache/w444/ts/product/54/09/ef/98bad22f6320b2ec3b6ee2b9e8254f02.jpg',
-      name: 'Thùng mì hảo hảo',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
+      SearchStore('Vinmart Man Thiện', 3600, 3600, 3.2, 4.5,
+          'https://vincom.com.vn/sites/default/files/2016-10/VinMart_1.jpg'),
+      [],
     ),
     SearchResultOutputModel(
-      imagePath:
-          'https://product.hstatic.net/1000288770/product/m__x_o_kh__h_o_h_o_t_m_chua_ng_t_g_i_th_ng_30_g_i_x_75_g_1024x1024.jpg',
-      name: 'Thung Mì Thịt xào',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
+      SearchStore('Familymart Trần Đức Tiến', 3600, 3600, 3.2, 4.5,
+          'https://www.midvalleysouthkey.com/img/tenant/logo-mobile05Apr2019171734.jpg'),
+      [
+        SearchItemModel(
+          'Thùng mirinda',
+          200000,
+          'https://vietgifts.com/wp-content/uploads/2019/01/mirinda-vi-cam-24-lon.jpg',
+        ),
+        SearchItemModel(
+          'Thùng 7up',
+          200000,
+          'https://img.websosanh.vn/v2/users/root_product/images/thung-nuoc-ngot-7up-chanh-12/JiXjLWqeYndD.jpg?compress=85',
+        ),
+        SearchItemModel(
+          'Thùng coca 24 lon',
+          200000,
+          'https://sieuthitt.com/images/stories/virtuemart/product/cocaxuan.jpg',
+        ),
+        SearchItemModel(
+          'Thùng pepsi 24 lon',
+          200000,
+          'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
+        ),
+      ],
     ),
     SearchResultOutputModel(
-      imagePath:
-          'https://csfood.vn/wp-content/uploads/2018/01/m%C3%AC-h%E1%BA%A3o-h%E1%BA%A3o-m%C3%AC-chay-h%C6%B0%C6%A1ng-v%E1%BB%8B-rau-n%E1%BA%A5m-th%C3%B9ng-30-g%C3%B3i.png',
-      name: 'Thùng mì 3 miền',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
+      SearchStore('Bách hóa xanh Trần Bình Trọng', 3600, 3600, 3.2, 4.5,
+          'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg'),
+      [
+        SearchItemModel(
+          'Thùng coca 24 lon',
+          200000,
+          'https://sieuthitt.com/images/stories/virtuemart/product/cocaxuan.jpg',
+        ),
+      ],
     ),
     SearchResultOutputModel(
-      imagePath:
-          'https://csfood.vn/wp-content/uploads/2017/12/th%C3%B9ng-m%C3%AC-g%C3%A0-t%C3%ADm-%C4%83n-li%E1%BB%81n-vifon.png',
-      name: 'Thùng mì lẩu thái',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
-    ),
-    SearchResultOutputModel(
-      imagePath: 'https://media3.scdn.vn/img2/2018/6_26/pjC6cb.jpg',
-      name: 'Thùng mì đệ nhất',
-      category: 'Đồ khô',
-      daysLeft: 5,
-      currentPrice: 120000,
-      oldPrice: 80000,
-      isLike: true,
+      SearchStore('Circle K FPT', 3600, 3600, 3.2, 4.5,
+          'https://assets1.csnews.com/files/styles/content_sm/s3/2020-03/Circle%20K%20Logo%20Sm_121317_1.png?itok=Yb6TJg38'),
+      [
+        SearchItemModel(
+          'Thùng mirinda',
+          200000,
+          'https://vietgifts.com/wp-content/uploads/2019/01/mirinda-vi-cam-24-lon.jpg',
+        ),
+        SearchItemModel(
+          'Thùng coca 24 lon',
+          200000,
+          'https://sieuthitt.com/images/stories/virtuemart/product/cocaxuan.jpg',
+        ),
+      ],
     ),
   ];
 
@@ -137,9 +153,7 @@ class _ResultSearchScreenState extends State<ResultSearchScreen> {
       itemBuilder: (context, i) {
         if (i.isOdd) {
           return Divider(
-            indent: _contextHeight * 0.031,
-            endIndent: _contextWidth * 0.031,
-            thickness: 2.5,
+            thickness: 7,
             color: AppColors.lightGrey,
           );
         } else {
@@ -148,7 +162,7 @@ class _ResultSearchScreenState extends State<ResultSearchScreen> {
             return null;
           }
           SearchResultOutputModel model = dataResults[index];
-          return SearchResultItemWidget(model);
+          return SearchResultWidget(model);
         }
       },
     );
