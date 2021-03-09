@@ -1,44 +1,58 @@
-import 'package:flutter/cupertino.dart';
-
 class SearchResultOutputModel {
+  SearchStore store;
+  List<SearchItemModel> itemList;
+
+  SearchResultOutputModel(this.store, this.itemList);
+}
+
+class SearchStore {
+  String storeName;
+  int openingTime;
+  int closingTime;
+  double distance;
+  double stars;
   String imagePath;
-  String name;
-  String category;
-  int daysLeft;
-  double oldPrice;
-  double currentPrice;
-  bool isLike;
 
-  SearchResultOutputModel(
-      {this.imagePath,
-      this.name,
-      this.category,
-      this.daysLeft,
-      this.oldPrice,
-      this.currentPrice,
-      this.isLike});
+  SearchStore(this.storeName, this.openingTime, this.closingTime, this.distance,
+      this.stars, this.imagePath);
 
-  get getIsLike => this.isLike;
+  String get getStoreName => this.storeName;
 
-  set setIsLike(isLike) => this.isLike = isLike;
+  set setStoreName(String storeName) => this.storeName = storeName;
 
-  get getName => this.name;
+  get getOpeningTime => this.openingTime;
 
-  set setName(name) => this.name = name;
+  set setOpeningTime(openingTime) => this.openingTime = openingTime;
 
-  get getCategory => this.category;
+  get getClosingTime => this.closingTime;
 
-  set setCategory(category) => this.category = category;
+  set setClosingTime(closingTime) => this.closingTime = closingTime;
 
-  get getDaysLeft => this.daysLeft;
+  get getDistance => this.distance;
 
-  set setDaysLeft(daysLeft) => this.daysLeft = daysLeft;
+  set setDistance(distance) => this.distance = distance;
 
-  get getOldPrice => this.oldPrice;
+  get getStars => this.stars;
 
-  set setOldPrice(oldPrice) => this.oldPrice = oldPrice;
+  set setStars(stars) => this.stars = stars;
+}
 
-  get getCurrentPrice => this.currentPrice;
+class SearchItemModel {
+  String itemName;
+  double price;
+  String imagePath;
 
-  set setCurrentPrice(currentPrice) => this.currentPrice = currentPrice;
+  SearchItemModel(this.itemName, this.price, this.imagePath);
+
+  String get getItemName => this.itemName;
+
+  set setItemName(String itemName) => this.itemName = itemName;
+
+  get getPrice => this.price;
+
+  set setPrice(price) => this.price = price;
+
+  get getImagePath => this.imagePath;
+
+  set setImagePath(imagePath) => this.imagePath = imagePath;
 }
