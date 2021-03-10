@@ -16,6 +16,10 @@ class AppColors {
   static const Color red = Colors.red;
 
   static const Color yellow = Colors.yellow;
+
+  static const Color veryLightBlue = Color(0xffeaefff);
+
+  static const Color mediumGrey = Color(0xff9098b1);
 }
 
 class AppFontSizes {
@@ -81,4 +85,6 @@ class NamedRoutes {
   static const String viewProfileRoute = '/viewProfile';
 
   static const String viewOrderRoute = '/viewOrder';
+
+  static const String registerRoute = '/register';
 }
