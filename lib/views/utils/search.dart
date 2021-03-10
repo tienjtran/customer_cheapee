@@ -73,7 +73,7 @@ class StoreSearchWidget extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '${store.distance} kms',
+                      '${store.distance} km',
                       style: TextStyle(
                         fontSize: AppFontSizes.smallSize,
                       ),

@@ -10,11 +10,11 @@ class HomePromotionWidget extends StatelessWidget {
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.only(
-          left: 10,
-          right: 10,
+          left: 0,
+          right: 0,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(0),
           child: Image.network(
             imagePath,
             fit: BoxFit.fill,

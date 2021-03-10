@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
+import 'package:flutter/material.dart';
 
 class NamingCategoryWidget extends StatelessWidget {
   NamingCategoryWidget({Key key, this.outputModel}) : super(key: key);
@@ -10,7 +10,7 @@ class NamingCategoryWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           IconButton(
-            icon: Image.network(outputModel.getImagePath),
+            icon: Image.asset(outputModel.getImagePath),
             iconSize: 50,
           ),
           Text(outputModel.getText),

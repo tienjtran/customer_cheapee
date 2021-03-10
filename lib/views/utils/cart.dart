@@ -1,7 +1,7 @@
+import 'package:customer_cheapee/views/models/output/cart.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_cheapee/views/models/output/cart.dart';
 import 'package:flutter/services.dart';
 
 class CartItemWidget extends StatefulWidget {
@@ -58,20 +58,21 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: AppColors.white,
       margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
         children: [
-          Theme(
-            data: ThemeData(
-              unselectedWidgetColor: Theme.of(context).accentColor,
-            ),
-            child: Checkbox(
-              value: this.widget.model.checked,
-              onChanged: onChangedCheckBox,
-              activeColor: Theme.of(context).accentColor,
-              checkColor: AppColors.white,
-            ),
-          ),
+          // Theme(
+          //   data: ThemeData(
+          //     unselectedWidgetColor: Theme.of(context).accentColor,
+          //   ),
+          //   child: Checkbox(
+          //     value: this.widget.model.checked,
+          //     onChanged: onChangedCheckBox,
+          //     activeColor: Theme.of(context).accentColor,
+          //     checkColor: AppColors.white,
+          //   ),
+          // ),
           Image.network(
             this.widget.model.imagePath,
             height: 60,
@@ -157,7 +158,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   ),
                   Expanded(
                     child: Container(
-                      color: AppColors.lightGrey,
+                      color: AppColors.white,
                       child: Center(
                         child: TextFormField(
                           key: Key(this.widget.model.quantity.toString()),

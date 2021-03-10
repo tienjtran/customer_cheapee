@@ -1,8 +1,8 @@
 import 'package:customer_cheapee/views/models/output/cart.dart';
-import 'package:customer_cheapee/views/utils/common.dart';
-import 'package:flutter/material.dart';
-import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/cart.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:flutter/material.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen({Key key}) : super(key: key);
@@ -12,8 +12,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double total = 1000000;
-  String shopName = 'Bách hóa xanh bình hưng hòa';
+  double total = 1500000;
+  String customerAddress = '14L Quốc Hương, phường Thảo Điền, quận 2';
   List<CartItemOutputModel> modelList = [
     CartItemOutputModel(
         'Sữa Milo',
@@ -79,37 +79,61 @@ class _CartScreenState extends State<CartScreen> {
             color: AppColors.strongGrey,
           ),
         ),
+        elevation: 0,
       ),
       body: Container(
+        color: AppColors.white,
         child: Column(
           children: [
-            SizedBox(
-              height: 15,
-            ),
             Container(
+              margin: EdgeInsets.only(top: 10, right: 25, bottom: 10, left: 5),
               width: _contextWidth,
               padding: EdgeInsets.only(left: 20),
-              child: Text(
-                shopName,
-                style: TextStyle(
-                  color: AppColors.strongGrey,
-                  fontSize: AppFontSizes.largeSize,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Giao hàng đến'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: _contextWidth * 0.7,
+                        margin: EdgeInsets.only(top: 5),
+                        child: Text(
+                          customerAddress,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: AppFontSizes.size25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        'Chỉnh sửa',
+                        style: TextStyle(
+                          color: Color(0xff339ec9),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             Divider(
               color: AppColors.lightGrey,
-              thickness: 2,
+              thickness: 5,
             ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
                   if (index.isOdd) {
                     return Divider(
-                      indent: _contextWidth * 0.031,
-                      endIndent: _contextWidth * 0.031,
-                      thickness: 2.5,
+                      // indent: _contextWidth * 0.031,
+                      // endIndent: _contextWidth * 0.031,
+                      thickness: 1,
                     );
                   } else {
                     final position = index ~/ 2;
@@ -127,7 +151,7 @@ class _CartScreenState extends State<CartScreen> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: AppColors.strongGrey,
+                    color: AppColors.lightGrey,
                   ),
                 ),
               ),
@@ -144,13 +168,13 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                             color: AppColors.strongGrey,
                             fontSize: AppFontSizes.largeSize,
-                            fontWeight: FontWeight.bold,
+                            // fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           CommonUtils.convertDoubleToMoney(total),
                           style: TextStyle(
-                            color: AppColors.red,
+                            color: AppColors.black,
                             fontSize: AppFontSizes.largeSize,
                             fontWeight: FontWeight.bold,
                           ),
