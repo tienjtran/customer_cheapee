@@ -84,7 +84,8 @@ class StoreDetailScreen extends StatelessWidget {
           child: GridView.count(
             crossAxisCount: 3,
             scrollDirection: Axis.vertical,
-            childAspectRatio: 0.7,
+            // ! Change this if GridView children overflow
+            childAspectRatio: 0.6,
             children: [
               for (int i = 0; i < productList.length; i++)
                 if (productList[i].getCategory == category)
