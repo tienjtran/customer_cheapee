@@ -7,7 +7,7 @@ class AppColors {
 
   static const Color strongGrey = Color(0xff616161);
 
-  static const Color lightGrey = Color(0xffd6d6d6);
+  static const Color lightGrey = Color(0xffE9ECF1);
 
   static const Color black = Colors.black;
 
@@ -22,6 +22,7 @@ class AppFontSizes {
   static const double smallSize = 12;
   static const double mediumSize = 15;
   static const double largeSize = 18;
+  static const double size25 = 25;
 }
 
 class Constants {
@@ -48,11 +49,13 @@ class Constants {
 
   static const String order = 'Đặt hàng';
 
-  static const String total = 'Tổng tiền';
+  static const String total = 'Tổng';
 
   static const String addToCart = 'Thêm vào giỏ hàng';
 
   static const String quantity = 'Số lượng:';
+
+  static const String filter = 'Bộ lọc tìm kiếm';
 }
 
 class HomeScreenConstant {

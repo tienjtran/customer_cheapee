@@ -1,16 +1,16 @@
+import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/notification.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
+import 'package:customer_cheapee/views/ui/search.dart';
+import 'package:customer_cheapee/views/utils/category.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_cheapee/views/utils/constants.dart';
-import 'package:customer_cheapee/views/utils/category.dart';
-import 'package:customer_cheapee/views/models/output/home.dart';
-import 'package:customer_cheapee/views/ui/search.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double contextHeight;
   double contextWidth;
-  static String positionSearch = '203 Đương Ngô Đình chiểu phường 7 quận 10';
+  static String positionSearch = '14L Quốc Hương, phường Thảo Điền, quận 2';
   int quantity = 3;
 
   List<Widget> fragmentOptions = <Widget>[
@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         positionSearch,
         style: TextStyle(fontSize: AppFontSizes.largeSize),
       ),
+      elevation: 0,
     ),
     AppBar(
       title: Text('Thông báo'),
@@ -178,33 +179,27 @@ class _HomeFragmentState extends State<HomeFragment> {
   double _contextWidth;
   List<SuggestedItemModel> suggestingItemList = [
     new SuggestedItemModel(
-      imagePath:
-          'https://photosfine.files.wordpress.com/2012/04/white-background-fruit-and-vegetables-2.jpg',
+      imagePath: 'assets/images/vegetables.png',
       text: 'Rau củ',
     ),
     new SuggestedItemModel(
-      imagePath:
-          'https://bizweb.dktcdn.net/thumb/1024x1024/100/391/207/products/500mlrevive.jpg?v=1606706069087',
+      imagePath: 'assets/images/drinks.png',
       text: 'Giải khát',
     ),
     new SuggestedItemModel(
-      imagePath:
-          'https://nguoivietkhoedep.net/wp-content/uploads/2020/05/thitcatuoi_hhuu_thumb-300x291.jpg',
+      imagePath: 'assets/images/meats.png',
       text: 'Tươi sống',
     ),
     new SuggestedItemModel(
-      imagePath:
-          'https://media1.nguoiduatin.vn/media/nguyen-hoang-yen/2019/05/03/do-hop-ha-long.jpg',
+      imagePath: 'assets/images/canned.png',
       text: 'Đồ hộp',
     ),
     new SuggestedItemModel(
-      imagePath:
-          'https://shelbyreport.nyc3.cdn.digitaloceanspaces.com/wp-content/uploads/2018/08/PRO-SNICKERS.jpg',
+      imagePath: 'assets/images/snack.png',
       text: 'Bánh kẹo',
     ),
     new SuggestedItemModel(
-      imagePath:
-          'https://anh.eva.vn/upload/3-2018/images/2018-08-03/an-qua-nhieu-trai-cay-khong-tot-nhung-an-5-loai-qua-nay-cang-nhieu-cang-tot-cho-suc-khoe-trai-cay1-15331132143471276157929-1533265891-782-width600height450.jpg',
+      imagePath: 'assets/images/fruits.png',
       text: 'Trái cây',
     ),
   ];
@@ -364,34 +359,37 @@ class _HomeFragmentState extends State<HomeFragment> {
   Widget build(BuildContext context) {
     _contextHeight = MediaQuery.of(context).size.height;
     _contextWidth = MediaQuery.of(context).size.width;
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        int listIndex = i - 4;
-        int realIndex = listIndex ~/ 2;
-        if (realIndex > (storeList.length - 1)) {
-          return null;
-        }
+    return Container(
+      color: AppColors.white,
+      child: ListView.builder(
+        itemBuilder: (context, i) {
+          int listIndex = i - 4;
+          int realIndex = listIndex ~/ 2;
+          if (realIndex > (storeList.length - 1)) {
+            return null;
+          }
 
-        switch (i) {
-          case 0:
-            return buildSearchWidget(context);
-          case 1:
-            return buildPromotioncarousel(context);
-          case 2:
-            return buildSuggestedWidget(context);
-          case 3:
-            return buildNearStoreText(context);
-          default:
-            if (listIndex.isOdd) {
-              return Divider(
-                indent: _contextHeight * 0.031,
-                endIndent: _contextWidth * 0.031,
-                thickness: 2,
-              );
-            }
-            return buildNearStoreItem(realIndex, context);
-        }
-      },
+          switch (i) {
+            case 0:
+              return buildSearchWidget(context);
+            case 1:
+              return buildPromotioncarousel(context);
+            case 2:
+              return buildSuggestedWidget(context);
+            case 3:
+              return buildNearStoreText(context);
+            default:
+              if (listIndex.isOdd) {
+                return Divider(
+                  indent: _contextHeight * 0.031,
+                  endIndent: _contextWidth * 0.031,
+                  thickness: 2,
+                );
+              }
+              return buildNearStoreItem(realIndex, context);
+          }
+        },
+      ),
     );
   }
 
@@ -435,7 +433,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget buildSearchWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 15, left: 10, right: 10),
+      padding: EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -443,9 +441,15 @@ class _HomeFragmentState extends State<HomeFragment> {
             child: GestureDetector(
               child: Container(
                 height: 35.0,
-                color: AppColors.lightGrey,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  color: AppColors.lightGrey,
+                ),
                 child: Row(
                   children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
                     Icon(
                       Icons.search,
                       size: 30.0,

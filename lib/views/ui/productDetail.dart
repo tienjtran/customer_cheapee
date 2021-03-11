@@ -319,7 +319,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 180,
+                height: 210,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[

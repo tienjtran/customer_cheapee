@@ -1,8 +1,7 @@
-import 'package:customer_cheapee/views/utils/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
-import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
+import 'package:flutter/material.dart';
 
 class NearStoreWidget extends StatelessWidget {
   NearStoreOutputModel model;
@@ -13,16 +12,20 @@ class NearStoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(
-        5,
+        0,
       ),
-      height: 200,
+      color: AppColors.white,
+      height: 225,
       child: Column(
         children: [
           Row(
             children: [
-              Image.network(
-                model.imagePath,
-                height: 20,
+              Container(
+                margin: EdgeInsets.only(left: 15),
+                child: Image.network(
+                  model.imagePath,
+                  height: 20,
+                ),
               ),
               SizedBox(
                 width: 10,
@@ -35,7 +38,7 @@ class NearStoreWidget extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  '<${model.distance}',
+                  '${model.distance}km',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontSize: AppFontSizes.mediumSize,
@@ -45,16 +48,22 @@ class NearStoreWidget extends StatelessWidget {
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                if (index >= model.productList.length) {
-                  return null;
-                }
-                return SuggestedProductWidget(
-                  model: model.productList[index],
-                );
-              },
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: SizedBox(
+                height: 210,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    if (index >= model.productList.length) {
+                      return null;
+                    }
+                    return SuggestedProductWidget(
+                      model: model.productList[index],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],
