@@ -4,9 +4,11 @@ class SuggestedProductModel {
   int discount;
   String salePrice; //giá đã giảm
   String expiryDate; //HSD
+  int category; // Phân loại
+  bool suggested; // Sản phầm được gợi ý
 
   SuggestedProductModel(this.name, this.imagePath, this.discount,
-      this.salePrice, this.expiryDate);
+      this.salePrice, this.expiryDate, this.category, this.suggested);
 
   get getName => this.name;
   set setName(String name) => this.name = name;
@@ -22,4 +24,10 @@ class SuggestedProductModel {
 
   get getExpiryDate => this.expiryDate;
   set setExpiryDate(String expiryDate) => this.expiryDate = expiryDate;
+
+  get getCategory => this.category;
+  set setCategory(category) => this.category = category;
+
+  get getSuggested => this.suggested;
+  set setSuggested(suggested) => this.suggested = suggested;
 }

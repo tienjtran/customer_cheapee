@@ -84,4 +84,6 @@ class NamedRoutes {
   static const String viewProfileRoute = '/viewProfile';
 
   static const String viewOrderRoute = '/viewOrder';
+
+  static const String storeDetailRoute = '/storeDetail';
 }
