@@ -4,10 +4,12 @@ class NearStoreOutputModel {
   String storeName;
   String imagePath;
   double distance;
+  int openTime;
+  int closeTime;
   List<SuggestedProductModel> productList;
 
-  NearStoreOutputModel(
-      this.storeName, this.imagePath, this.distance, this.productList);
+  NearStoreOutputModel(this.storeName, this.imagePath, this.distance,
+      this.openTime, this.closeTime, this.productList);
 
   double get getDistance => this.distance;
 
@@ -24,4 +26,12 @@ class NearStoreOutputModel {
   get getProductList => this.productList;
 
   set setProductList(productList) => this.productList = productList;
+
+  get getOpenTime => this.openTime;
+
+  set setOpenTime(openTime) => this.openTime = openTime;
+
+  get getCloseTime => this.closeTime;
+
+  set setCloseTime(closeTime) => this.closeTime = closeTime;
 }

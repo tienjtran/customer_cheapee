@@ -19,3 +19,26 @@ class NamingCategoryWidget extends StatelessWidget {
     );
   }
 }
+
+class StoreCategoryWidget extends StatelessWidget {
+  StoreCategoryWidget({Key key, this.outputModel}) : super(key: key);
+  final SuggestedItemModel outputModel;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Image.network(outputModel.getImagePath),
+            iconSize: 30,
+          ),
+          Container(
+            padding: const EdgeInsets.only(left: 20),
+            child: Text(outputModel.getText),
+          ),
+        ],
+      ),
+    );
+  }
+}

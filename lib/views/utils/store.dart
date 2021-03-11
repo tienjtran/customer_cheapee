@@ -10,6 +10,14 @@ class NearStoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _navigateToStoreDetailScreen() {
+      Navigator.pushNamed(
+        context,
+        NamedRoutes.storeDetailRoute,
+        arguments: model,
+      );
+    }
+
     return Container(
       margin: EdgeInsets.all(
         0,
@@ -18,34 +26,37 @@ class NearStoreWidget extends StatelessWidget {
       height: 225,
       child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 15),
-                child: Image.network(
-                  model.imagePath,
-                  height: 20,
+          InkWell(
+            onTap: _navigateToStoreDetailScreen,
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  child: Image.network(
+                    model.imagePath,
+                    height: 20,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                model.storeName,
-                style: TextStyle(
-                  fontSize: AppFontSizes.mediumSize,
+                SizedBox(
+                  width: 10,
                 ),
-              ),
-              Expanded(
-                child: Text(
-                  '${model.distance}km',
-                  textAlign: TextAlign.right,
+                Text(
+                  model.storeName,
                   style: TextStyle(
                     fontSize: AppFontSizes.mediumSize,
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Text(
+                    '${model.distance}km',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.mediumSize,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Container(

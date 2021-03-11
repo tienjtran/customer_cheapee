@@ -1,6 +1,7 @@
 import 'package:customer_cheapee/views/ui/cart.dart';
 import 'package:customer_cheapee/views/ui/login.dart';
 import 'package:customer_cheapee/views/ui/order.dart';
+import 'package:customer_cheapee/views/ui/storeDetail.dart';
 import 'package:customer_cheapee/views/ui/viewprofile.dart';
 import 'package:customer_cheapee/views/ui/viewOrder.dart';
 import 'package:customer_cheapee/views/ui/productDetail.dart';
@@ -29,6 +30,7 @@ class CustomerCheapee extends StatelessWidget {
         NamedRoutes.viewProfileRoute: (context) => ViewProfileScreen(),
         NamedRoutes.viewOrderRoute: (context) => ViewOrderScreen(),
         NamedRoutes.productDetailRoute: (context) => ProductDetailScreen(),
+        NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),
       },
     );
   }
