@@ -1,5 +1,7 @@
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -39,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text(
-                    'Tran Duc Tien',
+                    FirebaseAuth.instance.currentUser.displayName,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -220,7 +222,8 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap: () {
+                    onTap: () async {
+                      await GoogleSignIn().signOut();
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           NamedRoutes.loginRoute, (route) => false);
                     },

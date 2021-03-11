@@ -12,6 +12,7 @@ import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,9 +20,45 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Position _currentPosition;
+  static String _currentAddress = '';
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+      Placemark place = p[0];
+      setState(() {
+        _currentAddress =
+            "${place.name}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   double contextHeight;
   double contextWidth;
-  static String positionSearch = '14L Quốc Hương, phường Thảo Điền, quận 2';
   int quantity = 3;
 
   List<Widget> fragmentOptions = <Widget>[
@@ -40,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         iconSize: 20,
       ),
       title: Text(
-        positionSearch,
+        _currentAddress,
         style: TextStyle(fontSize: AppFontSizes.largeSize),
       ),
       elevation: 0,
