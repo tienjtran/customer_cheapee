@@ -2,6 +2,7 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CommonWidgetUtils {
   static TextStyle getCommonTextStyle(
@@ -35,5 +36,17 @@ class CommonUtils {
           fractionDigits: 0,
         )).output;
     return mfo.symbolOnLeft;
+  }
+
+  static double decreaseHundredPercent(double from, double to) {
+    return double.parse((1 - (to / from)).toStringAsFixed(1)) * 100;
+  }
+}
+
+class FirebaseUtils {
+  static Future<String> getDownloadUrls(String path) async {
+    var storage = firebase_storage.FirebaseStorage.instance;
+    String downloadURL = await storage.ref(path).getDownloadURL();
+    return downloadURL;
   }
 }

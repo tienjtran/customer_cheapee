@@ -95,7 +95,7 @@ class SuggestedProductWidget extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/images/sale_tag.png',
-                  width: 42,
+                  width: 45,
                 ),
                 Text(
                   '-${model.discount}%',

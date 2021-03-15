@@ -87,3 +87,24 @@ class NamedRoutes {
 
   static const String storeDetailRoute = '/storeDetail';
 }
+
+class ConfigKeyConstants {
+  static const String cheapeeApi = 'CHEAPEE_API_URL';
+}
+
+class APIUrls {
+  static const String homeScreenCustomer =
+      'api/homescreencustomer?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}';
+
+  static const String latitudeParam = '{latitude}';
+
+  static const String longitudeParam = '{longitude}';
+
+  static const String distanceParam = '{distance}';
+}
+
+class APIConstansts {
+  static const String bearerAuthorization = 'Bearer ${tokenParam}';
+
+  static const String tokenParam = '{token}';
+}
