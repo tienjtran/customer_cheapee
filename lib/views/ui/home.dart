@@ -9,10 +9,12 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:customer_cheapee/presenters/home.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -22,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Position _currentPosition;
   static String _currentAddress = '';
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   @override
   void initState() {
@@ -30,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _getCurrentLocation();
   }
 
-  _getCurrentLocation() {
-    geolocator
+  _getCurrentLocation() async {
+    await geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Placemark place = p[0];
       setState(() {
         _currentAddress =
-            "${place.name}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+            "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
       });
     } catch (e) {
       print(e);
@@ -198,14 +200,18 @@ class NotificationFragment extends StatelessWidget {
   }
 }
 
-class HomeFragment extends StatefulWidget {
-  const HomeFragment({Key key}) : super(key: key);
+abstract class HomeView {
+  void initHomeScreen(List<NearStoreOutputModel> model);
+}
 
+class HomeFragment extends StatefulWidget {
+  HomeFragment({Key key}) : super(key: key);
   @override
   _HomeFragmentState createState() => _HomeFragmentState();
 }
 
-class _HomeFragmentState extends State<HomeFragment> {
+class _HomeFragmentState extends State<HomeFragment> implements HomeView {
+  HomePresenter _homePresenter = HomePresenter();
   List<String> promotionImagePath = [
     'https://vuakhuyenmai.vn/wp-content/uploads/2021/01/vinmart-khuyen-mai-50off-5-1-2021.jpg',
     'https://www.bigc.vn/files/banners/2020/november/december/si-u-sale-1212-cover-blog-big-c.png',
@@ -242,223 +248,245 @@ class _HomeFragmentState extends State<HomeFragment> {
   ];
 
   List<NearStoreOutputModel> storeList = [
-    NearStoreOutputModel(
-      'Bách hóa xanh Bình Hưng Hòa',
-      'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg',
-      2.1,
-      360,
-      1200,
-      [
-        SuggestedProductModel(
-          'Thùng mì hảo hảo',
-          'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
-          50,
-          'đ 200.000',
-          'HSD còn 2 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng mì omachi',
-          'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
-          70,
-          'đ 100.000',
-          'HSD còn 4 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng mì 3 miền',
-          'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
-          80,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng milo',
-          'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
-          70,
-          'đ 180.000',
-          'HSD còn 84 ngày',
-          3,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng 7upa 12 chai 1.5 lít',
-          'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-          20,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          3,
-          true,
-        ),
-      ],
-    ),
-    NearStoreOutputModel(
-      'Vinmart Man Thiện',
-      'https://isaac.vn/wp-content/uploads/2020/03/vinmart.01.jpg',
-      2.1,
-      390,
-      1200,
-      [
-        SuggestedProductModel(
-          'Thùng Pepsi',
-          'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
-          50,
-          'đ 200.000',
-          'HSD còn 2 tháng',
-          3,
-          false,
-        ),
-        SuggestedProductModel(
-          'Nước Dasani 350ml',
-          'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
-          70,
-          'đ 10.000',
-          'HSD còn 4 tháng',
-          3,
-          false,
-        ),
-        SuggestedProductModel(
-          'Thùng Pepsi không calo',
-          'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
-          80,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          3,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng Mirinda 12 chai 1.5 lít',
-          'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
-          70,
-          'đ 180.000',
-          'HSD còn 84 ngày',
-          3,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng 7upa 12 chai 1.5 lít',
-          'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-          20,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          3,
-          true,
-        ),
-      ],
-    ),
-    NearStoreOutputModel(
-      'Circle K Man Thiện',
-      'https://i1.wp.com/discountsandsavings.ca/wp-content/uploads/2020/08/Screenshot_20200805-205026_Chrome.jpg?resize=800%2C341&ssl=1',
-      2.1,
-      360,
-      1200,
-      [
-        SuggestedProductModel(
-          'Thùng mì hảo hảo',
-          'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
-          50,
-          'đ 200.000',
-          'HSD còn 2 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng mì omachi',
-          'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
-          70,
-          'đ 100.000',
-          'HSD còn 4 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng mì 3 miền',
-          'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
-          80,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          4,
-          false,
-        ),
-        SuggestedProductModel(
-          'Thùng milo',
-          'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
-          70,
-          'đ 180.000',
-          'HSD còn 84 ngày',
-          3,
-          false,
-        ),
-        SuggestedProductModel(
-          'Thùng 7upa 12 chai 1.5 lít',
-          'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-          20,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          3,
-          true,
-        ),
-      ],
-    ),
-    NearStoreOutputModel(
-      '7 Eleven FPT',
-      'https://searchlogovector.com/wp-content/uploads/2018/05/7-eleven-logo-vector.png',
-      2.1,
-      360,
-      1200,
-      [
-        SuggestedProductModel(
-          'Thùng mì hảo hảo',
-          'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
-          50,
-          'đ 200.000',
-          'HSD còn 2 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng mì omachi',
-          'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
-          70,
-          'đ 100.000',
-          'HSD còn 4 tháng',
-          4,
-          false,
-        ),
-        SuggestedProductModel(
-          'Thùng mì 3 miền',
-          'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
-          80,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          4,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng milo',
-          'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
-          70,
-          'đ 180.000',
-          'HSD còn 84 ngày',
-          3,
-          true,
-        ),
-        SuggestedProductModel(
-          'Thùng 7upa 12 chai 1.5 lít',
-          'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-          20,
-          'đ 180.000',
-          'HSD còn 3 tháng',
-          3,
-          false,
-        ),
-      ],
-    ),
+    // NearStoreOutputModel(
+    //   'Bách hóa xanh Bình Hưng Hòa',
+    //   'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   'Vinmart Man Thiện',
+    //   'https://isaac.vn/wp-content/uploads/2020/03/vinmart.01.jpg',
+    //   2.1,
+    //   390,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng Pepsi',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Nước Dasani 350ml',
+    //       'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
+    //       70,
+    //       'đ 10.000',
+    //       'HSD còn 4 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng Pepsi không calo',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng Mirinda 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   'Circle K Man Thiện',
+    //   'https://i1.wp.com/discountsandsavings.ca/wp-content/uploads/2020/08/Screenshot_20200805-205026_Chrome.jpg?resize=800%2C341&ssl=1',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   '7 Eleven FPT',
+    //   'https://searchlogovector.com/wp-content/uploads/2018/05/7-eleven-logo-vector.png',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //   ],
+    // ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _homePresenter.view = this;
+    if (FirebaseAuth.instance.currentUser != null) {
+      asyncMethod();
+    }
+  }
+
+  void asyncMethod() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    _homePresenter.loadHomeScreen(position.latitude, position.longitude, 5);
+  }
+
+  @override
+  void initHomeScreen(List<NearStoreOutputModel> model) {
+    setState(() {
+      this.storeList = model;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

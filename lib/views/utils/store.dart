@@ -48,7 +48,7 @@ class NearStoreWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '${model.distance}km',
+                    '${model.distance} km',
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: AppFontSizes.mediumSize,

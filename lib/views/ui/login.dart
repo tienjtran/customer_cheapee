@@ -68,7 +68,6 @@ class LoginScreen extends StatelessWidget {
                     final UserCredential userCredential =
                         await signInWithGoogle();
                     final User user = userCredential.user;
-                    String token = await user.getIdToken();
                     assert(user != null);
                     Navigator.pushNamed(context, NamedRoutes.homeRoute);
                   },

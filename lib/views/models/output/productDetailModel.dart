@@ -1,7 +1,7 @@
 class SuggestedProductModel {
   String name; //tên sản phẩm
   String imagePath; //link hình ảnh
-  int discount;
+  double discount;
   String salePrice; //giá đã giảm
   String expiryDate; //HSD
   int category; // Phân loại
@@ -17,7 +17,7 @@ class SuggestedProductModel {
   set setImagePath(String imagePath) => this.imagePath = imagePath;
 
   get getPrice => this.discount;
-  set setPrice(int discount) => this.discount = discount;
+  set setPrice(double discount) => this.discount = discount;
 
   get getSalePrice => this.salePrice;
   set setSalePrice(String salePrice) => this.salePrice = salePrice;

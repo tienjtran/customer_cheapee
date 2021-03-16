@@ -43,8 +43,9 @@ class CustomerCheapee extends StatelessWidget {
               NamedRoutes.orderRoute: (context) => OrderScreen(),
               NamedRoutes.viewProfileRoute: (context) => ViewProfileScreen(),
               NamedRoutes.viewOrderRoute: (context) => ViewOrderScreen(),
-        NamedRoutes.productDetailRoute: (context) => ProductDetailScreen(),
-        NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),
+              NamedRoutes.productDetailRoute: (context) =>
+                  ProductDetailScreen(),
+              NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),
             },
           );
         }

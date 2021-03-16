@@ -223,6 +223,7 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                     onTap: () async {
+                      await FirebaseAuth.instance.signOut();
                       await GoogleSignIn().signOut();
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           NamedRoutes.loginRoute, (route) => false);
