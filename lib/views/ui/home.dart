@@ -9,6 +9,7 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -469,7 +470,9 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
   void initState() {
     super.initState();
     _homePresenter.view = this;
-    asyncMethod();
+    if (FirebaseAuth.instance.currentUser != null) {
+      asyncMethod();
+    }
   }
 
   void asyncMethod() async {
