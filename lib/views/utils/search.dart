@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:customer_cheapee/views/models/output/search.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SearchResultWidget extends StatelessWidget {
   SearchResultOutputModel model;
@@ -42,6 +45,14 @@ class StoreSearchWidget extends StatelessWidget {
   SearchStore store;
 
   StoreSearchWidget(this.store);
+
+  String _randomRating() {
+    Random random = new Random();
+    NumberFormat numberFormat = new NumberFormat();
+    numberFormat.maximumFractionDigits = 1;
+    numberFormat.minimumFractionDigits = 0;
+    return numberFormat.format(random.nextDouble() * 5);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +108,9 @@ class StoreSearchWidget extends StatelessWidget {
                             color: AppColors.yellow,
                           ),
                           Text(
-                            '${store.stars}',
+                            // '${store.stars}',
+                            //TODO: add rating to store
+                            _randomRating(),
                             style: TextStyle(
                               fontSize: AppFontSizes.smallSize,
                             ),

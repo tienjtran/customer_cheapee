@@ -101,6 +101,11 @@ class APIUrls {
   static const String longitudeParam = '{longitude}';
 
   static const String distanceParam = '{distance}';
+
+  static const String searchScreen =
+      'api/searchscreen?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}&name=${searchName}';
+
+  static const String searchName = '{searchName}';
 }
 
 class APIConstansts {
