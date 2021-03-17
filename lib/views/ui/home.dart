@@ -36,8 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  _getCurrentLocation() async {
-    await geolocator
+  _getCurrentLocation() {
+    geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
@@ -55,22 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _getAddressFromLatLng() async {
-    try {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
-      Placemark place = p[0];
-      setState(() {
-        _currentAddress =
-            "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
-      });
-    } catch (e) {
-      print(e);
-    }
+    List<Placemark> p = await geolocator.placemarkFromCoordinates(
+        _currentPosition.latitude, _currentPosition.longitude);
+    Placemark place = p[0];
+    setState(() {
+      _currentAddress =
+          "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+    });
   }
 
   double contextHeight;
   double contextWidth;
-  int quantity = 3;
   CollectionReference productCartRef = null;
   int shoppingCartQuantity = 0;
 
@@ -126,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : FloatingActionButton(
                   onPressed: _navigateToCartScreen,
                   backgroundColor: AppColors.white,
-                  child: CartIconWidget(productCartRef),
+                  child: CartIconWidget(shoppingCartQuantity),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(
@@ -707,9 +702,9 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
 }
 
 class CartIconWidget extends StatelessWidget {
-  CartIconWidget(this.productRef);
+  CartIconWidget(this.quantity);
 
-  CollectionReference productRef;
+  int quantity;
 
   @override
   Widget build(BuildContext context) {
@@ -737,20 +732,13 @@ class CartIconWidget extends StatelessWidget {
                 ),
                 color: AppColors.lightGreen,
               ),
-              child: FutureBuilder<QuerySnapshot>(
-                future: productRef.get(),
-                builder: (context, snapshot) {
-                  return Text(
-                    snapshot.data == null
-                        ? ''
-                        : snapshot.data.docs.length.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontSize: AppFontSizes.smallSize,
-                    ),
-                  );
-                },
+              child: Text(
+                quantity.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontSize: AppFontSizes.smallSize,
+                ),
               ),
             ),
           ],
