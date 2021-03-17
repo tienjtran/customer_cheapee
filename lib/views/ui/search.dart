@@ -40,7 +40,7 @@ class SearchScreenDelegate extends SearchDelegate {
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return await _searchPresenter.loadSearchScreen(
-        position.latitude, position.longitude, 5, query);
+        position.latitude, position.longitude, 10, query);
   }
 
   @override
