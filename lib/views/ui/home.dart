@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/notification.dart';
-import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
 import 'package:customer_cheapee/views/ui/search.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
@@ -29,7 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    if (FirebaseAuth.instance.currentUser != null) {
+      _getCurrentLocation();
+      loadingShoppingCart();
+    }
   }
 
   _getCurrentLocation() async {
@@ -43,6 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }).catchError((e) {
       print(e);
     });
+  }
+
+  void loadingShoppingCart() {
+    productCartRef = FirebaseUtils.getCartReference();
+    productCartRef.get().then((value) => shoppingCartQuantity = value.size);
   }
 
   _getAddressFromLatLng() async {
@@ -62,6 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
   double contextHeight;
   double contextWidth;
   int quantity = 3;
+  CollectionReference productCartRef = null;
+  int shoppingCartQuantity = 0;
 
   List<Widget> fragmentOptions = <Widget>[
     HomeFragment(),
@@ -95,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onItemTapped(int i) {
     setState(() {
       this._selectedIndex = i;
+      productCartRef.get().then((value) => shoppingCartQuantity = value.size);
     });
   }
 
@@ -109,18 +121,20 @@ class _HomeScreenState extends State<HomeScreen> {
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
       floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              onPressed: _navigateToCartScreen,
-              backgroundColor: AppColors.white,
-              child: CartIconWidget(quantity),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    5,
+          ? ((productCartRef == null || shoppingCartQuantity == 0)
+              ? null
+              : FloatingActionButton(
+                  onPressed: _navigateToCartScreen,
+                  backgroundColor: AppColors.white,
+                  child: CartIconWidget(productCartRef),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        5,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
+                ))
           : null,
     );
   }
@@ -220,6 +234,7 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
   String _result;
   double _contextHeight;
   double _contextWidth;
+
   List<SuggestedItemModel> suggestingItemList = [
     new SuggestedItemModel(
       imagePath: 'assets/images/vegetables.png',
@@ -692,9 +707,9 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
 }
 
 class CartIconWidget extends StatelessWidget {
-  CartIconWidget(this.quantity);
+  CartIconWidget(this.productRef);
 
-  int quantity;
+  CollectionReference productRef;
 
   @override
   Widget build(BuildContext context) {
@@ -722,15 +737,22 @@ class CartIconWidget extends StatelessWidget {
                 ),
                 color: AppColors.lightGreen,
               ),
-              child: Text(
-                quantity.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontSize: AppFontSizes.smallSize,
-                ),
+              child: FutureBuilder<QuerySnapshot>(
+                future: productRef.get(),
+                builder: (context, snapshot) {
+                  return Text(
+                    snapshot.data == null
+                        ? ''
+                        : snapshot.data.docs.length.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: AppFontSizes.smallSize,
+                    ),
+                  );
+                },
               ),
-            )
+            ),
           ],
         ),
       ),

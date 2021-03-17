@@ -108,3 +108,9 @@ class APIConstansts {
 
   static const String tokenParam = '{token}';
 }
+
+class FirebaseConstants {
+  static const String cartCollectionId = 'carts';
+
+  static const String productField = 'products';
+}

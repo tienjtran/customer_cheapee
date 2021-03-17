@@ -1,8 +1,10 @@
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommonWidgetUtils {
   static TextStyle getCommonTextStyle(
@@ -48,5 +50,12 @@ class FirebaseUtils {
     var storage = firebase_storage.FirebaseStorage.instance;
     String downloadURL = await storage.ref(path).getDownloadURL();
     return downloadURL;
+  }
+
+  static CollectionReference getCartReference() {
+    return FirebaseFirestore.instance
+        .collection(FirebaseConstants.cartCollectionId)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .collection(FirebaseConstants.productField);
   }
 }
