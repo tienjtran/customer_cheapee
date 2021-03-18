@@ -1,4 +1,5 @@
 class SuggestedProductModel {
+  int productId;
   String name; //tên sản phẩm
   String imagePath; //link hình ảnh
   double discount;
@@ -7,8 +8,15 @@ class SuggestedProductModel {
   int category; // Phân loại
   bool suggested; // Sản phầm được gợi ý
 
-  SuggestedProductModel(this.name, this.imagePath, this.discount,
-      this.salePrice, this.expiryDate, this.category, this.suggested);
+  SuggestedProductModel(
+      this.productId,
+      this.name,
+      this.imagePath,
+      this.discount,
+      this.salePrice,
+      this.expiryDate,
+      this.category,
+      this.suggested);
 
   get getName => this.name;
   set setName(String name) => this.name = name;
