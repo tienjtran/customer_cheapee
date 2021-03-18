@@ -1,6 +1,7 @@
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 
 class NearStoreOutputModel {
+  int storeId;
   String storeName;
   String imagePath;
   double distance;
@@ -8,8 +9,8 @@ class NearStoreOutputModel {
   int closeTime;
   List<SuggestedProductModel> productList;
 
-  NearStoreOutputModel(this.storeName, this.imagePath, this.distance,
-      this.openTime, this.closeTime, this.productList);
+  NearStoreOutputModel(this.storeId, this.storeName, this.imagePath,
+      this.distance, this.openTime, this.closeTime, this.productList);
 
   double get getDistance => this.distance;
 

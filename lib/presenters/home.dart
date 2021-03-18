@@ -30,6 +30,7 @@ class HomePresenter implements IHomePresenter {
     for (var i = 0; i < result.length; i++) {
       var unit = result[i];
       var model = new NearStoreOutputModel(
+          unit.storeId,
           unit.storeName,
           await FirebaseUtils.getDownloadUrls(unit.imagePath),
           double.parse(unit.distance.toStringAsFixed(1)),
@@ -39,6 +40,7 @@ class HomePresenter implements IHomePresenter {
       for (var j = 0; j < result[i].productList.length; j++) {
         var p = result[i].productList[j];
         var product = new SuggestedProductModel(
+            p.productInStoreId,
             p.name,
             await FirebaseUtils.getDownloadUrls(p.imagePath),
             CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),

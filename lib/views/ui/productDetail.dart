@@ -17,6 +17,7 @@ class ProductDetailScreen extends StatelessWidget {
     //danh sach cac san pham duoc goi y
     List<SuggestedProductModel> suggestedProductList = [
       new SuggestedProductModel(
+        1,
         'Thùng Pepsi',
         'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
         20,
@@ -26,6 +27,7 @@ class ProductDetailScreen extends StatelessWidget {
         false,
       ),
       new SuggestedProductModel(
+        1,
         'Nước Dasani 350ml',
         'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
         30,
@@ -35,6 +37,7 @@ class ProductDetailScreen extends StatelessWidget {
         false,
       ),
       new SuggestedProductModel(
+        1,
         'Thùng Pepsi không calo',
         'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
         40,
@@ -44,6 +47,7 @@ class ProductDetailScreen extends StatelessWidget {
         false,
       ),
       new SuggestedProductModel(
+        1,
         'Thùng Mirinda 12 chai 1.5 lít',
         'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
         50,
@@ -53,6 +57,7 @@ class ProductDetailScreen extends StatelessWidget {
         false,
       ),
       new SuggestedProductModel(
+        1,
         'Thùng 7upa 12 chai 1.5 lít',
         'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
         60,
