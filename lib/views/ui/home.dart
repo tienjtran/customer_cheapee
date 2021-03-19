@@ -40,9 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
+      _currentPosition = position;
       _getAddressFromLatLng();
     }).catchError((e) {
       print(e);
@@ -75,27 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileScreen(),
   ];
 
-  List<Widget> appbarOptions = <Widget>[
-    AppBar(
-      leading: IconButton(
-        icon: Icon(
-          Icons.location_on_outlined,
-          color: AppColors.black,
-        ),
-        iconSize: 20,
-      ),
-      title: Text(
-        _currentAddress,
-        style: TextStyle(fontSize: AppFontSizes.largeSize),
-      ),
-      elevation: 0,
-    ),
-    AppBar(
-      title: Text('Thông báo'),
-    ),
-    null,
-  ];
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int i) {
@@ -112,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: buildAppbar(),
+      appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
       floatingActionButton: _selectedIndex == 0
@@ -165,8 +142,29 @@ class _HomeScreenState extends State<HomeScreen> {
     return fragmentOptions.elementAt(this._selectedIndex);
   }
 
-  Widget buildAppbar() {
-    return appbarOptions.elementAt(this._selectedIndex);
+  Widget buildAppBar() {
+    if (_selectedIndex == 0) {
+      return AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.location_on_outlined,
+            color: AppColors.black,
+          ),
+          iconSize: 20,
+        ),
+        title: Text(
+          _currentAddress,
+          style: TextStyle(fontSize: AppFontSizes.largeSize),
+        ),
+        elevation: 0,
+      );
+    } else if (_selectedIndex == 1) {
+      return AppBar(
+        title: Text('Thông báo'),
+      );
+    } else {
+      return null;
+    }
   }
 }
 
