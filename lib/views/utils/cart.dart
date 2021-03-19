@@ -13,11 +13,11 @@ class CartItemWidget extends StatefulWidget {
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
-  void onChangedCheckBox(bool value) {
-    setState(() {
-      this.widget.model.checked = value;
-    });
-  }
+  // void onChangedCheckBox(bool value) {
+  //   setState(() {
+  //     this.widget.model.checked = value;
+  //   });
+  // }
 
   void onPressedPlusSign() {
     setState(() {
@@ -32,6 +32,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
         FlatButton(
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
+            setState(() {
+              widget.model.quantity++;
+            });
           },
           child: Text(
             Constants.no,
@@ -76,6 +79,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
           Image.network(
             this.widget.model.imagePath,
             height: 60,
+            width: 60,
+            fit: BoxFit.fitWidth,
           ),
           SizedBox(
             width: 15,
@@ -151,6 +156,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           showDialog(
                             context: context,
                             builder: (_) => buildYesNoDialog(),
+                            barrierDismissible: false,
                           );
                         }
                       });

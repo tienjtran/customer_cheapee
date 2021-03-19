@@ -1,6 +1,13 @@
-import 'package:flutter/cupertino.dart';
+class CartOutputModel {
+  int storeId;
+  String storeName;
+  String storeAddress;
+  List<CartItemOutputModel> productList = new List();
+  CartOutputModel(this.storeId, this.storeName, this.storeAddress);
+}
 
 class CartItemOutputModel {
+  int productId;
   String name;
   String imagePath;
 
@@ -8,17 +15,23 @@ class CartItemOutputModel {
   double currentPrice;
   int leftDays;
   int quantity;
-  bool checked;
 
-  CartItemOutputModel(this.name, this.imagePath, this.oldPrice,
-      this.currentPrice, this.leftDays, this.quantity, this.checked);
+  CartItemOutputModel(
+      {this.productId,
+      this.name,
+      this.imagePath,
+      this.oldPrice,
+      this.currentPrice,
+      this.leftDays,
+      this.quantity});
+
+  int get getProductId => this.productId;
+
+  set setProductId(int productId) => this.productId = productId;
 
   String get getImagePath => this.imagePath;
 
   set setImagePath(String imagePath) => this.imagePath = imagePath;
-  bool get getChecked => this.checked;
-
-  set setChecked(bool checked) => this.checked = checked;
 
   String get getName => this.name;
 

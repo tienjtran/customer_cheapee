@@ -1,9 +1,9 @@
-import 'package:customer_cheapee/views/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
@@ -24,9 +24,15 @@ Future<UserCredential> signInWithGoogle() async {
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key key}) : super(key: key);
+  void permission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+    ].request();
+  }
 
   @override
   Widget build(BuildContext context) {
+    permission();
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,

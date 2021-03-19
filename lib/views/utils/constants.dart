@@ -106,10 +106,20 @@ class APIUrls {
       'api/searchscreen?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}&name=${searchName}';
 
   static const String searchName = '{searchName}';
+
+  static const String loadCart = 'api/cart/loading-cart';
 }
 
 class APIConstansts {
   static const String bearerAuthorization = 'Bearer ${tokenParam}';
 
   static const String tokenParam = '{token}';
+}
+
+class FirebaseConstants {
+  static const String cartCollectionId = 'carts';
+
+  static const String productField = 'products';
+
+  static const String storeIdKey = 'store_id';
 }

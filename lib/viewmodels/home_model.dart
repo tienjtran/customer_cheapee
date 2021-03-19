@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:customer_cheapee/datasets/home_view.dart';
 import 'package:customer_cheapee/inputs/home_view.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';

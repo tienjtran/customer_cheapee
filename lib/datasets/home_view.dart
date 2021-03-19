@@ -18,7 +18,7 @@ class ProductInNearStoreDataset {
 
   factory ProductInNearStoreDataset.fromJson(Map<String, dynamic> json) {
     var list = json['productList'] as List;
-    List<ProductListDataset> imagesList =
+    List<ProductListDataset> productList =
         list.map((i) => ProductListDataset.fromJson(i)).toList();
     return ProductInNearStoreDataset(
         storeId: json['storeID'] as int,
@@ -27,7 +27,7 @@ class ProductInNearStoreDataset {
         distance: json['distance'] as double,
         openTime: json['openTime'] as int,
         closeTime: json['closeTime'] as int,
-        productList: imagesList);
+        productList: productList);
   }
 }
 
