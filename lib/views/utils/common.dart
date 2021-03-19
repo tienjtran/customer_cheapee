@@ -58,4 +58,14 @@ class FirebaseUtils {
         .doc(FirebaseAuth.instance.currentUser.uid)
         .collection(FirebaseConstants.productField);
   }
+
+  static Future<int> getStoreIdInCart() async {
+    int storeId;
+    await FirebaseFirestore.instance
+        .collection(FirebaseConstants.cartCollectionId)
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((value) => storeId = value.data()[FirebaseConstants.storeIdKey]);
+    return storeId;
+  }
 }

@@ -101,6 +101,8 @@ class APIUrls {
   static const String longitudeParam = '{longitude}';
 
   static const String distanceParam = '{distance}';
+
+  static const String loadCart = 'api/cart/loading-cart';
 }
 
 class APIConstansts {
@@ -113,4 +115,6 @@ class FirebaseConstants {
   static const String cartCollectionId = 'carts';
 
   static const String productField = 'products';
+
+  static const String storeIdKey = 'store_id';
 }
