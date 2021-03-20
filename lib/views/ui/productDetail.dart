@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:customer_cheapee/presenters/productdetail_presenter.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +11,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class ProductDetailScreen extends StatelessWidget {
+  final ProductDetailPresenter _productDetailPresenter =
+      new ProductDetailPresenter();
+  final int productId;
+
+  ProductDetailScreen({this.productId});
+
+  Future<ProductDetailModel> _getProductDetail(productInStoreId) async {
+    return await _productDetailPresenter
+        .loadProductDetailScreen(productInStoreId);
+  }
+
   @override
   Widget build(BuildContext context) {
     double contextHeight = MediaQuery.of(context).size.height;
@@ -233,92 +246,120 @@ class ProductDetailScreen extends StatelessWidget {
           });
     }
 
-    Widget productInfo = new Container(
-      padding: EdgeInsets.only(left: 15.0, top: 10.0, right: 15.0, bottom: 0.0),
-      child: Row(
-        children: [
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 7),
-                child: Text(
-                  'Thùng Coca Cola (24 chai)',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+    Widget _productInfo(ProductDetailModel data) {
+      return Container(
+        padding:
+            EdgeInsets.only(left: 15.0, top: 10.0, right: 15.0, bottom: 0.0),
+        child: Row(
+          children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(bottom: 7),
+                  // * Name
+                  child: Text(
+                    data.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: 7),
-                child: Text(
-                  'Vinmart',
-                  style: TextStyle(
-                      color: AppColors.strongGrey,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Text(
-                        'đ 210.000',
-                        style: TextStyle(
-                            color: AppColors.strongGreen,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      )),
-                  Text(
-                    'đ 310.000',
+                Container(
+                  padding: EdgeInsets.only(bottom: 7),
+                  // * Brand
+                  //TODO: change brandid
+                  child: Text(
+                    data.brandid.toString(),
                     style: TextStyle(
                         color: AppColors.strongGrey,
-                        decoration: TextDecoration.lineThrough,
-                        fontSize: 17),
-                  )
-                ],
-              ),
-              Container(
-                  padding: EdgeInsets.only(bottom: 7, top: 7),
-                  child: Text(
-                    'Còn 3 tháng',
-                    style: TextStyle(color: AppColors.red, fontSize: 17),
-                  )),
-              Container(
-                  padding: EdgeInsets.only(bottom: 7),
-                  child: Text(
-                    'Mô tả',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  )),
-              Container(
-                child: Text(
-                  'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
-                  ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.'
-                  'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
-                  ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.',
-                  maxLines: 4,
-                  overflow: TextOverflow.fade,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 5, bottom: 0),
-                alignment: Alignment.center,
-                child: Text(
-                  'Xem thêm',
-                  style: TextStyle(
-                    color: AppColors.strongGrey,
-                    fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                 ),
-              )
-            ],
-          )),
-        ],
-      ),
-    );
+                Row(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Text(
+                          // * sale price
+                          CommonUtils.convertDoubleToMoney(data.salePrice),
+                          style: TextStyle(
+                              color: AppColors.strongGreen,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
+                        )),
+                    Text(
+                      // * price
+                      CommonUtils.convertDoubleToMoney(data.originalPrice),
+                      style: TextStyle(
+                          color: AppColors.strongGrey,
+                          decoration: TextDecoration.lineThrough,
+                          fontSize: 17),
+                    )
+                  ],
+                ),
+                // * Ngày còn lại
+                if (data.getRemainingDays > 0)
+                  Container(
+                    padding: EdgeInsets.only(bottom: 7, top: 7),
+                    child: Text(
+                      'Còn ' + data.getRemainingDays.toString() + ' ngày',
+                      style: TextStyle(color: AppColors.red, fontSize: 17),
+                    ),
+                  )
+                else if (data.getRemainingDays == 0)
+                  Container(
+                    padding: EdgeInsets.only(bottom: 7, top: 7),
+                    child: Text(
+                      'Còn hạn sử dụng trong ngày',
+                      style: TextStyle(color: AppColors.red, fontSize: 17),
+                    ),
+                  )
+                else
+                  Container(
+                    padding: EdgeInsets.only(bottom: 7, top: 7),
+                    child: Text(
+                      'Đã hết hạn sử dụng',
+                      style: TextStyle(color: AppColors.red, fontSize: 17),
+                    ),
+                  ),
+                Container(
+                    padding: EdgeInsets.only(bottom: 7),
+                    child: Text(
+                      'Mô tả',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )),
+                Container(
+                  child: Text(
+                    'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
+                    ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.'
+                    'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
+                    ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.',
+                    maxLines: 4,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 5, bottom: 0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Xem thêm',
+                    style: TextStyle(
+                      color: AppColors.strongGrey,
+                      fontSize: 14,
+                    ),
+                  ),
+                )
+              ],
+            )),
+          ],
+        ),
+      );
+    }
 
     Widget productSuggestion = new Container(
       padding: EdgeInsets.only(left: 15.0, top: 0.0, right: 15.0, bottom: 15.0),
@@ -358,79 +399,162 @@ class ProductDetailScreen extends StatelessWidget {
     );
 
     return Scaffold(
-        body: Stack(children: <Widget>[
-      Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  Image.network(
-                    'https://cf.shopee.vn/file/ed945b16c684909727a2d03c792c983c',
-                    width: contextWidth,
-                    height: contextHeight * 0.3,
-                    fit: BoxFit.fill,
-                    alignment: Alignment.center,
-                  ),
-                  productInfo,
-                  Divider(
-                    color: AppColors.lightGrey,
-                    thickness: 1.0,
-                    indent: contextWidth * 0.031,
-                    endIndent: contextWidth * 0.031,
-                  ),
-                  productSuggestion,
-                  //--------------------------------------------------------------------------
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(),
-              height: 50,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox.expand(
-                      child: ElevatedButton(
-                        child: Text(
-                          Constants.addToCart,
-                          style: TextStyle(fontSize: AppFontSizes.largeSize),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed))
-                                return Theme.of(context)
-                                    .accentColor
-                                    .withOpacity(0.5);
-                              return Theme.of(context).accentColor;
-                            },
-                          ),
-                        ),
-                        onPressed: () => displayBottomSheet(context),
-                      ),
+      body: FutureBuilder(
+        future: _getProductDetail(productId),
+        builder:
+            (BuildContext context, AsyncSnapshot<ProductDetailModel> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data == null) {
+              return Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 30),
                     ),
+                    SizedBox(
+                      child: Icon(
+                        Icons.cancel_outlined,
+                        color: AppColors.red,
+                        size: 60,
+                      ),
+                      width: 60,
+                      height: 60,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Rất tiếc không có kết quả bạn mong muốn.'),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              return Scaffold(
+                  body: Stack(children: <Widget>[
+                Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          children: <Widget>[
+                            Image.network(
+                              //TODO: add imagepath
+                              'https://cf.shopee.vn/file/ed945b16c684909727a2d03c792c983c',
+                              width: contextWidth,
+                              height: contextHeight * 0.3,
+                              fit: BoxFit.fill,
+                              alignment: Alignment.center,
+                            ),
+                            // * Product info
+                            _productInfo(snapshot.data),
+                            Divider(
+                              color: AppColors.lightGrey,
+                              thickness: 1.0,
+                              indent: contextWidth * 0.031,
+                              endIndent: contextWidth * 0.031,
+                            ),
+                            // * Product Suggestion
+                            productSuggestion,
+                            //--------------------------------------------------------------------------
+                          ],
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(),
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox.expand(
+                                child: ElevatedButton(
+                                  child: Text(
+                                    Constants.addToCart,
+                                    style: TextStyle(
+                                        fontSize: AppFontSizes.largeSize),
+                                  ),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed))
+                                          return Theme.of(context)
+                                              .accentColor
+                                              .withOpacity(0.5);
+                                        return Theme.of(context).accentColor;
+                                      },
+                                    ),
+                                  ),
+                                  onPressed: () => displayBottomSheet(context),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                Positioned(
+                  top: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  child: AppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: _onPressGoBack,
+                      color: AppColors.white,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                  ),
+                ),
+              ]));
+            }
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                  ),
+                  SizedBox(
+                    child: Icon(
+                      Icons.cancel_outlined,
+                      color: AppColors.red,
+                      size: 60,
+                    ),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Rất tiếc đã có lỗi xảy ra.'),
+                  )
                 ],
               ),
-            ),
-          ],
-        ),
+            );
+          } else {
+            return Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                  ),
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Đang tải dữ liệu...'),
+                  )
+                ],
+              ),
+            );
+          }
+        },
       ),
-      Positioned(
-        top: 0.0,
-        left: 0.0,
-        right: 0.0,
-        child: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: _onPressGoBack,
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-      ),
-    ]));
+    );
   }
 }

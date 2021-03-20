@@ -108,6 +108,11 @@ class APIUrls {
   static const String searchName = '{searchName}';
 
   static const String loadCart = 'api/cart/loading-cart';
+
+  static const String productDetailScreen =
+      'products-in-store/productdetail/$pisId';
+
+  static const String pisId = '{pisId}';
 }
 
 class APIConstansts {
