@@ -1,3 +1,4 @@
+import 'package:customer_cheapee/presenters/storeDetail_presenter.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
@@ -6,8 +7,12 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/diamongShape.dart';
 import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class StoreDetailScreen extends StatelessWidget {
+  StoreDetailPresenter _storeDetailPresenter = StoreDetailPresenter();
+
+  // * Get storeModel from arguments
   final List<SuggestedItemModel> _categoryList = [
     new SuggestedItemModel(
       imagePath:
@@ -48,11 +53,10 @@ class StoreDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int _storeId = ModalRoute.of(context).settings.arguments;
+    asyncMethod(_storeId);
     // * Get device size
     final _contextSize = MediaQuery.of(context).size;
-    // * Get storeModel from arguments
-    NearStoreOutputModel _storeModel =
-        ModalRoute.of(context).settings.arguments;
     // * Navigators
     void _close() {
       Navigator.pop(context);
@@ -113,7 +117,7 @@ class StoreDetailScreen extends StatelessWidget {
     }
 
     // * Create UI that contains several Categories
-    Widget _buildCategoryList() {
+    Widget _buildCategoryList(NearStoreOutputModel data) {
       return ListView(
         children: [
           for (var i = 0; i < _categoryList.length; i++)
@@ -145,7 +149,7 @@ class StoreDetailScreen extends StatelessWidget {
                             builder: (context) => _buildCategoryDetail(
                               i,
                               _categoryList[i].getText,
-                              _storeModel.productList,
+                              data.productList,
                             ),
                           ),
                         ),
@@ -165,11 +169,10 @@ class StoreDetailScreen extends StatelessWidget {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        if (index >= _storeModel.productList.length) {
+                        if (index >= data.productList.length) {
                           return null;
                         }
-                        return _selectProduct(
-                            i, _storeModel.productList[index]);
+                        return _selectProduct(i, data.productList[index]);
                       },
                     ),
                   ),
@@ -181,70 +184,156 @@ class StoreDetailScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      // * Back button
-      floatingActionButton: Container(
-        child: FloatingActionButton(
-          onPressed: _close,
-          backgroundColor: AppColors.white,
-          shape: DiamondBorder(),
-          child: Container(
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      // * Body
-      body: Container(
-        padding: const EdgeInsets.only(top: 24),
-        child: Column(
-          children: [
-            // * Big Image
-            Container(
-              child: Image.network(
-                _storeModel.getImagePath,
-                width: _contextSize.width,
-                height: _contextSize.height * 0.2,
-              ),
-            ),
-            // * Store Detail
-            Container(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: Column(
-                children: [
-                  // * Name
-                  Text(
-                    _storeModel.getStoreName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppFontSizes.largeSize,
+        body: FutureBuilder(
+            future: asyncMethod(_storeId),
+            builder: (BuildContext context,
+                AsyncSnapshot<NearStoreOutputModel> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data == null) {
+                  return Center(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 30),
+                        ),
+                        SizedBox(
+                          child: Icon(
+                            Icons.cancel_outlined,
+                            color: AppColors.red,
+                            size: 60,
+                          ),
+                          width: 60,
+                          height: 60,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 16),
+                          child:
+                              Text('Rất tiếc không có kết quả bạn mong muốn.'),
+                        )
+                      ],
                     ),
-                  ),
-                  // * Distant
-                  Text(
-                    _storeModel.distance.toString() + ' km',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
+                  );
+                } else {
+                  return Scaffold(
+                    // * Back button
+                    floatingActionButton: Container(
+                      child: FloatingActionButton(
+                        onPressed: _close,
+                        backgroundColor: AppColors.white,
+                        shape: DiamondBorder(),
+                        child: Container(
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
+                    floatingActionButtonLocation:
+                        FloatingActionButtonLocation.startTop,
+                    // * Body
+                    body: Container(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: Column(
+                        children: [
+                          // * Big Image
+                          Container(
+                            child: Image.network(
+                              snapshot.data.getImagePath,
+                              width: _contextSize.width,
+                              height: _contextSize.height * 0.2,
+                            ),
+                          ),
+                          // * Store Detail
+                          Container(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: Column(
+                              children: [
+                                // * Name
+                                Text(
+                                  snapshot.data.getStoreName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppFontSizes.largeSize,
+                                  ),
+                                ),
+                                // * Distant
+                                Text(
+                                  snapshot.data.distance.toString() + ' km',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                // * Operating Time
+                                Text(CommonUtils.convertMinuteToStringTime(
+                                        snapshot.data.openTime) +
+                                    ' - ' +
+                                    CommonUtils.convertMinuteToStringTime(
+                                        snapshot.data.closeTime)),
+                              ],
+                            ),
+                          ),
+                          // * Category List
+                          Expanded(
+                            child: _buildCategoryList(snapshot.data),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      SizedBox(
+                        child: Icon(
+                          Icons.cancel_outlined,
+                          color: AppColors.red,
+                          size: 60,
+                        ),
+                        width: 60,
+                        height: 60,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 16),
+                        child: Text('Rất tiếc đã có lỗi xảy ra.'),
+                      )
+                    ],
                   ),
-                  // * Operating Time
-                  Text(CommonUtils.convertMinuteToStringTime(
-                          _storeModel.openTime) +
-                      ' - ' +
-                      CommonUtils.convertMinuteToStringTime(
-                          _storeModel.closeTime)),
-                ],
-              ),
-            ),
-            // * Category List
-            Expanded(
-              child: _buildCategoryList(),
-            ),
-          ],
-        ),
-      ),
-    );
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 30),
+                      ),
+                      SizedBox(
+                        child: CircularProgressIndicator(),
+                        width: 60,
+                        height: 60,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 16),
+                        child: Text('Đang tìm kiếm...'),
+                      )
+                    ],
+                  ),
+                );
+              }
+            }));
+  }
+
+  Future<NearStoreOutputModel> asyncMethod(int storeId) async {
+    NearStoreOutputModel a;
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    a = await _storeDetailPresenter.loadStoreDetailScreen(
+        storeId, position.latitude, position.longitude, 5);
+    return a;
   }
 }
