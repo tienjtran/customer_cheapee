@@ -43,25 +43,27 @@ class SuggestedProductModel {
 class ProductDetailModel {
   int productInStoreId;
   String name; //tên sản phẩm
-  int imagePathid; //link hình ảnh
+  String imagePath; //link hình ảnh
   double discount;
   double salePrice; //giá đã giảm
   double originalPrice;
   String expiryDate; //HSD
-  int manufacturerid;
-  int brandid;
+  String description;
+  String manufacturerName;
+  String brandName;
   int categoryid;
   int remainingDays;
 
   ProductDetailModel(
     this.productInStoreId,
     this.name,
-    this.imagePathid,
+    this.imagePath,
     this.salePrice,
     this.originalPrice,
     this.expiryDate,
-    this.manufacturerid,
-    this.brandid,
+    this.description,
+    this.manufacturerName,
+    this.brandName,
     this.categoryid,
   );
 
@@ -72,8 +74,8 @@ class ProductDetailModel {
   get getName => this.name;
   set setName(name) => this.name = name;
 
-  get getImagePathid => this.imagePathid;
-  set setImagePathid(imagePathid) => this.imagePathid = imagePathid;
+  get getImagePath => this.imagePath;
+  set setImagePath(imagePath) => this.imagePath = imagePath;
 
   get getDiscount => 100 - (this.salePrice / this.originalPrice * 100);
   set setDiscount(discount) => this.discount = discount;
@@ -84,11 +86,15 @@ class ProductDetailModel {
   get getExpiryDate => this.expiryDate;
   set setExpiryDate(expiryDate) => this.expiryDate = expiryDate;
 
-  get getManufacturerid => this.manufacturerid;
-  set setManufacturerid(manufacturerid) => this.manufacturerid = manufacturerid;
+  get getDescription => this.description;
+  set setDescription(description) => this.description = description;
 
-  get getBrandid => this.brandid;
-  set setBrandid(brandid) => this.brandid = brandid;
+  get getManufacturerName => this.manufacturerName;
+  set setManufacturerName(manufacturerName) =>
+      this.manufacturerName = manufacturerName;
+
+  get getBrandName => this.brandName;
+  set setBrandName(brandName) => this.brandName = brandName;
 
   get getCategoryid => this.categoryid;
   set setCategoryid(categoryid) => this.categoryid = categoryid;

@@ -35,4 +35,82 @@ class ProductDetailViewModel {
     ProductInStoreDataset result = ProductInStoreDataset.fromJson(parsed);
     return result;
   }
+
+  // * Brand
+  Future<BrandDataset> getBrand(int brandId) async {
+    String url = APIUrls.getBrand;
+    url = url.replaceFirst(APIUrls.brandId, brandId.toString());
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+
+    return parseDataFromBrandJson(response.body);
+  }
+
+  BrandDataset parseDataFromBrandJson(String responseBody) {
+    final Map<String, dynamic> parsed = jsonDecode(responseBody);
+    BrandDataset result = BrandDataset.fromJson(parsed);
+    return result;
+  }
+
+  // * Manufacturer
+  Future<ManufacturerDataset> getManufacturer(int manufacturerId) async {
+    String url = APIUrls.getManufacturer;
+    url = url.replaceFirst(APIUrls.manufacturerId, manufacturerId.toString());
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+
+    return parseDataFromManufacturerJson(response.body);
+  }
+
+  ManufacturerDataset parseDataFromManufacturerJson(String responseBody) {
+    final Map<String, dynamic> parsed = jsonDecode(responseBody);
+    ManufacturerDataset result = ManufacturerDataset.fromJson(parsed);
+    return result;
+  }
+
+  //* Photo
+  Future<PhotoDataset> getPhoto(int photoId) async {
+    String url = APIUrls.getPhoto;
+    url = url.replaceFirst(APIUrls.photoId, photoId.toString());
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+
+    return parseDataFromPhotoJson(response.body);
+  }
+
+  PhotoDataset parseDataFromPhotoJson(String responseBody) {
+    final Map<String, dynamic> parsed = jsonDecode(responseBody);
+    PhotoDataset result = PhotoDataset.fromJson(parsed);
+    return result;
+  }
 }

@@ -113,6 +113,19 @@ class APIUrls {
       'products-in-store/productdetail/$pisId';
 
   static const String pisId = '{pisId}';
+
+  static const String getBrand = 'api/cheapee/brands/$brandId';
+
+  static const String brandId = '{brandId}';
+
+  static const String getManufacturer =
+      'api/cheapee/manufacturers/$manufacturerId';
+
+  static const String manufacturerId = '{manufacturerId}';
+
+  static const String getPhoto = 'api/cheapee/photo/$photoId';
+
+  static const String photoId = '{photoId}';
 }
 
 class APIConstansts {

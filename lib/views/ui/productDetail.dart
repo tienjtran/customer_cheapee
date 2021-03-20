@@ -85,6 +85,13 @@ class ProductDetailScreen extends StatelessWidget {
       Navigator.pop(context);
     }
 
+    bool _isDisabled(int remainingDays) {
+      if (remainingDays >= 0) {
+        return false;
+      } else
+        return true;
+    }
+
     void displayBottomSheet(BuildContext context) {
       showModalBottomSheet(
           context: context,
@@ -99,6 +106,7 @@ class ProductDetailScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
+                        //TODO: Remaining product
                         Text('Kho: 215'),
                         Expanded(
                             child: Container(
@@ -270,9 +278,8 @@ class ProductDetailScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(bottom: 7),
                   // * Brand
-                  //TODO: change brandid
                   child: Text(
-                    data.brandid.toString(),
+                    data.brandName,
                     style: TextStyle(
                         color: AppColors.strongGrey,
                         fontWeight: FontWeight.bold,
@@ -335,10 +342,7 @@ class ProductDetailScreen extends StatelessWidget {
                     )),
                 Container(
                   child: Text(
-                    'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
-                    ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.'
-                    'Nước ngọt Coca Cola với thương hiệu uy tín hàng đầu thế giới,'
-                    ' được nhiều người yêu thích với hương vị thơm ngon, hấp dẫn.',
+                    data.description,
                     maxLines: 4,
                     overflow: TextOverflow.fade,
                   ),
@@ -361,42 +365,42 @@ class ProductDetailScreen extends StatelessWidget {
       );
     }
 
-    Widget productSuggestion = new Container(
-      padding: EdgeInsets.only(left: 15.0, top: 0.0, right: 15.0, bottom: 15.0),
-      child: Row(
-        children: [
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 10),
-                child: Text(
-                  'Sản phẩm liên quan',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13.5,
-                      color: AppColors.strongGrey),
-                ),
-              ),
-              SizedBox(
-                height: 210,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    SuggestedProductWidget(model: suggestedProductList[0]),
-                    SuggestedProductWidget(model: suggestedProductList[1]),
-                    SuggestedProductWidget(model: suggestedProductList[2]),
-                    SuggestedProductWidget(model: suggestedProductList[3]),
-                    SuggestedProductWidget(model: suggestedProductList[4]),
-                  ],
-                ),
-              ),
-            ],
-          ))
-        ],
-      ),
-    );
+    // Widget productSuggestion = new Container(
+    //   padding: EdgeInsets.only(left: 15.0, top: 0.0, right: 15.0, bottom: 15.0),
+    //   child: Row(
+    //     children: [
+    //       Expanded(
+    //           child: Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: <Widget>[
+    //           Container(
+    //             padding: EdgeInsets.only(bottom: 10),
+    //             child: Text(
+    //               'Sản phẩm liên quan',
+    //               style: TextStyle(
+    //                   fontWeight: FontWeight.bold,
+    //                   fontSize: 13.5,
+    //                   color: AppColors.strongGrey),
+    //             ),
+    //           ),
+    //           SizedBox(
+    //             height: 210,
+    //             child: ListView(
+    //               scrollDirection: Axis.horizontal,
+    //               children: <Widget>[
+    //                 SuggestedProductWidget(model: suggestedProductList[0]),
+    //                 SuggestedProductWidget(model: suggestedProductList[1]),
+    //                 SuggestedProductWidget(model: suggestedProductList[2]),
+    //                 SuggestedProductWidget(model: suggestedProductList[3]),
+    //                 SuggestedProductWidget(model: suggestedProductList[4]),
+    //               ],
+    //             ),
+    //           ),
+    //         ],
+    //       ))
+    //     ],
+    //   ),
+    // );
 
     return Scaffold(
       body: FutureBuilder(
@@ -437,8 +441,7 @@ class ProductDetailScreen extends StatelessWidget {
                         child: ListView(
                           children: <Widget>[
                             Image.network(
-                              //TODO: add imagepath
-                              'https://cf.shopee.vn/file/ed945b16c684909727a2d03c792c983c',
+                              snapshot.data.imagePath,
                               width: contextWidth,
                               height: contextHeight * 0.3,
                               fit: BoxFit.fill,
@@ -453,7 +456,7 @@ class ProductDetailScreen extends StatelessWidget {
                               endIndent: contextWidth * 0.031,
                             ),
                             // * Product Suggestion
-                            productSuggestion,
+                            // productSuggestion,
                             //--------------------------------------------------------------------------
                           ],
                         ),
@@ -466,26 +469,31 @@ class ProductDetailScreen extends StatelessWidget {
                             Expanded(
                               child: SizedBox.expand(
                                 child: ElevatedButton(
-                                  child: Text(
-                                    Constants.addToCart,
-                                    style: TextStyle(
-                                        fontSize: AppFontSizes.largeSize),
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.pressed))
-                                          return Theme.of(context)
-                                              .accentColor
-                                              .withOpacity(0.5);
-                                        return Theme.of(context).accentColor;
-                                      },
+                                    child: Text(
+                                      Constants.addToCart,
+                                      style: TextStyle(
+                                          fontSize: AppFontSizes.largeSize),
                                     ),
-                                  ),
-                                  onPressed: () => displayBottomSheet(context),
-                                ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Theme.of(context)
+                                                .accentColor
+                                                .withOpacity(0.5);
+                                          else if (states
+                                              .contains(MaterialState.disabled))
+                                            return AppColors.lightGrey;
+                                          return Theme.of(context).accentColor;
+                                        },
+                                      ),
+                                    ),
+                                    onPressed: _isDisabled(
+                                            snapshot.data.getRemainingDays)
+                                        ? null
+                                        : () => displayBottomSheet(context)),
                               ),
                             ),
                           ],
