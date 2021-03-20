@@ -39,3 +39,67 @@ class SuggestedProductModel {
   get getSuggested => this.suggested;
   set setSuggested(suggested) => this.suggested = suggested;
 }
+
+class ProductDetailModel {
+  int productInStoreId;
+  String name; //tên sản phẩm
+  String imagePath; //link hình ảnh
+  double discount;
+  double salePrice; //giá đã giảm
+  double originalPrice;
+  String expiryDate; //HSD
+  String description;
+  String manufacturerName;
+  String brandName;
+  int categoryid;
+  int remainingDays;
+
+  ProductDetailModel(
+    this.productInStoreId,
+    this.name,
+    this.imagePath,
+    this.salePrice,
+    this.originalPrice,
+    this.expiryDate,
+    this.description,
+    this.manufacturerName,
+    this.brandName,
+    this.categoryid,
+  );
+
+  get getProductInStoreId => this.productInStoreId;
+  set setProductInStoreId(productInStoreId) =>
+      this.productInStoreId = productInStoreId;
+
+  get getName => this.name;
+  set setName(name) => this.name = name;
+
+  get getImagePath => this.imagePath;
+  set setImagePath(imagePath) => this.imagePath = imagePath;
+
+  get getDiscount => 100 - (this.salePrice / this.originalPrice * 100);
+  set setDiscount(discount) => this.discount = discount;
+
+  get getSalePrice => this.salePrice;
+  set setSalePrice(salePrice) => this.salePrice = salePrice;
+
+  get getExpiryDate => this.expiryDate;
+  set setExpiryDate(expiryDate) => this.expiryDate = expiryDate;
+
+  get getDescription => this.description;
+  set setDescription(description) => this.description = description;
+
+  get getManufacturerName => this.manufacturerName;
+  set setManufacturerName(manufacturerName) =>
+      this.manufacturerName = manufacturerName;
+
+  get getBrandName => this.brandName;
+  set setBrandName(brandName) => this.brandName = brandName;
+
+  get getCategoryid => this.categoryid;
+  set setCategoryid(categoryid) => this.categoryid = categoryid;
+
+  get getRemainingDays =>
+      new DateTime.now().difference(DateTime.parse(this.expiryDate)).inDays;
+  set setRemainingDays(remainingDays) => this.remainingDays = remainingDays;
+}
