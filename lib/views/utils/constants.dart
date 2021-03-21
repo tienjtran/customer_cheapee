@@ -106,10 +106,38 @@ class APIUrls {
       'api/searchscreen?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}&name=${searchName}';
 
   static const String searchName = '{searchName}';
+
+  static const String loadCart = 'api/cart/loading-cart';
+
+  static const String productDetailScreen =
+      'products-in-store/productdetail/$pisId';
+
+  static const String pisId = '{pisId}';
+
+  static const String getBrand = 'api/cheapee/brands/$brandId';
+
+  static const String brandId = '{brandId}';
+
+  static const String getManufacturer =
+      'api/cheapee/manufacturers/$manufacturerId';
+
+  static const String manufacturerId = '{manufacturerId}';
+
+  static const String getPhoto = 'api/cheapee/photo/$photoId';
+
+  static const String photoId = '{photoId}';
 }
 
 class APIConstansts {
   static const String bearerAuthorization = 'Bearer ${tokenParam}';
 
   static const String tokenParam = '{token}';
+}
+
+class FirebaseConstants {
+  static const String cartCollectionId = 'carts';
+
+  static const String productField = 'products';
+
+  static const String storeIdKey = 'store_id';
 }

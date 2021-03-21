@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/notification.dart';
-import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/profile.dart';
 import 'package:customer_cheapee/views/ui/search.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
@@ -29,39 +30,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    if (FirebaseAuth.instance.currentUser != null) {
+      _getCurrentLocation();
+      loadingShoppingCart();
+    }
   }
 
-  _getCurrentLocation() async {
-    await geolocator
+  _getCurrentLocation() {
+    geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
+      _currentPosition = position;
       _getAddressFromLatLng();
     }).catchError((e) {
       print(e);
     });
   }
 
+  void loadingShoppingCart() {
+    productCartRef = FirebaseUtils.getCartReference();
+    productCartRef.get().then((value) => shoppingCartQuantity = value.size);
+  }
+
   _getAddressFromLatLng() async {
-    try {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
-      Placemark place = p[0];
-      setState(() {
-        _currentAddress =
-            "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
-      });
-    } catch (e) {
-      print(e);
-    }
+    List<Placemark> p = await geolocator.placemarkFromCoordinates(
+        _currentPosition.latitude, _currentPosition.longitude);
+    Placemark place = p[0];
+    setState(() {
+      _currentAddress =
+          "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+    });
   }
 
   double contextHeight;
   double contextWidth;
-  int quantity = 3;
+  CollectionReference productCartRef = null;
+  int shoppingCartQuantity = 0;
 
   List<Widget> fragmentOptions = <Widget>[
     HomeFragment(),
@@ -69,32 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileScreen(),
   ];
 
-  List<Widget> appbarOptions = <Widget>[
-    AppBar(
-      leading: IconButton(
-        icon: Icon(
-          Icons.location_on_outlined,
-          color: AppColors.black,
-        ),
-        iconSize: 20,
-      ),
-      title: Text(
-        _currentAddress,
-        style: TextStyle(fontSize: AppFontSizes.largeSize),
-      ),
-      elevation: 0,
-    ),
-    AppBar(
-      title: Text('Thông báo'),
-    ),
-    null,
-  ];
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int i) {
     setState(() {
       this._selectedIndex = i;
+      productCartRef.get().then((value) => shoppingCartQuantity = value.size);
     });
   }
 
@@ -105,22 +89,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: buildAppbar(),
+      appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
       floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              onPressed: _navigateToCartScreen,
-              backgroundColor: AppColors.white,
-              child: CartIconWidget(quantity),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    5,
+          ? ((productCartRef == null || shoppingCartQuantity == 0)
+              ? null
+              : FloatingActionButton(
+                  onPressed: _navigateToCartScreen,
+                  backgroundColor: AppColors.white,
+                  child: CartIconWidget(shoppingCartQuantity),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(
+                        5,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
+                ))
           : null,
     );
   }
@@ -156,8 +142,29 @@ class _HomeScreenState extends State<HomeScreen> {
     return fragmentOptions.elementAt(this._selectedIndex);
   }
 
-  Widget buildAppbar() {
-    return appbarOptions.elementAt(this._selectedIndex);
+  Widget buildAppBar() {
+    if (_selectedIndex == 0) {
+      return AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.location_on_outlined,
+            color: AppColors.black,
+          ),
+          iconSize: 20,
+        ),
+        title: Text(
+          _currentAddress,
+          style: TextStyle(fontSize: AppFontSizes.largeSize),
+        ),
+        elevation: 0,
+      );
+    } else if (_selectedIndex == 1) {
+      return AppBar(
+        title: Text('Thông báo'),
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -220,6 +227,7 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
   String _result;
   double _contextHeight;
   double _contextWidth;
+
   List<SuggestedItemModel> suggestingItemList = [
     new SuggestedItemModel(
       imagePath: 'assets/images/vegetables.png',
@@ -730,7 +738,7 @@ class CartIconWidget extends StatelessWidget {
                   fontSize: AppFontSizes.smallSize,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
