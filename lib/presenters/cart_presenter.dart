@@ -2,6 +2,7 @@ import 'package:customer_cheapee/viewmodels/cart_model.dart';
 import 'package:customer_cheapee/views/models/output/cart.dart';
 import 'package:customer_cheapee/views/ui/cart.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
 
 abstract class ICartPresenter {
   Future<void> loadCart();
@@ -27,7 +28,8 @@ class CartPresenter implements ICartPresenter {
       await FirebaseUtils.getCartReference()
           .doc(dataset.productInStoreId.toString())
           .get()
-          .then((value) => model.quantity = value.data()['quantity']);
+          .then((value) =>
+              model.quantity = value.data()[FirebaseConstants.quantity]);
       model.productId = dataset.productInStoreId;
       model.name = dataset.productName;
       model.oldPrice = dataset.oldPrice;

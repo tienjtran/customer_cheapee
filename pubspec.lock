@@ -250,12 +250,12 @@ packages:
     source: sdk
     version: "0.0.0"
   font_awesome_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.11.0"
+    version: "8.12.0"
   geolocator:
     dependency: "direct main"
     description:

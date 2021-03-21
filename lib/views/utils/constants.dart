@@ -175,6 +175,8 @@ class FirebaseConstants {
   static const String productField = 'products';
 
   static const String storeIdKey = 'store_id';
+
+  static const String quantity = 'quantity';
 }
 
 class Process {
