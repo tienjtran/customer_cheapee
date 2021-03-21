@@ -1,20 +1,36 @@
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:flutter/material.dart';
 
-class NamingCategoryWidget extends StatelessWidget {
+import 'constants.dart';
+
+class NamingCategoryWidget extends StatefulWidget {
   NamingCategoryWidget({Key key, this.outputModel}) : super(key: key);
   final SuggestedItemModel outputModel;
+
+  @override
+  _NamingCategoryWidgetState createState() => _NamingCategoryWidgetState();
+}
+
+class _NamingCategoryWidgetState extends State<NamingCategoryWidget> {
+  void _navigateToSearch() {
+    Navigator.pushNamed(context, NamedRoutes.searchByCategory,
+        arguments: widget.outputModel.text);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          IconButton(
-            icon: Image.asset(outputModel.getImagePath),
-            iconSize: 50,
-          ),
-          Text(outputModel.getText),
-        ],
+    return GestureDetector(
+      onTap: _navigateToSearch,
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            IconButton(
+              icon: Image.asset(widget.outputModel.getImagePath),
+              iconSize: 50,
+            ),
+            Text(widget.outputModel.getText),
+          ],
+        ),
       ),
     );
   }

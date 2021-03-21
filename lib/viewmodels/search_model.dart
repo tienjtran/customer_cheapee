@@ -33,6 +33,29 @@ class SearchViewModel {
     return parseDataFromJson(response.body);
   }
 
+  Future<List<SearchStoreDataset>> getNearItemsByCategory(
+      SearchScreenLoadingInput input) async {
+    String url = APIUrls.searchByCategoryScreen;
+    url = url.replaceFirst(APIUrls.latitudeParam, input.latitude.toString());
+    url = url.replaceFirst(APIUrls.longitudeParam, input.longitude.toString());
+    url = url.replaceFirst(APIUrls.distanceParam, input.distance.toString());
+    url = url.replaceFirst(APIUrls.searchCategoryName, input.name);
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+
+    return parseDataFromJson(response.body);
+  }
+
   List<SearchStoreDataset> parseDataFromJson(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     List<SearchStoreDataset> result = parsed
