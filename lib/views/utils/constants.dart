@@ -126,6 +126,26 @@ class APIUrls {
   static const String getPhoto = 'api/cheapee/photo/$photoId';
 
   static const String photoId = '{photoId}';
+
+  static const String getAllOrder =
+      'api/cheapee/orders/?search_email=$email&page_size=$pageSize&page_number=p$pageNumber';
+
+  static const String email = '{email}';
+
+  static const String pageSize = '{pageSize}';
+
+  static const String pageNumber = '{pageNumber}';
+
+  // * Store
+  static const String getStore = 'api/cheapee/store/idstore?storeId=$storeId';
+
+  static const String storeId = '{storeId}';
+
+  // * Order Detail
+  static const String getAllOrderDetail =
+      'api/cheapee/orderdetail?order_id=$orderId';
+
+  static const String orderId = '{orderId}';
 }
 
 class APIConstansts {
@@ -140,4 +160,11 @@ class FirebaseConstants {
   static const String productField = 'products';
 
   static const String storeIdKey = 'store_id';
+}
+
+class Process {
+  static const int confirmOrder = 0;
+  static const int waitToCollect = 1;
+  static const int waitForPayment = 2;
+  static const int orderHistory = 3;
 }

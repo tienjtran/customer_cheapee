@@ -2,6 +2,7 @@ import 'package:customer_cheapee/views/utils/confirmOrder.dart';
 import 'package:customer_cheapee/views/utils/orderHistory.dart';
 import 'package:customer_cheapee/views/utils/waitForPayment.dart';
 import 'package:customer_cheapee/views/utils/waitToCollect.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 List<String> _tabList = [
@@ -12,6 +13,7 @@ List<String> _tabList = [
 ];
 
 class OrderScreen extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     //Set initialIndex for DefaultTabController
@@ -56,10 +58,10 @@ class OrderScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            ConfirmOrder(),
-            WaitToCollect(),
-            WaitForPayment(),
-            OrderHistory(),
+            ConfirmOrder(email: _auth.currentUser.email),
+            WaitToCollect(email: _auth.currentUser.email),
+            WaitForPayment(email: _auth.currentUser.email),
+            OrderHistory(email: _auth.currentUser.email),
           ],
         ),
       ),

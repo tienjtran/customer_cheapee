@@ -1,6 +1,9 @@
-import 'package:customer_cheapee/datasets/product_dataset.dart';
+import 'package:customer_cheapee/datasets/productinstore_dataset.dart';
+import 'package:customer_cheapee/datasets/brand_dataset.dart';
+import 'package:customer_cheapee/datasets/manufacturer_dataset.dart';
+import 'package:customer_cheapee/datasets/photo_dataset.dart';
 import 'package:customer_cheapee/inputs/productdetail_input.dart';
-import 'package:customer_cheapee/viewmodels/productdetail_model.dart';
+import 'package:customer_cheapee/viewmodels/productdetail_viewmodel.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 
