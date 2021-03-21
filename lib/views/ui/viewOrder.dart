@@ -11,14 +11,9 @@ class ViewOrderScreen extends StatefulWidget {
 }
 
 class _ViewOrderScreenState extends State<ViewOrderScreen> {
-  bool _isCanceled;
-  bool _isConfirmed;
-
   @override
   void initState() {
     super.initState();
-    _isCanceled = false;
-    _isConfirmed = false;
   }
 
   @override
@@ -45,7 +40,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
               Container(
                 child: Row(
                   children: [
-                    Image.asset(
+                    Image.network(
                       product.imagePath,
                       height: 70,
                       width: 70,
@@ -75,7 +70,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                             ),
                           ),
                           Text(
-                            product.getRemainingDaysString + ' ngày',
+                            'Hết hạn: ' + product.getRemainingDaysString,
                             style: TextStyle(
                               color: Colors.grey,
                             ),
@@ -121,7 +116,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset(
+                      Image.network(
                         order.getImagePath,
                         height: 20,
                         width: 20,
@@ -144,15 +139,9 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
 
     // * Bottom part
     Widget _buildBottomBar(OrderModel order) {
-      if (order.getConfirmDate != null) {
-        _isConfirmed = true;
-      } else {
-        _isConfirmed = false;
-      }
-
       void _cancelOrder(BuildContext context) {
         setState(() {
-          _isCanceled = true;
+          order.process = 4;
         });
         Navigator.pop(context);
         return null;
@@ -179,14 +168,6 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
             );
           },
         );
-      }
-
-      Function _showConfirmDialog(BuildContext context) {
-        if (_isConfirmed) {
-          return null;
-        } else {
-          return () => _showDialog(context);
-        }
       }
 
       return Container(
@@ -222,7 +203,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                             color: AppColors.red,
                           ),
                         ),
-                        onPressed: () => {}, // TODO:
+                        onPressed: () => {}, // TODO: Add Copy
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(
@@ -247,7 +228,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     children: [
                       Text('Thời gian xác nhận'),
                       Text(
-                        _isConfirmed
+                        order.confirmDate != null
                             ? DateFormat('yyyy-MM-dd hh:mm')
                                 .format(order.getConfirmDate)
                             : '----------------------------',
@@ -286,26 +267,29 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                   ),
                 ),
                 FlatButton(
-                  // * Cancel Order Button
-                  height: 50,
-                  minWidth: 150,
-                  color: AppColors.red,
-                  onPressed: _isCanceled ? null : _showConfirmDialog(context),
-                  child: Text(
-                    _isConfirmed
-                        ? 'Đã xác nhận'
-                        : _isCanceled
-                            ? 'Đã bị huỷ'
-                            : 'Huỷ đơn hàng',
-                  ),
-                  textColor: AppColors.white,
-                  disabledColor: AppColors.white,
-                  disabledTextColor: _isConfirmed
-                      ? AppColors.strongGreen
-                      : _isCanceled
-                          ? AppColors.red
-                          : AppColors.black,
-                ),
+                    // * Cancel Order Button
+                    height: 50,
+                    minWidth: 150,
+                    color: AppColors.red,
+                    onPressed: order.process == Process.confirmOrder
+                        ? () => _showDialog(context)
+                        : null,
+                    child: Text(order.process == Process.confirmOrder
+                        ? 'Huỷ đơn hàng'
+                        : order.process == Process.waitToCollect
+                            ? 'Đã xác nhận\nĐang chờ lấy hàng'
+                            : order.process == Process.waitForPayment
+                                ? 'Đã xác nhận\nĐang chờ thanh toán'
+                                : order.process == Process.orderHistory
+                                    ? 'Đơn hàng đã thanh toán'
+                                    : order.process == Process.canceled
+                                        ? 'Đã bị huỷ'
+                                        : 'Lỗi'),
+                    textColor: AppColors.white,
+                    disabledColor: AppColors.white,
+                    disabledTextColor: order.process == Process.canceled
+                        ? AppColors.red
+                        : AppColors.strongGreen),
               ],
             ),
           ],

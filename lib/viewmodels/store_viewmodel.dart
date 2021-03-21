@@ -26,12 +26,13 @@ class StoreViewModel {
       },
     );
 
-    return parseDataFromPhotoJson(response.body);
+    return parseDataFromStoreJson(response.body);
   }
 
-  StoreDataset parseDataFromPhotoJson(String responseBody) {
-    final Map<String, dynamic> parsed = jsonDecode(responseBody);
-    StoreDataset result = StoreDataset.fromJson(parsed);
-    return result;
+  StoreDataset parseDataFromStoreJson(String responseBody) {
+    final parsed = jsonDecode(responseBody);
+    List<StoreDataset> result =
+        parsed.map<StoreDataset>((s) => StoreDataset.fromJson(s)).toList();
+    return result.single;
   }
 }

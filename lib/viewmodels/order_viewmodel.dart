@@ -13,6 +13,8 @@ class OrderViewModel {
   Future<List<OrderDataset>> getAllOrder(OrderInput input) async {
     String url = APIUrls.getAllOrder;
     url = url.replaceFirst(APIUrls.email, input.email);
+    url = url.replaceFirst(APIUrls.pageSize, input.pageSize.toString());
+    url = url.replaceFirst(APIUrls.pageNumber, input.pageNumber.toString());
 
     String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
     final response = await http.get(
@@ -30,8 +32,9 @@ class OrderViewModel {
   }
 
   List<OrderDataset> parseDataFromJson(String responseBody) {
-    final List<Map<String, dynamic>> parsed = jsonDecode(responseBody);
-    List<OrderDataset> result = parsed.map((o) => OrderDataset.fromJson(o));
+    final parsed = jsonDecode(responseBody);
+    List<OrderDataset> result =
+        parsed.map<OrderDataset>((o) => OrderDataset.fromJson(o)).toList();
     return result;
   }
 
@@ -82,9 +85,10 @@ class OrderViewModel {
   }
 
   List<OrderDetailDataset> parseListOrderDetailFromJson(String responseBody) {
-    final List<Map<String, dynamic>> parsed = jsonDecode(responseBody);
-    List<OrderDetailDataset> result =
-        parsed.map((o) => OrderDetailDataset.fromJson(o));
+    final parsed = jsonDecode(responseBody);
+    List<OrderDetailDataset> result = parsed
+        .map<OrderDetailDataset>((o) => OrderDetailDataset.fromJson(o))
+        .toList();
     return result;
   }
 }

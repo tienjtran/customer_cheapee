@@ -22,7 +22,7 @@ class OrderDataset {
       orderId: json['orderId'] as int,
       orderDate: DateTime.parse(json['orderDate'] as String),
       confirmedDate: DateTime.parse(json['confirmedDate'] as String),
-      total: json['total'] as double,
+      total: json['total'].toDouble(), //fuck Dart JSON parser
       emailAddress: json['emailAddress'] as String,
       storeId: json['storeId'] as int,
       process: json['process'] as int,
@@ -51,7 +51,7 @@ class OrderDetailDataset {
       productInStoreId: json['productInStoreId'] as int,
       quantity: json['quantity'] as int,
       orderId: json['orderId'] as int,
-      price: json['price'] as double,
+      price: json['price'].toDouble(), //fuck Dart JSON parser
     );
   }
 }

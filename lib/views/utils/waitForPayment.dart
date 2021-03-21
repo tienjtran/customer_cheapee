@@ -165,6 +165,14 @@ class WaitForPayment extends StatelessWidget {
     );
   }
 
+  Widget _getTotalProductNumber(OrderModel orderModel) {
+    int total = 0;
+    for (var q in orderModel.quantityList) {
+      total += q;
+    }
+    return Text(total.toString() + ' sản phẩm');
+  }
+
   Widget _orderBuilder(OrderModel order) {
     return Column(
       children: [
@@ -172,10 +180,10 @@ class WaitForPayment extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
+            Image.network(
               order.getImagePath,
-              height: 20,
-              width: 20,
+              height: 30,
+              width: 30,
             ),
             Container(
               padding: const EdgeInsets.only(left: 20),
@@ -183,13 +191,16 @@ class WaitForPayment extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
               child: Row(
                 children: [
-                  Image.asset(
+                  Image.network(
                     order.productList[0].imagePath,
                     height: 70,
                     width: 70,
@@ -217,11 +228,11 @@ class WaitForPayment extends StatelessWidget {
                               order.productList[0].getDiscountedPrice),
                           style: TextStyle(
                             color: Colors.red,
-                            decoration: TextDecoration.lineThrough,
                           ),
                         ),
                         Text(
-                          order.productList[0].getRemainingDaysString + ' ngày',
+                          'Hết hạn: ' +
+                              order.productList[0].getRemainingDaysString,
                           style: TextStyle(
                             color: Colors.grey,
                           ),
@@ -266,7 +277,7 @@ class WaitForPayment extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(order.productList.length.toString() + ' sản phẩm'),
+            _getTotalProductNumber(order),
             Container(
               padding: const EdgeInsets.all(10),
               child: Row(

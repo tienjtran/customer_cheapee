@@ -1,13 +1,15 @@
+import 'package:intl/intl.dart';
+
 class ProductModel {
   int id;
   String name;
   double price;
   double discountedPrice;
-  int remainingDays;
+  DateTime expiryDate;
   String imagePath;
 
   ProductModel(this.id, this.name, this.price, this.discountedPrice,
-      this.remainingDays, this.imagePath);
+      this.expiryDate, this.imagePath);
 
   get getId => this.id;
   set setId(id) => this.id = id;
@@ -18,8 +20,9 @@ class ProductModel {
   get getDiscountedPrice => this.discountedPrice;
   set setDiscountedPrice(discountedPrice) =>
       this.discountedPrice = discountedPrice;
-  get getRemainingDaysString => this.remainingDays.toString();
-  set setRemainingDays(remainingDays) => this.remainingDays = remainingDays;
+  get getRemainingDaysString =>
+      DateFormat('dd-MM-yyyy').format(this.expiryDate);
+  set setRemainingDays(expiryDate) => this.expiryDate = expiryDate;
   get getImagePath => this.imagePath;
   set setImagePath(imagePath) => this.imagePath = imagePath;
 }

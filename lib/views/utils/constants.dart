@@ -128,7 +128,7 @@ class APIUrls {
   static const String photoId = '{photoId}';
 
   static const String getAllOrder =
-      'api/cheapee/orders/?search_email=$email&page_size=$pageSize&page_number=p$pageNumber';
+      'api/cheapee/orders/?search_email=$email&page_size=$pageSize&page_number=$pageNumber';
 
   static const String email = '{email}';
 
@@ -167,4 +167,5 @@ class Process {
   static const int waitToCollect = 1;
   static const int waitForPayment = 2;
   static const int orderHistory = 3;
+  static const int canceled = 4;
 }

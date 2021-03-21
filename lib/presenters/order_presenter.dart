@@ -8,6 +8,7 @@ import 'package:customer_cheapee/viewmodels/store_viewmodel.dart';
 import 'package:customer_cheapee/views/models/output/orderModel.dart';
 import 'package:customer_cheapee/inputs/order_input.dart';
 import 'package:customer_cheapee/views/models/output/product.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 
 abstract class IOrderPresenter {
   Future<List<OrderModel>> loadOrderScreen(String email);
@@ -20,27 +21,32 @@ class OrderPresenter implements IOrderPresenter {
 
   OrderPresenter() {
     this._orderViewModel = new OrderViewModel();
+    this._storeViewModel = new StoreViewModel();
+    this._productDetailViewModel = new ProductDetailViewModel();
   }
 
   @override
   Future<List<OrderModel>> loadOrderScreen(inputEmail) async {
     // * get PIS dataset
-    List<OrderDataset> result =
-        await _orderViewModel.getAllOrder(new OrderInput(email: inputEmail));
+    List<OrderDataset> result = await _orderViewModel.getAllOrder(
+        new OrderInput(email: inputEmail, pageNumber: 1, pageSize: 50));
     // * Convert to SearchResultOutputModel
     List<OrderModel> model = [];
     for (var i = 0; i < result.length; i++) {
       var orderModel = new OrderModel(
-        result[i].orderId.toString(), //TODO: fix
-        result[i].storeId.toString(), //TODO: fix
+        result[i].orderId.toString(),
+        (await _storeViewModel.getStore(result[i].storeId)).storeName,
         result[i].total,
-        (await _storeViewModel.getStore(result[i].storeId)).imagePath,
+        await FirebaseUtils.getDownloadUrls(
+            (await _storeViewModel.getStore(result[i].storeId)).imagePath),
         await getProductModelList(
             await _orderViewModel.getListOrderDetail(result[i].orderId)),
         await getProductModelQuantityList(
             await _orderViewModel.getListOrderDetail(result[i].orderId)),
         result[i].orderDate,
-        result[i].confirmedDate,
+        result[i].confirmedDate.isBefore(DateTime.utc(2, 1, 1, 0, 0, 0))
+            ? null
+            : result[i].confirmedDate,
         result[i].process,
       );
       model.add(orderModel);
@@ -65,16 +71,16 @@ class OrderPresenter implements IOrderPresenter {
           .getProductDetail(new ProductDetailInput(id: od.productInStoreId)));
     }
     for (var pis in pisList) {
-      result.add(
-        new ProductModel(
-            pis.product.id,
-            pis.product.name,
-            pis.product.price,
-            pis.salePrice,
-            DateTime.now().difference(pis.expireDate).inDays,
-            (await _productDetailViewModel.getPhoto(pis.product.imagePathid))
-                .url),
-      );
+      result.add(new ProductModel(
+        pis.product.id,
+        pis.product.name,
+        pis.product.price,
+        pis.salePrice,
+        pis.expireDate,
+        await FirebaseUtils.getDownloadUrls(
+            ((await _productDetailViewModel.getPhoto(pis.product.imagePathid))
+                .url)),
+      ));
     }
     return result;
   }
