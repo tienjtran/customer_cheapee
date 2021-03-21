@@ -4,7 +4,6 @@ import 'package:customer_cheapee/presenters/productdetail_presenter.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
-import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,60 +25,6 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double contextHeight = MediaQuery.of(context).size.height;
     double contextWidth = MediaQuery.of(context).size.width;
-
-    //danh sach cac san pham duoc goi y
-    List<SuggestedProductModel> suggestedProductList = [
-      new SuggestedProductModel(
-        1,
-        'Thùng Pepsi',
-        'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
-        20,
-        'đ 200.000',
-        'HSD còn 2 tháng',
-        3,
-        false,
-      ),
-      new SuggestedProductModel(
-        1,
-        'Nước Dasani 350ml',
-        'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
-        30,
-        'đ 10.000',
-        'HSD còn 4 tháng',
-        3,
-        false,
-      ),
-      new SuggestedProductModel(
-        1,
-        'Thùng Pepsi không calo',
-        'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
-        40,
-        'đ 180.000',
-        'HSD còn 3 tháng',
-        3,
-        false,
-      ),
-      new SuggestedProductModel(
-        1,
-        'Thùng Mirinda 12 chai 1.5 lít',
-        'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
-        50,
-        'đ 180.000',
-        'HSD còn 84 ngày',
-        3,
-        false,
-      ),
-      new SuggestedProductModel(
-        1,
-        'Thùng 7upa 12 chai 1.5 lít',
-        'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
-        60,
-        'đ 180.000',
-        'HSD còn 3 tháng',
-        3,
-        false,
-      ),
-    ];
 
     void _onPressGoBack() {
       Navigator.pop(context);

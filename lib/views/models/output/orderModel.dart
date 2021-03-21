@@ -9,9 +9,10 @@ class OrderModel {
   List<int> quantityList;
   DateTime orderDate;
   DateTime confirmDate;
+  int process;
 
   OrderModel(this.id, this.name, this.total, this.imagePath, this.productList,
-      this.quantityList, this.orderDate, this.confirmDate);
+      this.quantityList, this.orderDate, this.confirmDate, this.process);
 
   get getId => this.id;
   set setId(id) => this.id = id;
@@ -29,4 +30,6 @@ class OrderModel {
   set setOrderDate(orderDate) => this.orderDate = orderDate;
   get getConfirmDate => this.confirmDate;
   set setConfirmDate(confirmDate) => this.confirmDate = confirmDate;
+  get getProcess => this.process;
+  set setProcess(process) => this.process = process;
 }
