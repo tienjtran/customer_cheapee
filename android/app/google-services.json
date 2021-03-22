@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "345930071324",
+    "project_id": "cheapee-ae57c",
+    "storage_bucket": "cheapee-ae57c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345930071324:android:b8eeea784fa4e0fcde4ed9",
+        "android_client_info": {
+          "package_name": "com.example.customer_cheapee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345930071324-103cnllfbnsepcjk3hsusflthe9pmi5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.customer_cheapee",
+            "certificate_hash": "2fd61ad47ba7c72e83eb4128c997f7c85c998e45"
+          }
+        },
+        {
+          "client_id": "345930071324-8frs648btig4adrle0jchpsi0ordnqtl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqEiifkmZqbdcTklJjf3zHPu4RlASqezo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345930071324-8frs648btig4adrle0jchpsi0ordnqtl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

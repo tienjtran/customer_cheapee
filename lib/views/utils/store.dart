@@ -1,75 +1,80 @@
+import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_cheapee/models/store.dart';
-import 'package:customer_cheapee/views/utils/common.dart';
 
 class NearStoreWidget extends StatelessWidget {
-  final Store store;
+  NearStoreOutputModel model;
 
-  NearStoreWidget({Key key, this.store}) : super(key: key);
+  NearStoreWidget(this.model);
 
   @override
   Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+    void _navigateToStoreDetailScreen() {
+      Navigator.pushNamed(
+        context,
+        NamedRoutes.storeDetailRoute,
+        arguments: model.storeId,
+      );
+    }
+
     return Container(
-      margin: EdgeInsets.fromLTRB(17, 10, 17, 10),
-      height: 73,
-      child: Row(
-        children: <Widget>[
-          Image.network(
-            store.imagePath,
-            width: 59,
-          ),
-          Container(
-            width: contextWidth * 0.05,
-          ),
-          Container(
-            width: contextWidth * 0.5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
-                  store.name,
-                  style: CommonWidgetUtils.getCommonTextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.black626262,
+      margin: EdgeInsets.all(
+        0,
+      ),
+      color: AppColors.white,
+      height: 225,
+      child: Column(
+        children: [
+          InkWell(
+            onTap: _navigateToStoreDetailScreen,
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  child: Image.network(
+                    model.imagePath,
+                    height: 20,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Text(
-                      Constants.kmDistance.replaceAll(
-                          Constants.replacedNumberVariable,
-                          store.getDistance.toString()),
-                      style: CommonWidgetUtils.getCommonTextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.greyADADAD,
-                        fontSize: 16,
-                      ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  model.storeName,
+                  style: TextStyle(
+                    fontSize: AppFontSizes.mediumSize,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    '${model.distance} km',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.mediumSize,
                     ),
-                    Text(
-                      '${CommonUtils.convertMinuteToStringTime(420)}-${CommonUtils.convertMinuteToStringTime(1320)}',
-                      style: CommonWidgetUtils.getCommonTextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.greyADADAD,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
           ),
           Expanded(
             child: Container(
-              child: Icon(
-                Icons.navigate_next,
+              margin: EdgeInsets.all(10),
+              child: SizedBox(
+                height: 210,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    if (index >= model.productList.length) {
+                      return null;
+                    }
+                    return SuggestedProductWidget(
+                      model: model.productList[index],
+                    );
+                  },
+                ),
               ),
-              alignment: Alignment.centerRight,
             ),
           ),
         ],
