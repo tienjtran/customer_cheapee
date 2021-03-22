@@ -53,11 +53,11 @@ class ProductListDataset {
 
   factory ProductListDataset.fromJson(Map<String, dynamic> json) {
     return ProductListDataset(
-        productInStoreId: json['productInStoreID'] as int,
+        productInStoreId: json['productInStoreId'] as int,
         name: json['name'] as String,
         imagePath: json['imagePath'] as String,
-        oldPrice: (json['oldPrice'] as int).toDouble(),
-        salePrice: (json['salePrice'] as int).toDouble(),
+        oldPrice: json['oldPrice'].toDouble(),
+        salePrice: json['salePrice'].toDouble(),
         manufactureDate: DateTime.parse(json['manufactureDate'] as String),
         expireDate: DateTime.parse(json['expireDate'] as String));
   }

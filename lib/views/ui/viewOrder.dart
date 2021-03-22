@@ -1,8 +1,10 @@
 import 'package:customer_cheapee/views/models/output/orderModel.dart';
 import 'package:customer_cheapee/views/models/output/product.dart';
+import 'package:customer_cheapee/views/ui/productDetail.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class ViewOrderScreen extends StatefulWidget {
@@ -24,6 +26,18 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
     //Create _close method
     void _close(BuildContext context) {
       Navigator.pop(context);
+    }
+
+    // * navigate to productdetail
+    void _navigateToProductDetailScreen(
+        BuildContext context, int productId) async {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+                  productId: productId,
+                )),
+      );
     }
 
     Widget _buildProductRow(ProductModel product, int quantity) {
@@ -51,11 +65,11 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product.getName,
+                            product.name,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            CommonUtils.convertDoubleToMoney(product.getPrice),
+                            CommonUtils.convertDoubleToMoney(product.price),
                             style: TextStyle(
                               fontSize: 11,
                               color: Colors.grey[400],
@@ -64,7 +78,7 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                           ),
                           Text(
                             CommonUtils.convertDoubleToMoney(
-                                product.getDiscountedPrice),
+                                product.discountedPrice),
                             style: TextStyle(
                               color: Colors.red,
                             ),
@@ -97,7 +111,11 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
         child: Column(
           children: [
             for (int i = 0; i < productList.length; i++)
-              _buildProductRow(productList[i], quantityList[i])
+              InkWell(
+                onTap: () => _navigateToProductDetailScreen(
+                    context, productList[i].productInStoreId),
+                child: _buildProductRow(productList[i], quantityList[i]),
+              ),
           ],
         ),
       );
@@ -203,7 +221,14 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                             color: AppColors.red,
                           ),
                         ),
-                        onPressed: () => {}, // TODO: Add Copy
+                        onPressed: () {
+                          Clipboard.setData(
+                              new ClipboardData(text: order.getId));
+                          // final snackBar = SnackBar(
+                          //   content: Text('Đã copy!'),
+                          // );
+                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                           side: BorderSide(

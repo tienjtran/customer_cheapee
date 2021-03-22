@@ -2,14 +2,15 @@ import 'package:intl/intl.dart';
 
 class ProductModel {
   int id;
+  int productInStoreId;
   String name;
   double price;
   double discountedPrice;
   DateTime expiryDate;
   String imagePath;
 
-  ProductModel(this.id, this.name, this.price, this.discountedPrice,
-      this.expiryDate, this.imagePath);
+  ProductModel(this.id, this.productInStoreId, this.name, this.price,
+      this.discountedPrice, this.expiryDate, this.imagePath);
 
   get getId => this.id;
   set setId(id) => this.id = id;

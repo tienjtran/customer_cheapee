@@ -30,14 +30,7 @@ class ProductDetailScreen extends StatelessWidget {
       Navigator.pop(context);
     }
 
-    bool _isDisabled(int remainingDays) {
-      if (remainingDays >= 0) {
-        return false;
-      } else
-        return true;
-    }
-
-    void displayBottomSheet(BuildContext context) {
+    void displayBottomSheet(BuildContext context, int quantity) {
       showModalBottomSheet(
           context: context,
           builder: (ctx) {
@@ -51,8 +44,7 @@ class ProductDetailScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        //TODO: Remaining product
-                        Text('Kho: 215'),
+                        Text('Kho: ' + quantity.toString()),
                         Expanded(
                             child: Container(
                           alignment: Alignment.topRight,
@@ -287,7 +279,7 @@ class ProductDetailScreen extends StatelessWidget {
                     )),
                 Container(
                   child: Text(
-                    data.description,
+                    data.description ?? 'Không có mô tả',
                     maxLines: 4,
                     overflow: TextOverflow.fade,
                   ),
@@ -435,10 +427,11 @@ class ProductDetailScreen extends StatelessWidget {
                                         },
                                       ),
                                     ),
-                                    onPressed: _isDisabled(
-                                            snapshot.data.getRemainingDays)
+                                    onPressed: snapshot.data.getRemainingDays <
+                                            0
                                         ? null
-                                        : () => displayBottomSheet(context)),
+                                        : () => displayBottomSheet(
+                                            context, snapshot.data.quantity)),
                               ),
                             ),
                           ],

@@ -53,6 +53,7 @@ class ProductDetailModel {
   String brandName;
   int categoryid;
   int remainingDays;
+  int quantity;
 
   ProductDetailModel(
     this.productInStoreId,
@@ -65,6 +66,7 @@ class ProductDetailModel {
     this.manufacturerName,
     this.brandName,
     this.categoryid,
+    this.quantity,
   );
 
   get getProductInStoreId => this.productInStoreId;
@@ -100,6 +102,6 @@ class ProductDetailModel {
   set setCategoryid(categoryid) => this.categoryid = categoryid;
 
   get getRemainingDays =>
-      new DateTime.now().difference(DateTime.parse(this.expiryDate)).inDays;
+      DateTime.parse(this.expiryDate).difference(new DateTime.now()).inDays;
   set setRemainingDays(remainingDays) => this.remainingDays = remainingDays;
 }

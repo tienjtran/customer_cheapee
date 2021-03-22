@@ -34,15 +34,21 @@ class OrderPresenter implements IOrderPresenter {
     List<OrderModel> model = [];
     for (var i = 0; i < result.length; i++) {
       var orderModel = new OrderModel(
+        // * id
         result[i].orderId.toString(),
+        // * name
         (await _storeViewModel.getStore(result[i].storeId)).storeName,
         result[i].total,
+        // * Image
         await FirebaseUtils.getDownloadUrls(
             (await _storeViewModel.getStore(result[i].storeId)).imagePath),
+        // * Product List
         await getProductModelList(
             await _orderViewModel.getListOrderDetail(result[i].orderId)),
+        // * quantity List
         await getProductModelQuantityList(
             await _orderViewModel.getListOrderDetail(result[i].orderId)),
+        // *
         result[i].orderDate,
         result[i].confirmedDate.isBefore(DateTime.utc(2, 1, 1, 0, 0, 0))
             ? null
@@ -73,6 +79,7 @@ class OrderPresenter implements IOrderPresenter {
     for (var pis in pisList) {
       result.add(new ProductModel(
         pis.product.id,
+        pis.productInStoreId,
         pis.product.name,
         pis.product.price,
         pis.salePrice,
@@ -81,6 +88,7 @@ class OrderPresenter implements IOrderPresenter {
             ((await _productDetailViewModel.getPhoto(pis.product.imagePathid))
                 .url)),
       ));
+      print(pis.product.price.toString() + '-' + pis.salePrice.toString());
     }
     return result;
   }
