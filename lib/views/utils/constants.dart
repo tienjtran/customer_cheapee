@@ -86,6 +86,8 @@ class NamedRoutes {
   static const String viewOrderRoute = '/viewOrder';
 
   static const String storeDetailRoute = '/storeDetail';
+
+  static const String searchByCategory = '/searchByCategory';
 }
 
 class ConfigKeyConstants {
@@ -105,7 +107,12 @@ class APIUrls {
   static const String searchScreen =
       'api/searchscreen?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}&name=${searchName}';
 
+  static const String searchByCategoryScreen =
+      'api/searchbycategory?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}&category=${searchCategoryName}';
+
   static const String searchName = '{searchName}';
+
+  static const String searchCategoryName = '{searchCategoryName}';
 
   static const String loadCart = 'api/cart/loading-cart';
 

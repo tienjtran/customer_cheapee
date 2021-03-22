@@ -1,16 +1,17 @@
 import 'package:customer_cheapee/views/ui/cart.dart';
 import 'package:customer_cheapee/views/ui/login.dart';
 import 'package:customer_cheapee/views/ui/order.dart';
-import 'package:customer_cheapee/views/ui/storeDetail.dart';
-import 'package:customer_cheapee/views/ui/viewprofile.dart';
-import 'package:customer_cheapee/views/ui/viewOrder.dart';
 import 'package:customer_cheapee/views/ui/productDetail.dart';
-
+import 'package:customer_cheapee/views/ui/searchByCategory.dart';
+import 'package:customer_cheapee/views/ui/storeDetail.dart';
+import 'package:customer_cheapee/views/ui/viewOrder.dart';
+import 'package:customer_cheapee/views/ui/viewprofile.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'ui/home.dart';
 import 'utils/constants.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class CustomerCheapee extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -46,6 +47,8 @@ class CustomerCheapee extends StatelessWidget {
               NamedRoutes.productDetailRoute: (context) =>
                   ProductDetailScreen(),
               NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),
+              NamedRoutes.searchByCategory: (context) =>
+                  SearchByCategoryScreen(),
             },
           );
         }
