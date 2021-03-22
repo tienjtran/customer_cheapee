@@ -14,7 +14,7 @@ class NearStoreWidget extends StatelessWidget {
       Navigator.pushNamed(
         context,
         NamedRoutes.storeDetailRoute,
-        arguments: model,
+        arguments: model.storeId,
       );
     }
 

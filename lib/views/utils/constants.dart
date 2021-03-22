@@ -153,6 +153,8 @@ class APIUrls {
       'api/cheapee/orderdetail?order_id=$orderId';
 
   static const String orderId = '{orderId}';
+
+  static const String getAllCategory = 'api/cheapee/categories';
 }
 
 class APIConstansts {
