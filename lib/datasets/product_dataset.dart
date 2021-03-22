@@ -24,7 +24,7 @@ class ProductDataset {
       id: json['productId'] as int,
       name: json['name'] as String,
       barcode: json['barcode'] as String,
-      price: (json['price'] as int).toDouble(),
+      price: json['price'].toDouble(),
       manufacturerid: json['manufacturerId'] as int,
       imagePathid: json['photoId'] as int,
       brandid: json['brandId'] as int,

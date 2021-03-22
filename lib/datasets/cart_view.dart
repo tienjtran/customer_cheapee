@@ -41,8 +41,8 @@ class ItemCartDataset {
     return ItemCartDataset(
       productInStoreId: json['productInStoreId'] as int,
       productName: json['productName'] as String,
-      oldPrice: (json['oldPrice'] as int).toDouble(),
-      salePrice: (json['salePrice'] as int).toDouble(),
+      oldPrice: json['oldPrice'].toDouble(),
+      salePrice: json['salePrice'].toDouble(),
       leftDay: json['leftDay'] as int,
       imagePath: json['imagePath'] as String,
     );
