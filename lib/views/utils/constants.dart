@@ -126,6 +126,8 @@ class APIUrls {
   static const String getPhoto = 'api/cheapee/photo/$photoId';
 
   static const String photoId = '{photoId}';
+
+  static const String getAllCategory = 'api/cheapee/categories';
 }
 
 class APIConstansts {

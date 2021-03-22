@@ -39,6 +39,7 @@ class ProductListDataset {
   final double salePrice;
   final DateTime manufactureDate;
   final DateTime expireDate;
+  final int categoryId;
 
   ProductListDataset(
       {this.productInStoreId,
@@ -47,7 +48,8 @@ class ProductListDataset {
       this.oldPrice,
       this.salePrice,
       this.manufactureDate,
-      this.expireDate});
+      this.expireDate,
+      this.categoryId});
 
   factory ProductListDataset.fromJson(Map<String, dynamic> json) {
     return ProductListDataset(
@@ -57,6 +59,7 @@ class ProductListDataset {
         oldPrice: (json['oldPrice'] as int).toDouble(),
         salePrice: (json['salePrice'] as int).toDouble(),
         manufactureDate: DateTime.parse(json['manufactureDate'] as String),
-        expireDate: DateTime.parse(json['expireDate'] as String));
+        expireDate: DateTime.parse(json['expireDate'] as String),
+        categoryId: json['categoryId'] as int);
   }
 }

@@ -1,6 +1,9 @@
+import 'package:customer_cheapee/datasets/category_dataset.dart';
 import 'package:customer_cheapee/datasets/storeDetail_dataset.dart';
 import 'package:customer_cheapee/inputs/storeDetail_input.dart';
+import 'package:customer_cheapee/viewmodels/category_model.dart';
 import 'package:customer_cheapee/viewmodels/storeDetail_model.dart';
+import 'package:customer_cheapee/views/models/output/category.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/storeDetail.dart';
@@ -9,13 +12,16 @@ import 'package:customer_cheapee/views/utils/common.dart';
 abstract class IStoreDetailPresenter {
   void loadStoreDetailScreen(
       int storeId, double longitude, double latitude, double distance);
+  void loadListCategory();
 }
 
 class StoreDetailPresenter implements IStoreDetailPresenter {
   StoreDetailViewModel _viewModel;
+  CategoryViewModel _categoryViewModel;
 
   StoreDetailPresenter() {
     this._viewModel = new StoreDetailViewModel();
+    this._categoryViewModel = new CategoryViewModel();
   }
   @override
   Future<NearStoreOutputModel> loadStoreDetailScreen(
@@ -48,7 +54,7 @@ class StoreDetailPresenter implements IStoreDetailPresenter {
               CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
               'đ ' + p.salePrice.toStringAsFixed(0),
               'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
-              1,
+              p.categoryId,
               true);
           productList.add(product);
         }
@@ -57,5 +63,21 @@ class StoreDetailPresenter implements IStoreDetailPresenter {
       }
     }
     //view.initStoreDetailScreen(model);
+  }
+
+  @override
+  Future<List<CategoryModel>> loadListCategory() async {
+    List<CategoryModel> listResult = [];
+    List<CategoryDataset> result = await _categoryViewModel.getListCategory();
+    CategoryModel model;
+    for (var i = 0; i < result.length; i++) {
+      model = new CategoryModel(
+          result[i].categoryId,
+          result[i].name,
+          result[i].description,
+          await FirebaseUtils.getDownloadUrls(result[i].imagePath));
+      listResult.add(model);
+    }
+    return listResult;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:customer_cheapee/presenters/storeDetail_presenter.dart';
+import 'package:customer_cheapee/views/models/output/category.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
@@ -13,48 +14,12 @@ class StoreDetailScreen extends StatelessWidget {
   StoreDetailPresenter _storeDetailPresenter = StoreDetailPresenter();
 
   // * Get storeModel from arguments
-  final List<SuggestedItemModel> _categoryList = [
-    new SuggestedItemModel(
-      imagePath:
-          'https://media.istockphoto.com/vectors/banana-with-thumbs-up-vector-id525671293?k=6&m=525671293&s=170667a&w=0&h=N-51OhS_46AiltZediBHJyPl671PDvUwe04XKdVobN4=',
-      text: 'Gợi ý cho bạn',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://43s0w3yikyo2qsm4r33qc6d7-wpengine.netdna-ssl.com/wp-content/uploads/2017/01/meat_PNG3902.png',
-      text: 'Thịt cá',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://photosfine.files.wordpress.com/2012/04/white-background-fruit-and-vegetables-2.jpg',
-      text: 'Rau củ',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://bizweb.dktcdn.net/thumb/1024x1024/100/391/207/products/500mlrevive.jpg?v=1606706069087',
-      text: 'Giải khát',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://media1.nguoiduatin.vn/media/nguyen-hoang-yen/2019/05/03/do-hop-ha-long.jpg',
-      text: 'Thực phẩm chế biến sẵn',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://shelbyreport.nyc3.cdn.digitaloceanspaces.com/wp-content/uploads/2018/08/PRO-SNICKERS.jpg',
-      text: 'Bánh kẹo',
-    ),
-    new SuggestedItemModel(
-      imagePath:
-          'https://anh.eva.vn/upload/3-2018/images/2018-08-03/an-qua-nhieu-trai-cay-khong-tot-nhung-an-5-loai-qua-nay-cang-nhieu-cang-tot-cho-suc-khoe-trai-cay1-15331132143471276157929-1533265891-782-width600height450.jpg',
-      text: 'Trái cây',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
     final int _storeId = ModalRoute.of(context).settings.arguments;
     asyncMethod(_storeId);
+    loadListCategoryOnScreen();
     // * Get device size
     final _contextSize = MediaQuery.of(context).size;
     // * Navigators
@@ -109,15 +74,19 @@ class StoreDetailScreen extends StatelessWidget {
     ) {
       if (category == 0 && productModel.getSuggested) {
         return SuggestedProductWidget(model: productModel);
-      } else if (productModel.getCategory == category) {
+      } else if (productModel.category == category) {
         return SuggestedProductWidget(model: productModel);
       } else {
-        return Container(child: null);
+        return SizedBox(
+          child: null,
+          height: 0,
+        );
       }
     }
 
     // * Create UI that contains several Categories
-    Widget _buildCategoryList(NearStoreOutputModel data) {
+    Widget _buildCategoryList(
+        NearStoreOutputModel data, List<CategoryModel> _categoryList) {
       return ListView(
         children: [
           for (var i = 0; i < _categoryList.length; i++)
@@ -138,7 +107,7 @@ class StoreDetailScreen extends StatelessWidget {
                           ),
                           Container(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Text(_categoryList[i].getText),
+                            child: Text(_categoryList[i].getName),
                           ),
                         ],
                       ),
@@ -147,8 +116,8 @@ class StoreDetailScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => _buildCategoryDetail(
-                              i,
-                              _categoryList[i].getText,
+                              _categoryList[i].categoryId,
+                              _categoryList[i].getName,
                               data.productList,
                             ),
                           ),
@@ -172,7 +141,8 @@ class StoreDetailScreen extends StatelessWidget {
                         if (index >= data.productList.length) {
                           return null;
                         }
-                        return _selectProduct(i, data.productList[index]);
+                        return _selectProduct(_categoryList[i].categoryId,
+                            data.productList[index]);
                       },
                     ),
                   ),
@@ -185,9 +155,10 @@ class StoreDetailScreen extends StatelessWidget {
 
     return Scaffold(
         body: FutureBuilder(
-            future: asyncMethod(_storeId),
-            builder: (BuildContext context,
-                AsyncSnapshot<NearStoreOutputModel> snapshot) {
+            future: Future.wait(
+                [asyncMethod(_storeId), loadListCategoryOnScreen()]),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data == null) {
                   return Center(
@@ -239,7 +210,7 @@ class StoreDetailScreen extends StatelessWidget {
                           // * Big Image
                           Container(
                             child: Image.network(
-                              snapshot.data.getImagePath,
+                              snapshot.data[0].getImagePath,
                               width: _contextSize.width,
                               height: _contextSize.height * 0.2,
                             ),
@@ -251,7 +222,7 @@ class StoreDetailScreen extends StatelessWidget {
                               children: [
                                 // * Name
                                 Text(
-                                  snapshot.data.getStoreName,
+                                  snapshot.data[0].getStoreName,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: AppFontSizes.largeSize,
@@ -259,23 +230,24 @@ class StoreDetailScreen extends StatelessWidget {
                                 ),
                                 // * Distant
                                 Text(
-                                  snapshot.data.distance.toString() + ' km',
+                                  snapshot.data[0].distance.toString() + ' km',
                                   style: TextStyle(
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
                                 // * Operating Time
                                 Text(CommonUtils.convertMinuteToStringTime(
-                                        snapshot.data.openTime) +
+                                        snapshot.data[0].openTime) +
                                     ' - ' +
                                     CommonUtils.convertMinuteToStringTime(
-                                        snapshot.data.closeTime)),
+                                        snapshot.data[0].closeTime)),
                               ],
                             ),
                           ),
                           // * Category List
                           Expanded(
-                            child: _buildCategoryList(snapshot.data),
+                            child: _buildCategoryList(
+                                snapshot.data[0], snapshot.data[1]),
                           ),
                         ],
                       ),
@@ -334,6 +306,12 @@ class StoreDetailScreen extends StatelessWidget {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     a = await _storeDetailPresenter.loadStoreDetailScreen(
         storeId, position.latitude, position.longitude, 5);
+    return a;
+  }
+
+  Future<List<CategoryModel>> loadListCategoryOnScreen() async {
+    List<CategoryModel> a;
+    a = await _storeDetailPresenter.loadListCategory();
     return a;
   }
 }
