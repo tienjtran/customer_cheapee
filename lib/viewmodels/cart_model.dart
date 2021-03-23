@@ -36,4 +36,36 @@ class CartViewModel {
     final parsed = jsonDecode(response.body).cast<String, dynamic>();
     return CartDataset.fromJson(parsed);
   }
+
+  Future<PlaceOrderDataset> placeOrder() async {
+    User user = FirebaseAuth.instance.currentUser;
+    var input = new PlaceOrderInput(
+      email: user.email,
+      uid: user.uid,
+    );
+    String mainUrl =
+        FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + APIUrls.placeOrder;
+    final response = await http.post(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(input),
+    );
+
+    if (response.statusCode == 204) {
+      return new PlaceOrderDataset(
+        orderId: Constants.failedOrder,
+      );
+    }
+
+    String body = response.body;
+    final parsed = jsonDecode(body).cast<String, dynamic>();
+    return PlaceOrderDataset.fromJson(parsed);
+  }
 }

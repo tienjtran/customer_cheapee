@@ -48,3 +48,15 @@ class ItemCartDataset {
     );
   }
 }
+
+class PlaceOrderDataset {
+  final int orderId;
+
+  PlaceOrderDataset({this.orderId});
+
+  factory PlaceOrderDataset.fromJson(Map<String, dynamic> json) {
+    return PlaceOrderDataset(
+      orderId: json['orderId'],
+    );
+  }
+}

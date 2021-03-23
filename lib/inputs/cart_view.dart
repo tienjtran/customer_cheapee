@@ -13,3 +13,17 @@ class LoadingCartInput {
     };
   }
 }
+
+class PlaceOrderInput {
+  final String uid;
+  final String email;
+
+  PlaceOrderInput({this.uid, this.email});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userIdentifier': uid,
+      'email': email,
+    };
+  }
+}
