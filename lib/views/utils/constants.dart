@@ -26,6 +26,8 @@ class AppFontSizes {
 }
 
 class Constants {
+  static const int failedOrder = -1;
+
   static const String cart = 'Giỏ hàng';
 
   static const String appTitle = "Cheappe";
@@ -95,6 +97,8 @@ class ConfigKeyConstants {
 }
 
 class APIUrls {
+  static const String placeOrder = 'api/cart/place-an-order';
+
   static const String homeScreenCustomer =
       'api/homescreencustomer?latitude=${latitudeParam}&longitude=${longitudeParam}&distance=${distanceParam}';
 

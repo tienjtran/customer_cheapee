@@ -4,7 +4,6 @@ import 'package:customer_cheapee/views/utils/cart.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CartScreen extends StatefulWidget {
@@ -16,6 +15,7 @@ class CartScreen extends StatefulWidget {
 
 abstract class ICartView {
   void loadingCart(CartOutputModel model);
+  void loadingOrderDetail(int orderId);
 }
 
 class _CartScreenState extends State<CartScreen> implements ICartView {
@@ -278,9 +278,10 @@ class _CartScreenState extends State<CartScreen> implements ICartView {
                                                 textColor:
                                                     AppColors.strongGreen,
                                                 onPressed: () {
-                                                  Navigator.of(context,
-                                                          rootNavigator: true)
-                                                      .pop();
+                                                  // Navigator.of(context,
+                                                  //         rootNavigator: true)
+                                                  //     .pop();
+                                                  _presenter.placeOrder();
                                                 },
                                                 child: Text('Đặt hàng'),
                                               ),
@@ -300,6 +301,51 @@ class _CartScreenState extends State<CartScreen> implements ICartView {
                   ),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  void loadingOrderDetail(int orderId) {
+    String title;
+    String content;
+    Function eventOnpressed;
+    ;
+    if (orderId == Constants.failedOrder) {
+      title = 'Đặt hàng thất bại';
+      content =
+          'Bạn đã đặt hàng thất bại, chúng tôi sẽ kiểm tra lại ngay, mong quý khách thông cảm!';
+
+      eventOnpressed = () {
+        Navigator.popUntil(
+          context,
+          ModalRoute.withName(NamedRoutes.homeRoute),
+        );
+      };
+    } else {
+      title = 'Đặt hàng thành công';
+      content = 'Bạn đã đặt hàng thành công, đơn hàng của bạn đang được duyệt!';
+
+      eventOnpressed = () {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          NamedRoutes.viewOrderRoute,
+          ModalRoute.withName(NamedRoutes.homeRoute),
+          arguments: orderId.toString(),
+        );
+      };
+    }
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          FlatButton(
+            onPressed: eventOnpressed,
+            child: Text('OK'),
+          ),
+        ],
       ),
     );
   }

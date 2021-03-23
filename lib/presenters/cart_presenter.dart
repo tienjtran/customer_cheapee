@@ -6,6 +6,7 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 
 abstract class ICartPresenter {
   Future<void> loadCart();
+  Future<void> placeOrder();
 }
 
 class CartPresenter implements ICartPresenter {
@@ -39,5 +40,11 @@ class CartPresenter implements ICartPresenter {
       cartModel.productList.add(model);
     }
     _view.loadingCart(cartModel);
+  }
+
+  @override
+  Future<void> placeOrder() async {
+    int value = (await _viewModel.placeOrder()).orderId;
+    _view.loadingOrderDetail(value);
   }
 }
