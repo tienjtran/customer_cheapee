@@ -43,7 +43,8 @@ class CustomerCheapee extends StatelessWidget {
               NamedRoutes.cartRoute: (context) => CartScreen(),
               NamedRoutes.orderRoute: (context) => OrderScreen(),
               NamedRoutes.viewProfileRoute: (context) => ViewProfileScreen(),
-              NamedRoutes.viewOrderRoute: (context) => ViewOrderScreen(),
+              NamedRoutes.viewOrderRoute: (context) => ViewOrderScreen(
+                  orderId: ModalRoute.of(context).settings.arguments),
               NamedRoutes.productDetailRoute: (context) =>
                   ProductDetailScreen(),
               NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),

@@ -1,3 +1,4 @@
+import 'package:customer_cheapee/presenters/order_presenter.dart';
 import 'package:customer_cheapee/views/models/output/orderModel.dart';
 import 'package:customer_cheapee/views/models/output/product.dart';
 import 'package:customer_cheapee/views/ui/productDetail.dart';
@@ -8,21 +9,37 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class ViewOrderScreen extends StatefulWidget {
+  final String orderId;
+
+  ViewOrderScreen({this.orderId});
+
   @override
   _ViewOrderScreenState createState() => _ViewOrderScreenState();
 }
 
 class _ViewOrderScreenState extends State<ViewOrderScreen> {
+  OrderPresenter _orderPresenter = new OrderPresenter();
+  Future<OrderModel> futureOrder;
+
+  //set new order
+  Future<OrderModel> _setOrderModel(String orderId) async {
+    return await _orderPresenter.cancelOrderPresenter(
+        orderId, Process.canceled);
+  }
+
+  //set new order
+  Future<OrderModel> _getOrderModel(String orderId) async {
+    return await _orderPresenter.getOrderPresenter(orderId);
+  }
+
   @override
   void initState() {
     super.initState();
+    futureOrder = _getOrderModel(widget.orderId);
   }
 
   @override
   Widget build(BuildContext context) {
-    //receive model
-    OrderModel _order = ModalRoute.of(context).settings.arguments;
-
     //Create _close method
     void _close(BuildContext context) {
       Navigator.pop(context);
@@ -157,12 +174,11 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
 
     // * Bottom part
     Widget _buildBottomBar(OrderModel order) {
-      void _cancelOrder(BuildContext context) {
-        setState(() {
-          order.process = 4;
-        });
+      void _cancelOrder(BuildContext context) async {
         Navigator.pop(context);
-        return null;
+        setState(() {
+          futureOrder = _setOrderModel(order.id);
+        });
       }
 
       void _showDialog(BuildContext context) {
@@ -186,6 +202,12 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
             );
           },
         );
+      }
+
+      Function _showConfirmDialog(BuildContext context) {
+        return (order.process != Process.confirmOrder)
+            ? null
+            : () => _showDialog(context);
       }
 
       return Container(
@@ -296,9 +318,9 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
                     height: 50,
                     minWidth: 150,
                     color: AppColors.red,
-                    onPressed: order.process == Process.confirmOrder
-                        ? () => _showDialog(context)
-                        : null,
+                    onPressed: order.process == Process.canceled
+                        ? null
+                        : _showConfirmDialog(context),
                     child: Text(order.process == Process.confirmOrder
                         ? 'Huỷ đơn hàng'
                         : order.process == Process.waitToCollect
@@ -322,34 +344,111 @@ class _ViewOrderScreenState extends State<ViewOrderScreen> {
       );
     }
 
-    // * Main body
+    // * Future Builder
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: Colors.black,
-          onPressed: () => _close(context),
-          padding: const EdgeInsets.only(left: 20),
-        ),
-        title: Text('Thông tin đơn hàng'),
-      ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //All order
-          children: [
-            Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
+      body: FutureBuilder(
+        future: futureOrder,
+        builder: (BuildContext context, AsyncSnapshot<OrderModel> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data == null) {
+              return Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 30),
+                    ),
+                    SizedBox(
+                      child: Icon(
+                        Icons.cancel_outlined,
+                        color: AppColors.red,
+                        size: 60,
+                      ),
+                      width: 60,
+                      height: 60,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text('Rất tiếc không có kết quả bạn mong muốn.'),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              // * Main body
+              return Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    color: Colors.black,
+                    onPressed: () => _close(context),
+                    padding: const EdgeInsets.only(left: 20),
+                  ),
+                  title: Text('Thông tin đơn hàng'),
+                ),
+                body: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //All order
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children: [
+                            _buildOrderDetail(snapshot.data),
+                          ],
+                        ),
+                      ),
+                      _buildBottomBar(snapshot.data),
+                    ],
+                  ),
+                ),
+              );
+            }
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Column(
                 children: [
-                  _buildOrderDetail(_order),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                  ),
+                  SizedBox(
+                    child: Icon(
+                      Icons.cancel_outlined,
+                      color: AppColors.red,
+                      size: 60,
+                    ),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Rất tiếc đã có lỗi xảy ra.'),
+                  )
                 ],
               ),
-            ),
-            _buildBottomBar(_order),
-          ],
-        ),
+            );
+          } else {
+            return Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                  ),
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Đang tải dữ liệu...'),
+                  )
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }

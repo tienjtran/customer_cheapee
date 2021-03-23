@@ -28,6 +28,18 @@ class OrderDataset {
       process: json['process'] as int,
     );
   }
+
+  Map toMap() {
+    var map = new Map();
+    map["orderId"] = orderId;
+    map["orderDate"] = orderDate.toIso8601String();
+    map["total"] = total;
+    map["emailAddress"] = emailAddress;
+    map["storeId"] = storeId;
+    map["process"] = process;
+
+    return map;
+  }
 }
 
 class OrderDetailDataset {
@@ -53,5 +65,16 @@ class OrderDetailDataset {
       orderId: json['orderId'] as int,
       price: json['price'].toDouble(), //fuck Dart JSON parser
     );
+  }
+
+  Map toMap() {
+    var map = new Map();
+    map["id"] = orderDetailId;
+    map["productInStoreId"] = productInStoreId;
+    map["quantity"] = quantity;
+    map["orderId"] = orderId;
+    map["price"] = price;
+
+    return map;
   }
 }
