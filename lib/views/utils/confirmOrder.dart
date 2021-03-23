@@ -72,7 +72,7 @@ class ConfirmOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     void _navigateToViewOrder(OrderModel orderModel) {
       Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
-          arguments: orderModel);
+          arguments: orderModel.id);
     }
 
     return FutureBuilder(

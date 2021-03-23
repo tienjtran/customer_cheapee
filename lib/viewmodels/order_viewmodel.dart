@@ -38,32 +38,6 @@ class OrderViewModel {
     return result;
   }
 
-  // //* Photo
-  // Future<PhotoDataset> getPhoto(int photoId) async {
-  //   String url = APIUrls.getPhoto;
-  //   url = url.replaceFirst(APIUrls.photoId, photoId.toString());
-
-  //   String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
-  //   final response = await http.get(
-  //     mainUrl,
-  //     headers: {
-  //       HttpHeaders.authorizationHeader:
-  //           APIConstansts.bearerAuthorization.replaceFirst(
-  //         APIConstansts.tokenParam,
-  //         await FirebaseAuth.instance.currentUser.getIdToken(),
-  //       ),
-  //     },
-  //   );
-
-  //   return parseDataFromPhotoJson(response.body);
-  // }
-
-  // PhotoDataset parseDataFromPhotoJson(String responseBody) {
-  //   final Map<String, dynamic> parsed = jsonDecode(responseBody);
-  //   PhotoDataset result = PhotoDataset.fromJson(parsed);
-  //   return result;
-  // }
-
 // * get list OrderDetail
   Future<List<OrderDetailDataset>> getListOrderDetail(int orderId) async {
     String url = APIUrls.getAllOrderDetail;
@@ -90,5 +64,56 @@ class OrderViewModel {
         .map<OrderDetailDataset>((o) => OrderDetailDataset.fromJson(o))
         .toList();
     return result;
+  }
+
+  // * Cancel order
+  Future<OrderDataset> cancelOrderView(Map body) async {
+    String url = APIUrls.cancelOrder;
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.put(
+      mainUrl,
+      body: jsonEncode(body),
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    return parseSingleDataFromJson(response.body);
+  }
+
+  OrderDataset parseSingleDataFromJson(String responseBody) {
+    final parsed = jsonDecode(responseBody);
+    OrderDataset result = OrderDataset.fromJson(parsed);
+    return result;
+  }
+
+  // * Get Order
+  Future<OrderDataset> getOrderView(String orderId) async {
+    String url = APIUrls.getOrder;
+    url = url.replaceFirst(APIUrls.orderId, orderId);
+
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+    // Check status code
+    final int statusCode = response.statusCode;
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while fetching data" + statusCode.toString());
+    }
+
+    return parseSingleDataFromJson(response.body);
   }
 }
