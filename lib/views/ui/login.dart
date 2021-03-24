@@ -1,3 +1,4 @@
+import 'package:customer_cheapee/presenters/signin_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -22,8 +23,17 @@ Future<UserCredential> signInWithGoogle() async {
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key key}) : super(key: key);
+abstract class ILoginScreen {
+  void setUserStatus(bool value);
+}
+
+class LoginScreen extends StatelessWidget implements ILoginScreen {
+  bool _isValidUser;
+  ISignInPresenter presenter;
+
+  LoginScreen({Key key}) : super(key: key) {
+    presenter = new SignInPresenter(this);
+  }
   void permission() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.location,
@@ -70,12 +80,10 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: SignInButton(
                   Buttons.Google,
-                  onPressed: () async {
-                    final UserCredential userCredential =
-                        await signInWithGoogle();
-                    final User user = userCredential.user;
-                    assert(user != null);
-                    Navigator.pushNamed(context, NamedRoutes.homeRoute);
+                  padding: EdgeInsets.all(2.0),
+                  elevation: 10.0,
+                  onPressed: () {
+                    login(context).catchError((e) => {print(e)});
                   },
                 ),
               ),
@@ -84,5 +92,26 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future login(BuildContext context) async {
+    UserCredential credential;
+    await signInWithGoogle()
+        .then((userCredential) => credential = userCredential)
+        .catchError((_) => {});
+    if (credential != null) {
+      await presenter.checkExists();
+      if (_isValidUser) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            NamedRoutes.homeRoute, (Route<dynamic> route) => false);
+      } else {
+        Navigator.of(context).pushNamed(NamedRoutes.signUp);
+      }
+    }
+  }
+
+  @override
+  void setUserStatus(bool value) {
+    _isValidUser = value;
   }
 }

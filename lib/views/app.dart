@@ -3,6 +3,7 @@ import 'package:customer_cheapee/views/ui/login.dart';
 import 'package:customer_cheapee/views/ui/order.dart';
 import 'package:customer_cheapee/views/ui/productDetail.dart';
 import 'package:customer_cheapee/views/ui/searchByCategory.dart';
+import 'package:customer_cheapee/views/ui/signup.dart';
 import 'package:customer_cheapee/views/ui/storeDetail.dart';
 import 'package:customer_cheapee/views/ui/viewOrder.dart';
 import 'package:customer_cheapee/views/ui/viewprofile.dart';
@@ -55,6 +56,7 @@ class CustomerCheapee extends StatelessWidget {
               NamedRoutes.storeDetailRoute: (context) => StoreDetailScreen(),
               NamedRoutes.searchByCategory: (context) =>
                   SearchByCategoryScreen(),
+              NamedRoutes.signUp: (context) => SignupScreen(),
             },
           );
         }

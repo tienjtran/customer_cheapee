@@ -92,6 +92,8 @@ class NamedRoutes {
   static const String storeDetailRoute = '/storeDetail';
 
   static const String searchByCategory = '/searchByCategory';
+
+  static const String signUp = '/signUp';
 }
 
 class ConfigKeyConstants {
@@ -195,4 +197,10 @@ class Process {
   static const int waitForPayment = 2;
   static const int orderHistory = 3;
   static const int canceled = 4;
+}
+
+class StatusCodes {
+  static const int ok = 200;
+
+  static const int notFound = 404;
 }
