@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:customer_cheapee/views/models/output/search.dart';
+import 'package:customer_cheapee/views/ui/productDetail.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -56,87 +57,96 @@ class StoreSearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(
-        5,
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 60,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  store.storeName,
-                  style: TextStyle(
-                    fontSize: AppFontSizes.mediumSize,
-                    fontWeight: FontWeight.w600,
+    return InkWell(
+      child: Container(
+        margin: EdgeInsets.all(
+          5,
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 60,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    store.storeName,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.mediumSize,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  '${CommonUtils.convertMinuteToStringTime(store.openingTime)}-${CommonUtils.convertMinuteToStringTime(store.closingTime)}',
-                  style: TextStyle(
-                    fontSize: AppFontSizes.smallSize,
+                  Text(
+                    '${CommonUtils.convertMinuteToStringTime(store.openingTime)}-${CommonUtils.convertMinuteToStringTime(store.closingTime)}',
+                    style: TextStyle(
+                      fontSize: AppFontSizes.smallSize,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${store.distance} km',
-                      style: TextStyle(
-                        fontSize: AppFontSizes.smallSize,
+                  Row(
+                    children: [
+                      Text(
+                        '${store.distance} km',
+                        style: TextStyle(
+                          fontSize: AppFontSizes.smallSize,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Icon(
-                      Icons.fiber_manual_record,
-                      size: 5,
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.star_rate,
-                            size: 18,
-                            color: AppColors.yellow,
-                          ),
-                          Text(
-                            // '${store.stars}',
-                            //TODO: add rating to store
-                            _randomRating(),
-                            style: TextStyle(
-                              fontSize: AppFontSizes.smallSize,
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Icon(
+                        Icons.fiber_manual_record,
+                        size: 5,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star_rate,
+                              size: 18,
+                              color: AppColors.yellow,
                             ),
-                          ),
-                        ],
+                            Text(
+                              // '${store.stars}',
+                              //TODO: add rating to store
+                              _randomRating(),
+                              style: TextStyle(
+                                fontSize: AppFontSizes.smallSize,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.0),
-                child: Image.network(
-                  store.imagePath,
-                  height: 60,
+            Expanded(
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: Image.network(
+                    store.imagePath,
+                    height: 60,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          NamedRoutes.storeDetailRoute,
+          arguments: store.storeId,
+        );
+      },
     );
   }
 }
@@ -148,53 +158,59 @@ class SearchItemInStoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Divider(
-            thickness: 1,
-            endIndent: 10,
-            indent: 10,
-          ),
-          Container(
-            height: 37,
-            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Row(
-              children: [
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        model.itemName,
-                        style: TextStyle(
-                          fontSize: AppFontSizes.smallSize,
-                        ),
-                      ),
-                      Text(
-                        CommonUtils.convertDoubleToMoney(model.price),
-                        style: TextStyle(
-                          fontSize: AppFontSizes.smallSize,
-                          color: AppColors.strongGreen,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Image.network(
-                    model.imagePath,
-                    alignment: Alignment.centerRight,
-                    height: 50,
-                  ),
-                ),
-              ],
+    return InkWell(
+      child: Container(
+        child: Column(
+          children: [
+            Divider(
+              thickness: 1,
+              endIndent: 10,
+              indent: 10,
             ),
-          ),
-        ],
+            Container(
+              height: 37,
+              margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: Row(
+                children: [
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          model.itemName,
+                          style: TextStyle(
+                            fontSize: AppFontSizes.smallSize,
+                          ),
+                        ),
+                        Text(
+                          CommonUtils.convertDoubleToMoney(model.price),
+                          style: TextStyle(
+                            fontSize: AppFontSizes.smallSize,
+                            color: AppColors.strongGreen,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Image.network(
+                      model.imagePath,
+                      alignment: Alignment.centerRight,
+                      height: 50,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
+      onTap: () {
+        Navigator.pushNamed(context, NamedRoutes.productDetailRoute,
+            arguments: model.getItemId);
+      },
     );
   }
 }
