@@ -165,6 +165,10 @@ class APIUrls {
 
   // * Get Order
   static const String getOrder = 'api/cheapee/orders/$orderId';
+
+  static const String consumerInfo = 'api/cheapee/consumer/$emailAddress';
+
+  static const String emailAddress = '{emailAddress}';
 }
 
 class APIConstansts {

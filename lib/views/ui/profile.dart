@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String email = FirebaseAuth.instance.currentUser.email;
     void _navigateToConfirmOrderScreen() {
       Navigator.pushNamed(context, NamedRoutes.orderRoute, arguments: 0);
     }
@@ -23,7 +24,8 @@ class ProfileScreen extends StatelessWidget {
     }
 
     void _navigateToViewProfileScreen() {
-      Navigator.pushNamed(context, NamedRoutes.viewProfileRoute);
+      Navigator.pushNamed(context, NamedRoutes.viewProfileRoute,
+          arguments: email);
     }
 
     return Scaffold(
