@@ -45,6 +45,7 @@ class ProductDetailPresenter implements IProductDetailPresenter {
       brandDataset.name, // Brand name
       result.product.categoryid,
       result.quantity,
+      result.storeId,
     );
     return model;
   }

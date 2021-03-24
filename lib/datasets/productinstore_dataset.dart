@@ -8,6 +8,7 @@ class ProductInStoreDataset {
   final String description;
   final int quantity;
   final ProductDataset product;
+  final int storeId;
 
   ProductInStoreDataset({
     this.productInStoreId,
@@ -17,6 +18,7 @@ class ProductInStoreDataset {
     this.description,
     this.quantity,
     this.product,
+    this.storeId,
   });
 
   factory ProductInStoreDataset.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class ProductInStoreDataset {
       description: json['description'] as String,
       quantity: json['quantity'] as int,
       product: ProductDataset.fromJson(json['product']),
+      storeId: int.parse(json['storeId'] as String),
     );
   }
 }
