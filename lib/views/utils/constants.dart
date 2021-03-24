@@ -26,6 +26,8 @@ class AppFontSizes {
 }
 
 class Constants {
+  static const int noStore = -1;
+
   static const int failedOrder = -1;
 
   static const String cart = 'Giỏ hàng';

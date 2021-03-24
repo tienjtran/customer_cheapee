@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:customer_cheapee/presenters/productdetail_presenter.dart';
@@ -21,6 +22,48 @@ class ProductDetailScreen extends StatelessWidget {
         .loadProductDetailScreen(productInStoreId);
   }
 
+  void addToCart(
+      int pisId, int storeId, BuildContext context, int quantity) async {
+    var result = await FirebaseUtils.getStoreIdInCart();
+    if (result != Constants.noStore && result != storeId) {
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Bạn có muốn Bắt Đầu một giỏ mới?'),
+          content: Text(
+              'Thêm món hàng này sẽ xóa hết những món hàng hiện tang có trong giỏ của bạn?'),
+          actions: [
+            OutlineButton(
+              child: new Text("Không"),
+              borderSide: BorderSide(
+                color: AppColors.strongGrey,
+              ),
+              textColor: AppColors.strongGrey,
+              color: AppColors.white,
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: AppColors.strongGreen,
+              onPressed: () async => {
+                await FirebaseUtils.deleteCartInFirestore(),
+                FirebaseUtils.addToCart(storeId, pisId, quantity),
+                Navigator.pop(context),
+                Navigator.pop(context),
+              },
+              child: Text('Tiếp tục'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      FirebaseUtils.addToCart(storeId, pisId, quantity);
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double contextHeight = MediaQuery.of(context).size.height;
@@ -30,7 +73,9 @@ class ProductDetailScreen extends StatelessWidget {
       Navigator.pop(context);
     }
 
-    void displayBottomSheet(BuildContext context, int quantity) {
+    void displayBottomSheet(
+        BuildContext context, int quantity, int storeId, int pis) {
+      var txtQuantity = TextEditingController(text: '1');
       showModalBottomSheet(
           context: context,
           builder: (ctx) {
@@ -98,14 +143,20 @@ class ProductDetailScreen extends StatelessWidget {
                                           color: Colors.white),
                                     ),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    var qu = int.parse(txtQuantity.text);
+                                    if (--qu <= 0) {
+                                      qu++;
+                                    }
+                                    txtQuantity.text = qu.toString();
+                                  },
                                 ),
                                 Expanded(
                                   child: Container(
                                     color: AppColors.lightGrey,
                                     child: Center(
                                       child: TextFormField(
-                                        initialValue: '1',
+                                        controller: txtQuantity,
                                         keyboardType: TextInputType.number,
                                         textAlignVertical:
                                             TextAlignVertical.top,
@@ -146,7 +197,13 @@ class ProductDetailScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    var qu = int.parse(txtQuantity.text);
+                                    if (++qu > quantity) {
+                                      qu--;
+                                    }
+                                    txtQuantity.text = qu.toString();
+                                  },
                                 ),
                               ])),
                         )),
@@ -177,7 +234,10 @@ class ProductDetailScreen extends StatelessWidget {
                                     },
                                   ),
                                 ),
-                                onPressed: () => {},
+                                onPressed: () async => {
+                                  addToCart(pis, storeId, context,
+                                      int.parse(txtQuantity.text.toString()))
+                                },
                               ),
                             ),
                           ),
@@ -431,7 +491,10 @@ class ProductDetailScreen extends StatelessWidget {
                                             0
                                         ? null
                                         : () => displayBottomSheet(
-                                            context, snapshot.data.quantity)),
+                                            context,
+                                            snapshot.data.quantity,
+                                            snapshot.data.storeId,
+                                            snapshot.data.productInStoreId)),
                               ),
                             ),
                           ],
