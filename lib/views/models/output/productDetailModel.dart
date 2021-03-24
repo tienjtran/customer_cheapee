@@ -54,6 +54,7 @@ class ProductDetailModel {
   int categoryid;
   int remainingDays;
   int quantity;
+  int storeId;
 
   ProductDetailModel(
     this.productInStoreId,
@@ -67,7 +68,11 @@ class ProductDetailModel {
     this.brandName,
     this.categoryid,
     this.quantity,
+    this.storeId,
   );
+
+  get getStoreId => this.storeId;
+  set setStoreId(storeId) => this.storeId = storeId;
 
   get getProductInStoreId => this.productInStoreId;
   set setProductInStoreId(productInStoreId) =>
