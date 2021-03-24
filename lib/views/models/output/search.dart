@@ -47,8 +47,14 @@ class SearchItemModel {
   String itemName;
   double price;
   String imagePath;
+  int storeId;
 
-  SearchItemModel(this.itemId, this.itemName, this.price, this.imagePath);
+  SearchItemModel(
+      this.itemId, this.itemName, this.price, this.imagePath, this.storeId);
+
+  int get getStoreId => this.storeId;
+
+  set setStoreId(int storeId) => this.storeId = storeId;
 
   int get getItemId => this.itemId;
 

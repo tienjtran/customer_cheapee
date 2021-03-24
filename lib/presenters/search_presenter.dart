@@ -53,6 +53,7 @@ class SearchPresenter implements ISearchPresenter {
           p.salePrice,
           // CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
           await FirebaseUtils.getDownloadUrls(p.imagePath),
+          unit.storeId,
           // 'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
         );
         productList.add(product);
@@ -102,6 +103,7 @@ class SearchPresenter implements ISearchPresenter {
           p.salePrice,
           // CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
           await FirebaseUtils.getDownloadUrls(p.imagePath),
+          unit.storeId,
           // 'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
         );
         productList.add(product);
