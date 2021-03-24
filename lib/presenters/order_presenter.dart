@@ -35,29 +35,31 @@ class OrderPresenter implements IOrderPresenter {
     // * Convert to SearchResultOutputModel
     List<OrderModel> model = [];
     for (var i = 0; i < result.length; i++) {
-      var orderModel = new OrderModel(
-        // * id
-        result[i].orderId.toString(),
-        // * name
-        (await _storeViewModel.getStore(result[i].storeId)).storeName,
-        result[i].total,
-        // * Image
-        await FirebaseUtils.getDownloadUrls(
-            (await _storeViewModel.getStore(result[i].storeId)).imagePath),
-        // * Product List
-        await getProductModelList(
-            await _orderViewModel.getListOrderDetail(result[i].orderId)),
-        // * quantity List
-        await getProductModelQuantityList(
-            await _orderViewModel.getListOrderDetail(result[i].orderId)),
-        // *
-        result[i].orderDate,
-        result[i].confirmedDate.isBefore(DateTime.utc(2, 1, 1, 0, 0, 0))
-            ? null
-            : result[i].confirmedDate,
-        result[i].process,
-      );
-      model.add(orderModel);
+      try {
+        var orderModel = new OrderModel(
+          // * id
+          result[i].orderId.toString(),
+          // * name
+          (await _storeViewModel.getStore(result[i].storeId)).storeName,
+          result[i].total,
+          // * Image
+          await FirebaseUtils.getDownloadUrls(
+              (await _storeViewModel.getStore(result[i].storeId)).imagePath),
+          // * Product List
+          await getProductModelList(
+              await _orderViewModel.getListOrderDetail(result[i].orderId)),
+          // * quantity List
+          await getProductModelQuantityList(
+              await _orderViewModel.getListOrderDetail(result[i].orderId)),
+          // *
+          result[i].orderDate,
+          result[i].confirmedDate.isBefore(DateTime.utc(2, 1, 1, 0, 0, 0))
+              ? null
+              : result[i].confirmedDate,
+          result[i].process,
+        );
+        model.add(orderModel);
+      } catch (e) {}
     }
     return model;
   }
