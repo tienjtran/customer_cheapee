@@ -1,6 +1,5 @@
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -59,13 +58,64 @@ class FirebaseUtils {
         .collection(FirebaseConstants.productField);
   }
 
+  static DocumentReference getDocCart() {
+    return FirebaseFirestore.instance
+        .collection(FirebaseConstants.cartCollectionId)
+        .doc(FirebaseAuth.instance.currentUser.uid);
+  }
+
   static Future<int> getStoreIdInCart() async {
     int storeId;
     await FirebaseFirestore.instance
         .collection(FirebaseConstants.cartCollectionId)
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
-        .then((value) => storeId = value.data()[FirebaseConstants.storeIdKey]);
+        .then((value) => storeId = value.data()[FirebaseConstants.storeIdKey])
+        .catchError((_) => storeId = Constants.noStore);
     return storeId;
+  }
+
+  static addToCart(int storeId, int productId, int quantity) {
+    var docCart = FirebaseUtils.getDocCart();
+    docCart.set({
+      FirebaseConstants.storeIdKey: storeId,
+    });
+    // var collectCarts = FirebaseFirestore.instance
+    //     .collection(FirebaseConstants.cartCollectionId);
+    // if (!(await docCart.get()).exists) {
+    var docProduct = docCart
+        .collection(FirebaseConstants.productField)
+        .doc(productId.toString());
+    int currentQua;
+    docProduct
+        .get()
+        .then((docSnap) => {
+              currentQua = docSnap.data()['quantity'],
+              docCart
+                  .collection(FirebaseConstants.productField)
+                  .doc(productId.toString())
+                  .update({
+                FirebaseConstants.quantity: quantity + currentQua,
+              })
+            })
+        .catchError(
+      (_) {
+        docProduct.set({
+          FirebaseConstants.quantity: quantity,
+        });
+      },
+    );
+  }
+
+  static Future deleteCartInFirestore() async {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    await getCartReference().get().then((querySnapshot) {
+      querySnapshot.docs.forEach((document) {
+        batch.delete(document.reference);
+      });
+      return batch.commit();
+    });
+    await getDocCart().delete();
   }
 }

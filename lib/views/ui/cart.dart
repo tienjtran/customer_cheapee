@@ -310,7 +310,6 @@ class _CartScreenState extends State<CartScreen> implements ICartView {
     String title;
     String content;
     Function eventOnpressed;
-    ;
     if (orderId == Constants.failedOrder) {
       title = 'Đặt hàng thất bại';
       content =
