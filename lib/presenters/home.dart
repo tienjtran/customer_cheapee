@@ -39,10 +39,14 @@ class HomePresenter implements IHomePresenter {
       List<SuggestedProductModel> productList = [];
       for (var j = 0; j < result[i].productList.length; j++) {
         var p = result[i].productList[j];
+        String image;
+        await FirebaseUtils.getDownloadUrls(p.imagePath)
+            .then((value) => image = value)
+            .catchError((_) => {});
         var product = new SuggestedProductModel(
             p.productInStoreId,
             p.name,
-            await FirebaseUtils.getDownloadUrls(p.imagePath),
+            image,
             CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
             'đ ' + p.salePrice.toStringAsFixed(0),
             'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
