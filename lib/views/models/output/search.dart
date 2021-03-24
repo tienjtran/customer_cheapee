@@ -6,6 +6,7 @@ class SearchResultOutputModel {
 }
 
 class SearchStore {
+  int storeId;
   String storeName;
   int openingTime;
   int closingTime;
@@ -13,8 +14,12 @@ class SearchStore {
   double stars;
   String imagePath;
 
-  SearchStore(this.storeName, this.openingTime, this.closingTime, this.distance,
-      this.stars, this.imagePath);
+  SearchStore(this.storeId, this.storeName, this.openingTime, this.closingTime,
+      this.distance, this.stars, this.imagePath);
+
+  int get getStoreId => this.storeId;
+
+  set setStoreId(int storeId) => this.storeId = storeId;
 
   String get getStoreName => this.storeName;
 
@@ -38,11 +43,16 @@ class SearchStore {
 }
 
 class SearchItemModel {
+  int itemId;
   String itemName;
   double price;
   String imagePath;
 
-  SearchItemModel(this.itemName, this.price, this.imagePath);
+  SearchItemModel(this.itemId, this.itemName, this.price, this.imagePath);
+
+  int get getItemId => this.itemId;
+
+  set setItemId(int itemName) => this.itemId = itemId;
 
   String get getItemName => this.itemName;
 

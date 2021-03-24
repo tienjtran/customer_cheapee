@@ -34,6 +34,7 @@ class SearchPresenter implements ISearchPresenter {
       var unit = result[i];
       var model = new SearchResultOutputModel(
           new SearchStore(
+            unit.storeId,
             unit.storeName,
             unit.openTime,
             unit.closeTime,
@@ -47,6 +48,7 @@ class SearchPresenter implements ISearchPresenter {
       for (var j = 0; j < result[i].productList.length; j++) {
         var p = result[i].productList[j];
         var product = new SearchItemModel(
+          p.productInStoreId,
           p.name,
           p.salePrice,
           // CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
@@ -81,6 +83,7 @@ class SearchPresenter implements ISearchPresenter {
       var unit = result[i];
       var model = new SearchResultOutputModel(
           new SearchStore(
+            unit.storeId,
             unit.storeName,
             unit.openTime,
             unit.closeTime,
@@ -94,6 +97,7 @@ class SearchPresenter implements ISearchPresenter {
       for (var j = 0; j < result[i].productList.length; j++) {
         var p = result[i].productList[j];
         var product = new SearchItemModel(
+          p.productInStoreId,
           p.name,
           p.salePrice,
           // CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
