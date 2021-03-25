@@ -37,7 +37,12 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundColor: AppColors.strongGreen,
+                  backgroundImage:
+                      Image.network(FirebaseAuth.instance.currentUser.photoURL)
+                          .image,
+                  onBackgroundImageError: (exception, stackTrace) {
+                    print(exception);
+                  },
                   radius: 40,
                 ),
                 Container(
