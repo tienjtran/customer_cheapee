@@ -11,18 +11,24 @@ import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:customer_cheapee/presenters/home.dart';
 
 class HomeScreen extends StatefulWidget {
+  final int initIndex;
+  HomeScreen({this.initIndex = 0});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
   Position _currentPosition;
   static String _currentAddress = '';
   Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
@@ -30,10 +36,55 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initIndex;
+    setUpCloudMessaging();
     if (FirebaseAuth.instance.currentUser != null) {
       _getCurrentLocation();
       loadingShoppingCart();
     }
+  }
+
+  Future setUpCloudMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    messaging.onTokenRefresh.listen((token) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        print('Trigger token');
+        FirebaseUtils.updateRegistrationToken(token)
+            .catchError((e) => print(e));
+      }
+    });
+
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      var data = initialMessage.data;
+      int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+      int orderId = int.parse(data[MessagingConstants.orderId]);
+      if (processValue != null && orderId != null) {
+        Navigator.pushNamed(context, NamedRoutes.orderRoute,
+            arguments: processValue);
+        Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+            arguments: orderId.toString());
+      }
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) {
+        var data = message.data;
+        int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+        int orderId = int.parse(data[MessagingConstants.orderId]);
+        if (processValue != null && orderId != null) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, NamedRoutes.homeRoute, (route) => false);
+          Navigator.pushNamed(context, NamedRoutes.orderRoute,
+              arguments: processValue);
+          Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+              arguments: orderId.toString());
+        }
+      },
+    );
   }
 
   _getCurrentLocation() {
@@ -72,8 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
     NotificationFragment(),
     ProfileScreen(),
   ];
-
-  int _selectedIndex = 0;
 
   void _onItemTapped(int i) {
     setState(() {
