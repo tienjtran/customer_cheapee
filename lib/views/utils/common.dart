@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:customer_cheapee/inputs/sign_up_input.dart';
+import 'package:flutter_config/flutter_config.dart';
+import 'package:http/http.dart' as http;
 
 class CommonWidgetUtils {
   static TextStyle getCommonTextStyle(
@@ -117,5 +122,39 @@ class FirebaseUtils {
       return batch.commit();
     });
     await getDocCart().delete();
+  }
+
+  static Future<bool> updateRegistrationToken(String token) async {
+    var url = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) +
+        APIUrls.updateRegistrationToken;
+    var response = await http
+        .post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            HttpHeaders.authorizationHeader:
+                APIConstansts.bearerAuthorization.replaceFirst(
+              APIConstansts.tokenParam,
+              await FirebaseAuth.instance.currentUser.getIdToken(),
+            ),
+          },
+          body: jsonEncode(<String, dynamic>{
+            'emailAddress': FirebaseAuth.instance.currentUser.email,
+            'registrationToken': token,
+          }),
+        )
+        .catchError(
+          (e) => {
+            print(e),
+          },
+        );
+
+    if (response.statusCode == StatusCodes.notFound) {
+      return false;
+    } else if (response.statusCode == StatusCodes.ok) {
+      return true;
+    } else {
+      throw new Exception();
+    }
   }
 }

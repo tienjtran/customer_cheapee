@@ -1,7 +1,9 @@
 import 'package:customer_cheapee/inputs/sign_up_input.dart';
 import 'package:customer_cheapee/presenters/sign_up_presenter.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -143,6 +145,11 @@ class _State extends State<SignupScreen> implements ISignUpView {
                         ],
                       ),
                     );
+                    await FirebaseMessaging.instance
+                        .getToken()
+                        .then((value) =>
+                            FirebaseUtils.updateRegistrationToken(value))
+                        .catchError((e) => print(e));
                     Navigator.pushNamedAndRemoveUntil(
                         context, NamedRoutes.homeRoute, (route) => false);
                   } else {

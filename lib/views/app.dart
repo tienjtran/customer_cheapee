@@ -8,8 +8,10 @@ import 'package:customer_cheapee/views/ui/storeDetail.dart';
 import 'package:customer_cheapee/views/ui/viewOrder.dart';
 import 'package:customer_cheapee/views/ui/viewprofile.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 
 import 'ui/home.dart';
 import 'utils/constants.dart';
@@ -69,13 +71,23 @@ class CustomerCheapee extends StatelessWidget {
 
   void setUpCloudMessaging() async {
     messaging = FirebaseMessaging.instance;
-    String mess = await messaging.getToken();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+    messaging.onTokenRefresh.listen((token) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        print('Trigger token');
+        FirebaseUtils.updateRegistrationToken(token)
+            .catchError((e) => print(e));
       }
     });
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) async {
+        print('Got a message whilst in the foreground!');
+        print('Message data: ${message.data}');
+        if (message.notification != null) {
+          print(
+              'Message also contained a notification: ${message.notification}');
+        }
+      },
+    );
   }
 }

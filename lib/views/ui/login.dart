@@ -1,4 +1,6 @@
 import 'package:customer_cheapee/presenters/signin_presenter.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -102,6 +104,10 @@ class LoginScreen extends StatelessWidget implements ILoginScreen {
     if (credential != null) {
       await presenter.checkExists();
       if (_isValidUser) {
+        await FirebaseMessaging.instance
+            .getToken()
+            .then((value) => FirebaseUtils.updateRegistrationToken(value))
+            .catchError((e) => print(e));
         Navigator.of(context).pushNamedAndRemoveUntil(
             NamedRoutes.homeRoute, (Route<dynamic> route) => false);
       } else {

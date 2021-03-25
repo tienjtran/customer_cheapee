@@ -101,6 +101,9 @@ class ConfigKeyConstants {
 }
 
 class APIUrls {
+  static const String updateRegistrationToken =
+      'api/cheapee/consumer/registration-token';
+
   static const String placeOrder = 'api/cart/place-an-order';
 
   static const String homeScreenCustomer =
