@@ -105,7 +105,8 @@ class LoginScreen extends StatelessWidget implements ILoginScreen {
         Navigator.of(context).pushNamedAndRemoveUntil(
             NamedRoutes.homeRoute, (Route<dynamic> route) => false);
       } else {
-        Navigator.of(context).pushNamed(NamedRoutes.signUp);
+        Navigator.of(context).pushNamed(NamedRoutes.signUp,
+            arguments: FirebaseAuth.instance.currentUser.displayName);
       }
     }
   }
