@@ -1,6 +1,7 @@
 import 'package:customer_cheapee/presenters/consumer_presenter.dart';
 import 'package:customer_cheapee/views/models/output/consumer.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ViewProfileScreen extends StatefulWidget {
@@ -36,7 +37,12 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CircleAvatar(
-                        backgroundColor: AppColors.strongGreen,
+                        backgroundImage: Image.network(
+                                FirebaseAuth.instance.currentUser.photoURL)
+                            .image,
+                        onBackgroundImageError: (exception, stackTrace) {
+                          print(exception);
+                        },
                         radius: 40,
                       ),
                       Container(
