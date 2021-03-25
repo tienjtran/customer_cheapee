@@ -15,17 +15,31 @@ import 'package:customer_cheapee/views/utils/common.dart';
 
 import 'ui/home.dart';
 import 'utils/constants.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class CustomerCheapee extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  FirebaseMessaging messaging;
+class CustomerCheapee extends StatefulWidget {
+  CustomerCheapee({Key key}) : super(key: key);
+
+  @override
+  _CustomerCheapeeState createState() => _CustomerCheapeeState();
+}
+
+class _CustomerCheapeeState extends State<CustomerCheapee> {
+  Future _initialize() async {
+    await Firebase.initializeApp();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       // Initialize FlutterFire:
-      future: _initialization,
+      future: _initialize(),
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
@@ -34,8 +48,6 @@ class CustomerCheapee extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          setUpCloudMessaging();
-
           return MaterialApp(
             title: Constants.appTitle,
             theme: ThemeData(
@@ -43,10 +55,13 @@ class CustomerCheapee extends StatelessWidget {
               accentColor: AppColors.strongGreen,
               cursorColor: AppColors.strongGreen,
             ),
-            initialRoute: NamedRoutes.loginRoute,
+            initialRoute: (FirebaseAuth.instance.currentUser != null)
+                ? NamedRoutes.homeRoute
+                : NamedRoutes.loginRoute,
             routes: {
               NamedRoutes.loginRoute: (context) => LoginScreen(),
-              NamedRoutes.homeRoute: (context) => HomeScreen(),
+              NamedRoutes.homeRoute: (context) => HomeScreen(
+                  initIndex: ModalRoute.of(context).settings.arguments ?? 0),
               NamedRoutes.cartRoute: (context) => CartScreen(),
               NamedRoutes.orderRoute: (context) => OrderScreen(),
               NamedRoutes.viewProfileRoute: (context) => ViewProfileScreen(),
@@ -65,28 +80,6 @@ class CustomerCheapee extends StatelessWidget {
 
         // Otherwise, show something whilst waiting for initialization to complete
         return Container();
-      },
-    );
-  }
-
-  void setUpCloudMessaging() async {
-    messaging = FirebaseMessaging.instance;
-    messaging.onTokenRefresh.listen((token) {
-      if (FirebaseAuth.instance.currentUser != null) {
-        print('Trigger token');
-        FirebaseUtils.updateRegistrationToken(token)
-            .catchError((e) => print(e));
-      }
-    });
-
-    FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) async {
-        print('Got a message whilst in the foreground!');
-        print('Message data: ${message.data}');
-        if (message.notification != null) {
-          print(
-              'Message also contained a notification: ${message.notification}');
-        }
       },
     );
   }
