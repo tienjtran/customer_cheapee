@@ -164,6 +164,8 @@ class APIUrls {
 
   static const String getAllCategory = 'api/cheapee/categories';
 
+  static const String signUpConsumer = 'api/cheapee/consumer/sign-up';
+
   // * Cancel Order
   static const String cancelOrder = 'api/cheapee/orders';
 
