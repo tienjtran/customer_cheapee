@@ -156,7 +156,18 @@ class StoreDetailScreen extends StatelessWidget {
     return Scaffold(
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 55.0),
-          child: HomeScreenState.getCartWidget(context),
+          child: FloatingActionButton(
+            onPressed: () => HomeScreenState.navigateToCartScreen(context),
+            backgroundColor: AppColors.white,
+            child: CartIconWidget(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  5,
+                ),
+              ),
+            ),
+          ),
         ),
         body: FutureBuilder(
             future: Future.wait(

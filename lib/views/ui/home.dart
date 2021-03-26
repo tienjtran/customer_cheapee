@@ -141,19 +141,15 @@ class HomeScreenState extends State<HomeScreen> {
       appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
-      floatingActionButton: getCartWidget(context),
-    );
-  }
-
-  static Widget getCartWidget(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => navigateToCartScreen(context),
-      backgroundColor: AppColors.white,
-      child: CartIconWidget(),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(
-            5,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => navigateToCartScreen(context),
+        backgroundColor: AppColors.white,
+        child: CartIconWidget(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              5,
+            ),
           ),
         ),
       ),
