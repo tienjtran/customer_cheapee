@@ -157,6 +157,7 @@ class StoreDetailScreen extends StatelessWidget {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 55.0),
           child: FloatingActionButton(
+            heroTag: 'btn2',
             onPressed: () => HomeScreenState.navigateToCartScreen(context),
             backgroundColor: AppColors.white,
             child: CartIconWidget(),
@@ -204,6 +205,7 @@ class StoreDetailScreen extends StatelessWidget {
                     // * Back button
                     floatingActionButton: Container(
                       child: FloatingActionButton(
+                        heroTag: 'btn1',
                         onPressed: _close,
                         backgroundColor: AppColors.white,
                         shape: DiamondBorder(),
