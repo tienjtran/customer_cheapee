@@ -150,6 +150,7 @@ class _State extends State<SignupScreen> implements ISignUpView {
                         .then((value) =>
                             FirebaseUtils.updateRegistrationToken(value))
                         .catchError((e) => print(e));
+                    await FirebaseUtils.getSearchQueryRef();
                     Navigator.pushNamedAndRemoveUntil(
                         context, NamedRoutes.homeRoute, (route) => false);
                   } else {

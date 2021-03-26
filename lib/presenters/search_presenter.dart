@@ -2,6 +2,7 @@ import 'package:customer_cheapee/datasets/search_dataset.dart';
 import 'package:customer_cheapee/inputs/search_input.dart';
 import 'package:customer_cheapee/viewmodels/search_model.dart';
 import 'package:customer_cheapee/views/models/output/search.dart';
+import 'package:customer_cheapee/views/ui/search.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 
 abstract class ISearchPresenter {
@@ -62,6 +63,8 @@ class SearchPresenter implements ISearchPresenter {
       listModel.add(model);
     }
     listModel.sort((a, b) => a.store.distance.compareTo(b.store.distance));
+    // save result in history for next time serach
+    FirebaseUtils.saveQuery(name).catchError((e) => {print(e)});
     return listModel;
   }
 
@@ -113,5 +116,20 @@ class SearchPresenter implements ISearchPresenter {
     }
     listModel.sort((a, b) => a.store.distance.compareTo(b.store.distance));
     return listModel;
+  }
+
+  Future<List<String>> loadSearhSuggestionOrHistory(String query) async {
+    List<String> result;
+    if (query.isEmpty) {
+      await FirebaseUtils.getSearchHistory()
+          .then((value) => result = value)
+          .catchError((e) => print(e));
+    } else {
+      await _viewModel
+          .getListSearch(query)
+          .then((value) => result = value.take(10).toList())
+          .catchError((e) => print(e));
+    }
+    return result;
   }
 }

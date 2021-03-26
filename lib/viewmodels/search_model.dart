@@ -63,4 +63,26 @@ class SearchViewModel {
         .toList();
     return result;
   }
+
+  Future<List<String>> getListSearch(String query) async {
+    String url = APIUrls.productNames;
+    url = url
+        .replaceFirst(APIUrls.query, query)
+        .replaceFirst(APIUrls.number, 10.toString());
+    String mainUrl = FlutterConfig.get(ConfigKeyConstants.cheapeeApi) + url;
+    final response = await http.get(
+      mainUrl,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            APIConstansts.bearerAuthorization.replaceFirst(
+          APIConstansts.tokenParam,
+          await FirebaseAuth.instance.currentUser.getIdToken(),
+        ),
+      },
+    );
+
+    List<String> result =
+        (jsonDecode(response.body) as List<dynamic>).cast<String>();
+    return result;
+  }
 }
