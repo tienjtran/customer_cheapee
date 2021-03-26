@@ -103,18 +103,23 @@ class WaitToCollect extends StatelessWidget {
               ),
             );
           } else {
+            int elIndex = 0;
             // * OrderList Builder
             return Container(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  for (var o in snapshot.data)
-                    if (o.process == Process.waitToCollect)
-                      InkWell(
-                        child: _orderBuilder(o),
-                        onTap: () => _navigateToViewOrder(o),
-                      ),
-                ],
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  while (elIndex < snapshot.data.length) {
+                    var order = snapshot.data[elIndex++];
+                    if (order.process == Process.waitToCollect) {
+                      return InkWell(
+                        child: _orderBuilder(order),
+                        onTap: () => _navigateToViewOrder(order),
+                      );
+                    }
+                  }
+                  return null;
+                },
               ),
             );
           }
