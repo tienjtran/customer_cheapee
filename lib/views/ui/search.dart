@@ -1,20 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:customer_cheapee/presenters/search_presenter.dart';
 import 'package:customer_cheapee/views/models/output/search.dart';
+import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/search.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class SearchScreenDelegate extends SearchDelegate {
-  SearchPresenter _searchPresenter = new SearchPresenter();
+abstract class ISearchScreen {
+  void assignFutureInit(Future future);
+}
+
+class SearchScreenDelegate extends SearchDelegate implements ISearchScreen {
+  SearchPresenter _searchPresenter;
   String strResult;
-  List<String> resultList = [];
-  List<String> recenteList = ['Bò', 'gà'];
-  List<String> suggestionList = [
-    'Milk tea',
-    'Milk trà đá',
-    'Milk sâm bố bàu tử'
-  ];
+  Future resultFuture;
+
+  SearchScreenDelegate() {
+    _searchPresenter = new SearchPresenter();
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -144,23 +148,76 @@ class SearchScreenDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    query.isEmpty ? resultList = recenteList : resultList = suggestionList;
-    return ListView.builder(
-      itemCount: resultList.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(query.isEmpty ? Icons.schedule : null),
-          title: Text(
-            resultList[index],
-          ),
-          onTap: () {
-            strResult = resultList[index];
-            query = strResult;
-            showResults(context);
-          },
-        );
+    return FutureBuilder<List<String>>(
+      future: _searchPresenter.loadSearhSuggestionOrHistory(query),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                SizedBox(
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    color: AppColors.red,
+                    size: 60,
+                  ),
+                  width: 60,
+                  height: 60,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text('Rất tiếc đã có lỗi xảy ra.'),
+                )
+              ],
+            ),
+          );
+        } else if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Icon(query.isEmpty ? Icons.schedule : null),
+                title: Text(
+                  snapshot.data[index],
+                ),
+                onTap: () {
+                  strResult = snapshot.data[index];
+                  query = strResult;
+                  showResults(context);
+                },
+              );
+            },
+          );
+        } else {
+          return Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                ),
+                SizedBox(
+                  child: CircularProgressIndicator(),
+                  width: 60,
+                  height: 60,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text('Đang tìm kiếm...'),
+                )
+              ],
+            ),
+          );
+        }
       },
     );
+  }
+
+  @override
+  void assignFutureInit(Future future) {
+    resultFuture = future;
   }
 }
 

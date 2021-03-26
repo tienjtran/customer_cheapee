@@ -157,4 +157,38 @@ class FirebaseUtils {
       throw new Exception();
     }
   }
+
+  static Future<DocumentReference> getSearchQueryRef() async {
+    var docRef = FirebaseFirestore.instance
+        .collection(FirebaseConstants.searchHistory)
+        .doc(FirebaseAuth.instance.currentUser.uid);
+    await docRef.get().then(
+          (ref) => {
+            if (!ref.exists)
+              {
+                docRef.set(
+                  {
+                    FirebaseConstants.query: <String>[],
+                  },
+                ),
+              }
+          },
+        );
+    return docRef;
+  }
+
+  static Future<List<String>> getSearchHistory() async {
+    var refDoc = (await getSearchQueryRef());
+    var map = (await refDoc.get()).data();
+    var data = map[FirebaseConstants.query] as List<dynamic>;
+    List<String> result = data.cast<String>();
+    return result;
+  }
+
+  static Future<void> saveQuery(String query) async {
+    var refDoc = (await getSearchQueryRef());
+    var currentList = await getSearchHistory();
+    currentList.insert(0, query);
+    refDoc.update({FirebaseConstants.query: currentList});
+  }
 }

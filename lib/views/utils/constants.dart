@@ -178,6 +178,13 @@ class APIUrls {
   static const String consumerInfo = 'api/cheapee/consumer/$emailAddress';
 
   static const String emailAddress = '{emailAddress}';
+
+  static const String query = '{query}';
+
+  static const String number = '{number}';
+
+  static const String productNames =
+      'api/cheapee/products/product-names?query=${query}&number=${number}';
 }
 
 class APIConstansts {
@@ -194,6 +201,10 @@ class FirebaseConstants {
   static const String storeIdKey = 'store_id';
 
   static const String quantity = 'quantity';
+
+  static const String searchHistory = 'search_history';
+
+  static const String query = 'query';
 }
 
 class Process {

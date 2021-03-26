@@ -108,6 +108,7 @@ class LoginScreen extends StatelessWidget implements ILoginScreen {
             .getToken()
             .then((value) => FirebaseUtils.updateRegistrationToken(value))
             .catchError((e) => print(e));
+        await FirebaseUtils.getSearchQueryRef();
         Navigator.of(context).pushNamedAndRemoveUntil(
             NamedRoutes.homeRoute, (Route<dynamic> route) => false);
       } else {
