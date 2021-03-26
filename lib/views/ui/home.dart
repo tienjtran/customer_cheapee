@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:customer_cheapee/presenters/home.dart';
 import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/notification.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
@@ -14,9 +16,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:customer_cheapee/presenters/home.dart';
 
 class HomeScreen extends StatefulWidget {
   final int initIndex;
@@ -661,9 +661,9 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
             default:
               if (listIndex.isOdd) {
                 return Divider(
-                  indent: _contextHeight * 0.031,
-                  endIndent: _contextWidth * 0.031,
-                  thickness: 2,
+                  // indent: _contextHeight * 0.031,
+                  // endIndent: _contextWidth * 0.031,
+                  thickness: 8,
                 );
               }
               return buildNearStoreItem(realIndex, context);
