@@ -214,12 +214,4 @@ class MessagingConstants {
   static const String keyProcessValue = 'processKey';
 
   static const String orderId = 'orderId';
-
-  static const int waitToCollect = 0;
-
-  static const int waitForPayment = 1;
-
-  static const int orderHistory = 2;
-
-  static const int canceled = 3;
 }
