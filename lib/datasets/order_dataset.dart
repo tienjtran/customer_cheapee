@@ -33,6 +33,7 @@ class OrderDataset {
     var map = new Map();
     map["orderId"] = orderId;
     map["orderDate"] = orderDate.toIso8601String();
+    map['confirmedDate'] = orderDate.toIso8601String();
     map["total"] = total;
     map["emailAddress"] = emailAddress;
     map["storeId"] = storeId;

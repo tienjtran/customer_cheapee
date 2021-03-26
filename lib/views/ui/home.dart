@@ -7,10 +7,8 @@ import 'package:customer_cheapee/views/ui/search.dart';
 import 'package:customer_cheapee/views/utils/category.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
-import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
-import 'package:customer_cheapee/views/utils/waitToCollect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
         content = 'đã thanh toán thành công, xin cảm ơn!';
         break;
       case Process.canceled:
-        content = 'đã bị hủy xin quý khách thông cảm';
+        content = 'Đơn hàng đã bị hủy, xin cảm ơn';
         break;
       default:
         content = '';
