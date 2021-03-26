@@ -10,6 +10,7 @@ import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:customer_cheapee/views/utils/home.dart';
 import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
+import 'package:customer_cheapee/views/utils/waitToCollect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,6 +33,28 @@ class HomeScreenState extends State<HomeScreen> {
   Position _currentPosition;
   static String _currentAddress = '';
   Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  String getTextNoti(int proccessValue) {
+    var content = '';
+    switch (proccessValue) {
+      case Process.waitToCollect:
+        content = 'đã được xác nhận xin vui lòng chờ nhân viên lấy hàng!';
+        break;
+      case Process.waitForPayment:
+        content =
+            'đã lấy hàng xong mời bạn đến cửa hàng thanh toán và nhận hàng!';
+        break;
+      case Process.orderHistory:
+        content = 'đã thanh toán thành công, xin cảm ơn!';
+        break;
+      case Process.canceled:
+        content = 'đã bị hủy xin quý khách thông cảm';
+        break;
+      default:
+        content = '';
+    }
+    return content;
+  }
 
   @override
   void initState() {
@@ -69,6 +92,79 @@ class HomeScreenState extends State<HomeScreen> {
             arguments: orderId.toString());
       }
     }
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      var data = message.data;
+      int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+      int orderId = int.parse(data[MessagingConstants.orderId]);
+      if (processValue != null && orderId != null) {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Column(
+              children: [
+                Text('Thông báo'),
+                Icon(
+                  Icons.check_circle_outline,
+                  color: AppColors.strongGreen,
+                  size: 20,
+                )
+              ],
+            ),
+            content: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                ),
+                children: [
+                  TextSpan(text: 'Đơn hàng '),
+                  TextSpan(
+                    text: '#$orderId ',
+                    style: TextStyle(
+                      color: AppColors.strongGreen,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  TextSpan(
+                    text: getTextNoti(processValue),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              OutlineButton(
+                child: new Text("Ok"),
+                borderSide: BorderSide(
+                  color: AppColors.strongGrey,
+                ),
+                textColor: AppColors.strongGrey,
+                color: AppColors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              OutlineButton(
+                child: new Text("Xem chi tiết đơn hàng"),
+                borderSide: BorderSide(
+                  color: AppColors.strongGrey,
+                ),
+                textColor: AppColors.strongGrey,
+                color: AppColors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                    context,
+                    NamedRoutes.viewOrderRoute,
+                    arguments: orderId.toString(),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    });
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) {
