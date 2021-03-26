@@ -47,13 +47,19 @@ class StoreDetailPresenter implements IStoreDetailPresenter {
             unit.closeTime, []);
         for (var j = 0; j < unit.productList.length; j++) {
           var p = unit.productList[j];
+
+          var differenceDate = p.expireDate.difference(DateTime.now()).inDays;
+          if (differenceDate <= 0) {
+            continue;
+          }
+
           var product = new SuggestedProductModel(
               p.productInStoreId,
               p.name,
               await FirebaseUtils.getDownloadUrls(p.imagePath),
               CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
               'đ ' + p.salePrice.toStringAsFixed(0),
-              'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
+              'HSD còn ${differenceDate.toString()} ngày',
               p.categoryId,
               true);
           productList.add(product);

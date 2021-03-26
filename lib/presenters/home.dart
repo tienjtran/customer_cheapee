@@ -5,7 +5,6 @@ import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/ui/home.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
-import 'package:customer_cheapee/views/utils/common.dart';
 
 abstract class IHomePresenter {
   void loadHomeScreen(double longitude, double latitude, double distance);
@@ -43,13 +42,20 @@ class HomePresenter implements IHomePresenter {
         await FirebaseUtils.getDownloadUrls(p.imagePath)
             .then((value) => image = value)
             .catchError((_) => {});
+        DateTime now = new DateTime.now();
+
+        int differenceDate = p.expireDate.difference(now).inDays;
+
+        if (differenceDate <= 0) {
+          continue;
+        }
         var product = new SuggestedProductModel(
             p.productInStoreId,
             p.name,
             image,
             CommonUtils.decreaseHundredPercent(p.oldPrice, p.salePrice),
             'đ ' + p.salePrice.toStringAsFixed(0),
-            'HSD còn ${p.expireDate.difference(p.manufactureDate).inDays.toString()} ngày',
+            'HSD còn ${differenceDate.toString()} ngày',
             1,
             true);
         productList.add(product);

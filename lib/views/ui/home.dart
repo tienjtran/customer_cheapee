@@ -15,7 +15,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:customer_cheapee/presenters/home.dart';
 
@@ -265,9 +265,9 @@ class HomeFragment extends StatefulWidget {
 class _HomeFragmentState extends State<HomeFragment> implements HomeView {
   HomePresenter _homePresenter = HomePresenter();
   List<String> promotionImagePath = [
-    'https://vuakhuyenmai.vn/wp-content/uploads/2021/01/vinmart-khuyen-mai-50off-5-1-2021.jpg',
-    'https://www.bigc.vn/files/banners/2020/november/december/si-u-sale-1212-cover-blog-big-c.png',
-    'https://cdn.tgdd.vn/Files/2020/05/19/1256620/tung-bung-khai-truong-sieu-thi-bach-hoa-xanh-online-tai-buon-ma-thuot-mua-hang-giam-gia-len-den-50-202005251049459813.png',
+    'assets/images/slider1.png',
+    'assets/images/slider2.png',
+    'assets/images/slider3.png',
   ];
   String _result;
   double _contextHeight;
@@ -721,26 +721,35 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
   }
 
   Widget buildPromotioncarousel(BuildContext context) {
-    return SizedBox(
-      height: 200.0,
-      child: Container(
-        margin: EdgeInsets.only(
-          top: 15,
-          bottom: 15,
-        ),
-        child: ListView.builder(
+    return CarouselSlider(
+        options: CarouselOptions(
+          height: 200,
+          viewportFraction: 0.9,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 1000),
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            if (index < promotionImagePath.length) {
-              return HomePromotionWidget(
-                imagePath: promotionImagePath[index],
-              );
-            }
-            return null;
-          },
         ),
-      ),
-    );
+        items: promotionImagePath.map((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(color: AppColors.white),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    i,
+                  ),
+                ),
+              );
+            },
+          );
+        }).toList());
   }
 }
 
