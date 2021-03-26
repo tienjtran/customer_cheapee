@@ -63,6 +63,7 @@ class HomePresenter implements IHomePresenter {
       model.productList = productList;
       listModel.add(model);
     }
+    listModel.sort((a, b) => a.distance.compareTo(b.distance));
     view.initHomeScreen(listModel);
   }
 }
