@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:customer_cheapee/views/ui/home.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductDetailPresenter _productDetailPresenter =
@@ -430,94 +431,100 @@ class ProductDetailScreen extends StatelessWidget {
               );
             } else {
               return Scaffold(
+                  floatingActionButton: Padding(
+                    padding: const EdgeInsets.only(bottom: 55.0),
+                    child: HomeScreenState.getCartWidget(context),
+                  ),
                   body: Stack(children: <Widget>[
-                Container(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          children: <Widget>[
-                            Image.network(
-                              snapshot.data.imagePath,
-                              width: contextWidth,
-                              height: contextHeight * 0.3,
-                              fit: BoxFit.fill,
-                              alignment: Alignment.center,
+                    Container(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView(
+                              children: <Widget>[
+                                Image.network(
+                                  snapshot.data.imagePath,
+                                  width: contextWidth,
+                                  height: contextHeight * 0.3,
+                                  fit: BoxFit.fill,
+                                  alignment: Alignment.center,
+                                ),
+                                // * Product info
+                                _productInfo(snapshot.data),
+                                Divider(
+                                  color: AppColors.lightGrey,
+                                  thickness: 1.0,
+                                  indent: contextWidth * 0.031,
+                                  endIndent: contextWidth * 0.031,
+                                ),
+                                // * Product Suggestion
+                                // productSuggestion,
+                                //--------------------------------------------------------------------------
+                              ],
                             ),
-                            // * Product info
-                            _productInfo(snapshot.data),
-                            Divider(
-                              color: AppColors.lightGrey,
-                              thickness: 1.0,
-                              indent: contextWidth * 0.031,
-                              endIndent: contextWidth * 0.031,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(),
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox.expand(
+                                    child: ElevatedButton(
+                                        child: Text(
+                                          Constants.addToCart,
+                                          style: TextStyle(
+                                              fontSize: AppFontSizes.largeSize),
+                                        ),
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty
+                                              .resolveWith<Color>(
+                                            (Set<MaterialState> states) {
+                                              if (states.contains(
+                                                  MaterialState.pressed))
+                                                return Theme.of(context)
+                                                    .accentColor
+                                                    .withOpacity(0.5);
+                                              else if (states.contains(
+                                                  MaterialState.disabled))
+                                                return AppColors.lightGrey;
+                                              return Theme.of(context)
+                                                  .accentColor;
+                                            },
+                                          ),
+                                        ),
+                                        onPressed:
+                                            snapshot.data.getRemainingDays < 0
+                                                ? null
+                                                : () => displayBottomSheet(
+                                                    context,
+                                                    snapshot.data.quantity,
+                                                    snapshot.data.storeId,
+                                                    snapshot.data
+                                                        .productInStoreId)),
+                                  ),
+                                ),
+                              ],
                             ),
-                            // * Product Suggestion
-                            // productSuggestion,
-                            //--------------------------------------------------------------------------
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(),
-                        height: 50,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox.expand(
-                                child: ElevatedButton(
-                                    child: Text(
-                                      Constants.addToCart,
-                                      style: TextStyle(
-                                          fontSize: AppFontSizes.largeSize),
-                                    ),
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Theme.of(context)
-                                                .accentColor
-                                                .withOpacity(0.5);
-                                          else if (states
-                                              .contains(MaterialState.disabled))
-                                            return AppColors.lightGrey;
-                                          return Theme.of(context).accentColor;
-                                        },
-                                      ),
-                                    ),
-                                    onPressed: snapshot.data.getRemainingDays <
-                                            0
-                                        ? null
-                                        : () => displayBottomSheet(
-                                            context,
-                                            snapshot.data.quantity,
-                                            snapshot.data.storeId,
-                                            snapshot.data.productInStoreId)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: AppBar(
-                    leading: IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      onPressed: _onPressGoBack,
-                      color: AppColors.white,
                     ),
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                  ),
-                ),
-              ]));
+                    Positioned(
+                      top: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: AppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back_ios),
+                          onPressed: _onPressGoBack,
+                          color: AppColors.white,
+                        ),
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                    ),
+                  ]));
             }
           } else if (snapshot.hasError) {
             return Center(

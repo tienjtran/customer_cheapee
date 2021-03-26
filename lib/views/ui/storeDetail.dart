@@ -1,6 +1,5 @@
 import 'package:customer_cheapee/presenters/storeDetail_presenter.dart';
 import 'package:customer_cheapee/views/models/output/category.dart';
-import 'package:customer_cheapee/views/models/output/home.dart';
 import 'package:customer_cheapee/views/models/output/productDetailModel.dart';
 import 'package:customer_cheapee/views/models/output/store.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
@@ -9,6 +8,7 @@ import 'package:customer_cheapee/views/utils/diamongShape.dart';
 import 'package:customer_cheapee/views/utils/suggestedProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:customer_cheapee/views/ui/home.dart';
 
 class StoreDetailScreen extends StatelessWidget {
   StoreDetailPresenter _storeDetailPresenter = StoreDetailPresenter();
@@ -154,6 +154,10 @@ class StoreDetailScreen extends StatelessWidget {
     }
 
     return Scaffold(
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 55.0),
+          child: HomeScreenState.getCartWidget(context),
+        ),
         body: FutureBuilder(
             future: Future.wait(
                 [asyncMethod(_storeId), loadListCategoryOnScreen()]),

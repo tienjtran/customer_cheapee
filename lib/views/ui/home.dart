@@ -24,10 +24,10 @@ class HomeScreen extends StatefulWidget {
   HomeScreen({this.initIndex = 0});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   Position _currentPosition;
   static String _currentAddress = '';
@@ -141,26 +141,26 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
-      floatingActionButton: _selectedIndex == 0
-          ? ((productCartRef == null || shoppingCartQuantity == 0)
-              ? null
-              : FloatingActionButton(
-                  onPressed: _navigateToCartScreen,
-                  backgroundColor: AppColors.white,
-                  child: CartIconWidget(shoppingCartQuantity),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        5,
-                      ),
-                    ),
-                  ),
-                ))
-          : null,
+      floatingActionButton: getCartWidget(context),
     );
   }
 
-  void _navigateToCartScreen() {
+  static Widget getCartWidget(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () => navigateToCartScreen(context),
+      backgroundColor: AppColors.white,
+      child: CartIconWidget(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static void navigateToCartScreen(BuildContext context) {
     Navigator.pushNamed(context, NamedRoutes.cartRoute);
   }
 
@@ -749,10 +749,6 @@ class _HomeFragmentState extends State<HomeFragment> implements HomeView {
 }
 
 class CartIconWidget extends StatelessWidget {
-  CartIconWidget(this.quantity);
-
-  int quantity;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -779,13 +775,30 @@ class CartIconWidget extends StatelessWidget {
                 ),
                 color: AppColors.lightGreen,
               ),
-              child: Text(
-                quantity.toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontSize: AppFontSizes.smallSize,
-                ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseUtils.getCartReference().snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text(
+                      '0',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontSize: AppFontSizes.smallSize,
+                      ),
+                    );
+                  }
+
+                  return Text(
+                    snapshot.data.docs.length.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: AppFontSizes.smallSize,
+                    ),
+                  );
+                },
               ),
             ),
           ],
