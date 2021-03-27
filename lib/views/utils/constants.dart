@@ -5,6 +5,8 @@ class AppColors {
 
   static const Color lightGreen = Color(0xffc8e6c9);
 
+  static final Color lightBlue = Color(0xff40BFFF);
+
   static const Color strongGrey = Color(0xff616161);
 
   static const Color lightGrey = Color(0xffE9ECF1);
@@ -178,6 +180,8 @@ class APIUrls {
   static const String consumerInfo = 'api/cheapee/consumer/$emailAddress';
 
   static const String emailAddress = '{emailAddress}';
+
+  static const String upDateProfile = 'api/cheapee/consumer';
 }
 
 class APIConstansts {

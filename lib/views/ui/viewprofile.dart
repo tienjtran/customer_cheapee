@@ -1,4 +1,6 @@
+import 'package:customer_cheapee/inputs/profile.dart';
 import 'package:customer_cheapee/presenters/consumer_presenter.dart';
+import 'package:customer_cheapee/presenters/updateProfile_presenter.dart';
 import 'package:customer_cheapee/views/models/output/consumer.dart';
 import 'package:customer_cheapee/views/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,11 +11,32 @@ class ViewProfileScreen extends StatefulWidget {
   _ViewProfileScreenState createState() => _ViewProfileScreenState();
 }
 
-class _ViewProfileScreenState extends State<ViewProfileScreen> {
-  ConsumerPresenter _consumerPresenter = new ConsumerPresenter();
+abstract class IUpdateView {
+  void update(bool value);
+}
+
+class _ViewProfileScreenState extends State<ViewProfileScreen>
+    implements IUpdateView {
+  TextEditingController nameController;
+  TextEditingController emailController;
+  TextEditingController phoneNumberController;
+  TextEditingController addressController;
+  bool upDateValue;
+  UpdateProfilePresenter presenter;
+  ConsumerPresenter _consumerPresenter;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    presenter = new UpdateProfilePresenter(this);
+    _consumerPresenter = new ConsumerPresenter();
     String email = ModalRoute.of(context).settings.arguments;
     return Scaffold(body: buildBody(context, email));
   }
@@ -29,6 +52,12 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
         builder: (BuildContext context,
             AsyncSnapshot<ConsumerOutputModel> snapshot) {
           if (snapshot.hasData) {
+            nameController = TextEditingController(text: snapshot.data.name);
+            emailController = TextEditingController(text: snapshot.data.email);
+            phoneNumberController =
+                TextEditingController(text: snapshot.data.phone);
+            addressController =
+                TextEditingController(text: snapshot.data.address);
             return Container(
               padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
               child: Column(
@@ -58,122 +87,191 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 50),
-                    child: Column(
-                      children: [
-                        Row(
-                          // * Name
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                initialValue: snapshot.data.name,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: AppColors.lightGrey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide: BorderSide(
-                                        color: AppColors.strongGreen),
-                                  ),
-                                  prefix: Container(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text('Họ Tên     '),
-                                  ),
+                    child: Column(children: [
+                      Row(
+                        // * Name
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              enabled: false,
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.lightGrey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.strongGreen),
+                                ),
+                                prefix: Container(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text('Họ Tên     '),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          // * BirthDate
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                initialValue: snapshot.data.phone,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: AppColors.lightGrey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide: BorderSide(
-                                        color: AppColors.strongGreen),
-                                  ),
-                                  prefix: Container(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text('Điện thoại'),
-                                  ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        // * BirthDate
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: phoneNumberController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.lightGrey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.strongGreen),
+                                ),
+                                prefix: Container(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text('Điện thoại'),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          // * Address
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                initialValue: snapshot.data.address,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: AppColors.lightGrey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide: BorderSide(
-                                        color: AppColors.strongGreen),
-                                  ),
-                                  prefix: Container(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text('Địa chỉ     '),
-                                  ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        // * Address
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: addressController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.lightGrey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.strongGreen),
+                                ),
+                                prefix: Container(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text('Địa chỉ     '),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          // * Email
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                initialValue: snapshot.data.email,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: AppColors.lightGrey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide: BorderSide(
-                                        color: AppColors.strongGreen),
-                                  ),
-                                  prefix: Container(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text('Email       '),
-                                  ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        // * Email
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              enabled: false,
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.lightGrey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  borderSide:
+                                      BorderSide(color: AppColors.strongGreen),
+                                ),
+                                prefix: Container(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text('Email       '),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: (MediaQuery.of(context).size.width - 40),
+                            child: ElevatedButton(
+                              child: Text(
+                                'Update',
+                                style: TextStyle(
+                                    fontSize: AppFontSizes.largeSize,
+                                    color: AppColors.white),
+                              ),
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          AppColors.red)),
+                              onPressed: () async {
+                                try {
+                                  await presenter.updateProfile(
+                                    new ProfileUpdate(
+                                      emailAddress: snapshot.data.getEmail,
+                                      address: addressController.text,
+                                      phoneNumber: phoneNumberController.text,
+                                    ),
+                                  );
+
+                                  if (upDateValue) {
+                                    showDialog(
+                                      context: context,
+                                      child: AlertDialog(
+                                        title: Text('Thông báo'),
+                                        content:
+                                            Text('Bạn đã cập nhật thành công'),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text('Ok'),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      child: AlertDialog(
+                                        title: Text('Error'),
+                                        content: Text(
+                                            'Có lỗi xảy ra với hệ thống :('),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      ),
+                                    ).then(
+                                      (_) => Navigator.of(context).popUntil(
+                                        ModalRoute.withName(
+                                            NamedRoutes.homeRoute),
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
                   ),
                 ],
               ),
@@ -182,5 +280,10 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
             return Container();
           }
         });
+  }
+
+  @override
+  void update(bool result) {
+    upDateValue = result;
   }
 }
