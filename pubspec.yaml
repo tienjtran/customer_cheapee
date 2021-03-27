@@ -24,10 +24,49 @@ dependencies:
   flutter:
     sdk: flutter
 
+  intl: ^0.16.1
+
+  flutter_icons: ^1.1.0
+
+  flutter_signin_button: ^1.1.0
+
+  provider: ^4.3.3
+  
+  google_sign_in: "^4.5.1"
+
+  firebase_core: "^0.7.0"
+
+  firebase_auth: "^0.20.1"
+
+  firebase_storage: "^7.0.0"
+
+  cloud_firestore: "^0.16.0+1"
+  
+  geolocator: ^5.3.1
+
+  http: ^0.12.2
+
+  flutter_config: ^1.0.8
+
+  permission_handler: ^5.0.1+1
+
+  test: ^1.15.7
+
+  font_awesome_flutter: ^8.12.0
+
+  firebase_messaging: "^8.0.0-dev.15"
+
+  flutter_local_notifications: ^4.0.1+2
+
+  carousel_slider: ^3.0.0
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  flutter_money_formatter:
+    git:
+      url: git://github.com/anisalibegic/flutter_money_formatter.git
 
 dev_dependencies:
   flutter_test:

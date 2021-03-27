@@ -1,56 +1,257 @@
-import 'package:customer_cheapee/models/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:customer_cheapee/views/models/output/home.dart';
+import 'package:customer_cheapee/views/models/output/notification.dart';
+import 'package:customer_cheapee/views/models/output/store.dart';
+import 'package:customer_cheapee/views/ui/profile.dart';
+import 'package:customer_cheapee/views/ui/search.dart';
+import 'package:customer_cheapee/views/utils/category.dart';
 import 'package:customer_cheapee/views/utils/common.dart';
+import 'package:customer_cheapee/views/utils/constants.dart';
+import 'package:customer_cheapee/views/utils/notification.dart';
 import 'package:customer_cheapee/views/utils/store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_cheapee/views/utils/constants.dart';
-import 'package:customer_cheapee/views/utils/category.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:customer_cheapee/presenters/home.dart';
 
 class HomeScreen extends StatefulWidget {
+  final int initIndex;
+  HomeScreen({this.initIndex = 0});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  static const List<Widget> _fragmentOptions = <Widget>[
-    HomeFragment(),
-    Text(
-      'Index 1: Notification',
-    ),
-    Text(
-      'Index 2: Account',
-    ),
-  ];
-
+class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  Position _currentPosition;
+  static String _currentAddress = '';
+  Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  String getTextNoti(int proccessValue) {
+    var content = '';
+    switch (proccessValue) {
+      case Process.waitToCollect:
+        content = 'đã được xác nhận xin vui lòng chờ nhân viên lấy hàng!';
+        break;
+      case Process.waitForPayment:
+        content =
+            'đã lấy hàng xong mời bạn đến cửa hàng thanh toán và nhận hàng!';
+        break;
+      case Process.orderHistory:
+        content = 'đã thanh toán thành công, xin cảm ơn!';
+        break;
+      case Process.canceled:
+        content = 'Đơn hàng đã bị hủy, xin cảm ơn';
+        break;
+      default:
+        content = '';
+    }
+    return content;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initIndex;
+    setUpCloudMessaging();
+    if (FirebaseAuth.instance.currentUser != null) {
+      _getCurrentLocation();
+      loadingShoppingCart();
+    }
+  }
+
+  Future setUpCloudMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    messaging.onTokenRefresh.listen((token) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        print('Trigger token');
+        FirebaseUtils.updateRegistrationToken(token)
+            .catchError((e) => print(e));
+      }
+    });
+
+    RemoteMessage initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      var data = initialMessage.data;
+      int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+      int orderId = int.parse(data[MessagingConstants.orderId]);
+      if (processValue != null && orderId != null) {
+        Navigator.pushNamed(context, NamedRoutes.orderRoute,
+            arguments: processValue);
+        Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+            arguments: orderId.toString());
+      }
+    }
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      var data = message.data;
+      int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+      int orderId = int.parse(data[MessagingConstants.orderId]);
+      if (processValue != null && orderId != null) {
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Column(
+              children: [
+                Text('Thông báo'),
+                Icon(
+                  Icons.check_circle_outline,
+                  color: AppColors.strongGreen,
+                  size: 20,
+                )
+              ],
+            ),
+            content: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  color: Colors.black,
+                  decoration: TextDecoration.none,
+                ),
+                children: [
+                  TextSpan(text: 'Đơn hàng '),
+                  TextSpan(
+                    text: '#$orderId ',
+                    style: TextStyle(
+                      color: AppColors.strongGreen,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  TextSpan(
+                    text: getTextNoti(processValue),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              OutlineButton(
+                child: new Text("Ok"),
+                borderSide: BorderSide(
+                  color: AppColors.strongGrey,
+                ),
+                textColor: AppColors.strongGrey,
+                color: AppColors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              OutlineButton(
+                child: new Text("Xem chi tiết đơn hàng"),
+                borderSide: BorderSide(
+                  color: AppColors.strongGrey,
+                ),
+                textColor: AppColors.strongGrey,
+                color: AppColors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                    context,
+                    NamedRoutes.viewOrderRoute,
+                    arguments: orderId.toString(),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) {
+        var data = message.data;
+        int processValue = int.parse(data[MessagingConstants.keyProcessValue]);
+        int orderId = int.parse(data[MessagingConstants.orderId]);
+        if (processValue != null && orderId != null) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, NamedRoutes.homeRoute, (route) => false);
+          Navigator.pushNamed(context, NamedRoutes.orderRoute,
+              arguments: processValue);
+          Navigator.pushNamed(context, NamedRoutes.viewOrderRoute,
+              arguments: orderId.toString());
+        }
+      },
+    );
+  }
+
+  _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      _currentPosition = position;
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  void loadingShoppingCart() {
+    productCartRef = FirebaseUtils.getCartReference();
+    productCartRef.get().then((value) => shoppingCartQuantity = value.size);
+  }
+
+  _getAddressFromLatLng() async {
+    List<Placemark> p = await geolocator.placemarkFromCoordinates(
+        _currentPosition.latitude, _currentPosition.longitude);
+    Placemark place = p[0];
+    setState(() {
+      _currentAddress =
+          "${place.subThoroughfare}, ${place.thoroughfare}, ${place.subAdministrativeArea}, ${place.administrativeArea}";
+    });
+  }
+
+  double contextHeight;
+  double contextWidth;
+  CollectionReference productCartRef = null;
+  int shoppingCartQuantity = 0;
+
+  List<Widget> fragmentOptions = <Widget>[
+    HomeFragment(),
+    NotificationFragment(),
+    ProfileScreen(),
+  ];
 
   void _onItemTapped(int i) {
     setState(() {
       this._selectedIndex = i;
+      productCartRef.get().then((value) => shoppingCartQuantity = value.size);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+    contextHeight = MediaQuery.of(context).size.height;
+    contextWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        toolbarHeight: contextHeight * 0.083,
-        leading: IconButton(
-          icon: Icon(
-            Icons.location_on,
-            color: Colors.black,
-          ),
-          iconSize: 30.0,
-        ),
-        title: Text('203 Đương Ngô Đình chiểu phường 7 quận 10'),
-      ),
-      body: _buildBody(),
+      appBar: buildAppBar(),
+      body: buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => navigateToCartScreen(context),
+        backgroundColor: AppColors.white,
+        child: CartIconWidget(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(
+              5,
+            ),
+          ),
+        ),
+      ),
     );
+  }
+
+  static void navigateToCartScreen(BuildContext context) {
+    Navigator.pushNamed(context, NamedRoutes.cartRoute);
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {
@@ -60,14 +261,15 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(
             Icons.home_outlined,
           ),
-          label: 'Trang chủ',
+          label: HomeScreenConstant.homeLabel,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications_outlined),
-          label: 'Thông báo',
+          label: HomeScreenConstant.noticationLabel,
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), label: 'Tài khoản'),
+            icon: Icon(Icons.person_outline),
+            label: HomeScreenConstant.accountLabel),
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Theme.of(context).accentColor,
@@ -75,62 +277,409 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildBody() {
-    return _fragmentOptions.elementAt(this._selectedIndex);
+  Widget buildBody() {
+    return fragmentOptions.elementAt(this._selectedIndex);
+  }
+
+  Widget buildAppBar() {
+    if (_selectedIndex == 0) {
+      return AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.location_on_outlined,
+            color: AppColors.black,
+          ),
+          iconSize: 20,
+        ),
+        title: Text(
+          _currentAddress,
+          style: TextStyle(fontSize: AppFontSizes.largeSize),
+        ),
+        elevation: 0,
+      );
+    } else if (_selectedIndex == 1) {
+      return AppBar(
+        title: Text('Thông báo'),
+      );
+    } else {
+      return null;
+    }
   }
 }
 
-class HomeFragment extends StatefulWidget {
-  const HomeFragment({Key key}) : super(key: key);
+class NotificationFragment extends StatelessWidget {
+  NotificationFragment({Key key}) : super(key: key);
 
+  List<NotificationItemOutputModel> modelList = List<
+          NotificationItemOutputModel>.generate(
+      10,
+      (index) => new NotificationItemOutputModel(
+          'Đơn hàng đã hoàn tất',
+          'Đơn hàng tại bách hóa xanh Le văn việt đã hoàn tất cảm ơn các bạn đã chọn Cheapê cho hôm nay',
+          '10 phút trước'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          if (index.isOdd) {
+            return Divider(
+              thickness: 1,
+              indent: 50,
+              endIndent: 50,
+            );
+          }
+          int position = index ~/ 2;
+
+          if (position >= modelList.length) {
+            return null;
+          }
+
+          return NotificationItemWidget(
+            model: modelList[position],
+          );
+        },
+      ),
+    );
+  }
+}
+
+abstract class HomeView {
+  void initHomeScreen(List<NearStoreOutputModel> model);
+}
+
+class HomeFragment extends StatefulWidget {
+  HomeFragment({Key key}) : super(key: key);
   @override
   _HomeFragmentState createState() => _HomeFragmentState();
 }
 
-class _HomeFragmentState extends State<HomeFragment> {
+class _HomeFragmentState extends State<HomeFragment> implements HomeView {
+  HomePresenter _homePresenter = HomePresenter();
+  List<String> promotionImagePath = [
+    'assets/images/slider1.png',
+    'assets/images/slider2.png',
+    'assets/images/slider3.png',
+  ];
+  String _result;
+  double _contextHeight;
+  double _contextWidth;
+
+  List<SuggestedItemModel> suggestingItemList = [
+    new SuggestedItemModel(
+      imagePath: 'assets/images/vegetables.png',
+      text: 'Rau củ',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/drinks.png',
+      text: 'Giải khát',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/meats.png',
+      text: 'Tươi sống',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/canned.png',
+      text: 'Đồ hộp',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/snack.png',
+      text: 'Bánh kẹo',
+    ),
+    new SuggestedItemModel(
+      imagePath: 'assets/images/fruits.png',
+      text: 'Trái cây',
+    ),
+  ];
+
+  List<NearStoreOutputModel> storeList = [
+    // NearStoreOutputModel(
+    //   'Bách hóa xanh Bình Hưng Hòa',
+    //   'https://magiamgia247.vn/wp-content/uploads/2019/09/m%C3%A3-gi%E1%BA%A3m-gi%C3%A1-b%C3%A1ch-h%C3%B3a-xanh-1-1280x720.jpg',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   'Vinmart Man Thiện',
+    //   'https://isaac.vn/wp-content/uploads/2020/03/vinmart.01.jpg',
+    //   2.1,
+    //   390,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng Pepsi',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/88121/bhx/24-lon-nuoc-ngot-pepsi-cola-330ml-201908201632500342.jpg',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Nước Dasani 350ml',
+    //       'https://cdn.tgdd.vn/Products/Images/2563/76400/bhx/nuoc-tinh-khiet-dasani-350ml-202002222041008058.jpg',
+    //       70,
+    //       'đ 10.000',
+    //       'HSD còn 4 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng Pepsi không calo',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/227314/bhx/thung-24-lon-nuoc-ngot-pepsi-khong-calo-330ml-202008212036368424.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng Mirinda 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/79142/bhx/thung-12-chai-nuoc-ngot-mirinda-vi-cam-15-lit-202003101727490978.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   'Circle K Man Thiện',
+    //   'https://i1.wp.com/discountsandsavings.ca/wp-content/uploads/2020/08/Screenshot_20200805-205026_Chrome.jpg?resize=800%2C341&ssl=1',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       true,
+    //     ),
+    //   ],
+    // ),
+    // NearStoreOutputModel(
+    //   '7 Eleven FPT',
+    //   'https://searchlogovector.com/wp-content/uploads/2018/05/7-eleven-logo-vector.png',
+    //   2.1,
+    //   360,
+    //   1200,
+    //   [
+    //     SuggestedProductModel(
+    //       'Thùng mì hảo hảo',
+    //       'https://vn-test-11.slatic.net/p/644d7ea90c85e4d2bee22275a4f26536.jpg_720x720q80.jpg_.webp',
+    //       50,
+    //       'đ 200.000',
+    //       'HSD còn 2 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì omachi',
+    //       'https://meta.vn/Data/image/2020/03/30/thung-30-goi-mi-omachi-xot-bo-ham-80gr-goi-sl.jpg',
+    //       70,
+    //       'đ 100.000',
+    //       'HSD còn 4 tháng',
+    //       4,
+    //       false,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng mì 3 miền',
+    //       'https://cdn.tgdd.vn/Products/Images/2565/80211/bhx/thung-30-goi-mi-3-mien-tom-chua-cay-65g-201912091512061369.jpg',
+    //       80,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       4,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng milo',
+    //       'https://salt.tikicdn.com/cache/w1200/ts/product/d7/c8/f5/ec08dff519ca1b1c2f742ea837376ff1.jpg',
+    //       70,
+    //       'đ 180.000',
+    //       'HSD còn 84 ngày',
+    //       3,
+    //       true,
+    //     ),
+    //     SuggestedProductModel(
+    //       'Thùng 7upa 12 chai 1.5 lít',
+    //       'https://cdn.tgdd.vn/Products/Images/2443/86662/bhx/thung-12-chai-nuoc-ngot-7-up-vi-chanh-15-lit-202003101722023678.jpg',
+    //       20,
+    //       'đ 180.000',
+    //       'HSD còn 3 tháng',
+    //       3,
+    //       false,
+    //     ),
+    //   ],
+    // ),
+  ];
+
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, i) {
-        switch (i) {
-          case 0:
-            return SearchWidget();
-          case 1:
-            return SuggestedCategoryWidget();
-          case 2:
-            return _buildNearStoreText();
-          default:
-            return _buildNearStoreItem(i, context);
-        }
-      },
-    );
-  }
-
-  Widget _buildNearStoreItem(int i, BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
-
-    if (i.isOdd)
-      return Divider(
-        indent: contextWidth * 0.031,
-        endIndent: contextWidth * 0.031,
-        thickness: 4.0,
-      );
-    else {
-      return NearStoreWidget(
-        store: Store(
-          name: 'Bách hóa xanh',
-          imagePath:
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyplPYVdltP8_FRwPc-_pSNypWo2Tynz7c1w&usqp=CAU',
-          openTime: 450,
-          closeTime: 1320,
-          distance: 2.1,
-        ),
-      );
+  void initState() {
+    super.initState();
+    _homePresenter.view = this;
+    if (FirebaseAuth.instance.currentUser != null) {
+      asyncMethod();
     }
   }
 
-  Widget _buildNearStoreText() {
+  void asyncMethod() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    _homePresenter.loadHomeScreen(position.latitude, position.longitude, 5);
+  }
+
+  @override
+  void initHomeScreen(List<NearStoreOutputModel> model) {
+    setState(() {
+      this.storeList = model;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _contextHeight = MediaQuery.of(context).size.height;
+    _contextWidth = MediaQuery.of(context).size.width;
+    return Container(
+      color: AppColors.white,
+      child: ListView.builder(
+        itemBuilder: (context, i) {
+          int listIndex = i - 4;
+          int realIndex = listIndex ~/ 2;
+          if (realIndex > (storeList.length - 1)) {
+            return null;
+          }
+
+          switch (i) {
+            case 0:
+              return buildSearchWidget(context);
+            case 1:
+              return buildPromotioncarousel(context);
+            case 2:
+              return buildSuggestedWidget(context);
+            case 3:
+              return buildNearStoreText(context);
+            default:
+              if (listIndex.isOdd) {
+                return Divider(
+                  indent: _contextHeight * 0.031,
+                  endIndent: _contextWidth * 0.031,
+                  thickness: 2,
+                );
+              }
+              return buildNearStoreItem(realIndex, context);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildNearStoreItem(int i, BuildContext context) {
+    return NearStoreWidget(
+      storeList[i],
+    );
+  }
+
+  Widget buildNearStoreText(context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -138,8 +687,10 @@ class _HomeFragmentState extends State<HomeFragment> {
           Row(
             children: <Widget>[
               Text(
-                "Cửa hàng gần tôi",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                HomeScreenConstant.nearStoreText,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppFontSizes.largeSize),
               ),
               SizedBox(
                 width: 15.0,
@@ -151,7 +702,7 @@ class _HomeFragmentState extends State<HomeFragment> {
             ],
           ),
           Divider(
-            color: AppColors.greyECECEC,
+            color: AppColors.lightGrey,
             thickness: 3.0,
             endIndent: 200,
           ),
@@ -159,61 +710,69 @@ class _HomeFragmentState extends State<HomeFragment> {
       ),
     );
   }
-}
 
-class SearchWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+  Widget buildSearchWidget(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(contextWidth * 0.042, contextHeight * 0.031,
-          contextWidth * 0.042, contextHeight * 0.031),
+      padding: EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            child: Container(
-              color: AppColors.greyF0F0F0,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 23.3,
-                    color: Colors.black,
-                  ),
+            child: GestureDetector(
+              child: Container(
+                height: 35.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  color: AppColors.lightGrey,
                 ),
-                style: TextStyle(fontSize: 18.0),
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Icon(
+                      Icons.search,
+                      size: 30.0,
+                      color: AppColors.strongGrey,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      HomeScreenConstant.searchEmptySentence,
+                      style: TextStyle(
+                        fontSize: AppFontSizes.mediumSize,
+                        color: AppColors.strongGrey,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              onTap: () async {
+                await showSearch(
+                  context: context,
+                  delegate: SearchScreenDelegate(),
+                ).then((value) => setState(() {
+                      _result = value;
+                    }));
+              },
             ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Colors.black,
-            ),
-            iconSize: contextWidth * 0.1,
-          )
         ],
       ),
     );
   }
-}
 
-class SuggestedCategoryWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    double contextHeight = MediaQuery.of(context).size.height;
-    double contextWidth = MediaQuery.of(context).size.width;
+  Widget buildSuggestedWidget(BuildContext context) {
     return Container(
-        color: AppColors.green2BAE68,
+        color: AppColors.strongGreen,
         child: Center(
           child: Container(
               height: 210,
-              width: contextWidth,
+              width: _contextWidth,
               margin: EdgeInsets.fromLTRB(16, 14, 16, 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
@@ -226,16 +785,13 @@ class SuggestedCategoryWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[0],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[1],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[2],
                       ),
                     ],
                   ),
@@ -243,21 +799,110 @@ class SuggestedCategoryWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[3],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[4],
                       ),
                       NamingCategoryWidget(
-                        imagePath: 'assets/images/coca.jpg',
-                        text: Text('Nước ngọt'),
+                        outputModel: suggestingItemList[5],
                       ),
                     ],
                   ),
                 ],
               )),
         ));
+  }
+
+  Widget buildPromotioncarousel(BuildContext context) {
+    return CarouselSlider(
+        options: CarouselOptions(
+          height: 200,
+          viewportFraction: 0.9,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 1000),
+          scrollDirection: Axis.horizontal,
+        ),
+        items: promotionImagePath.map((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                decoration: BoxDecoration(color: AppColors.white),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    i,
+                  ),
+                ),
+              );
+            },
+          );
+        }).toList());
+  }
+}
+
+class CartIconWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        child: Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              child: Icon(
+                FlutterIcons.bag_sli,
+                size: 35,
+                color: AppColors.strongGrey,
+              ),
+              margin: EdgeInsets.all(
+                5,
+              ),
+            ),
+            Container(
+              width: 15,
+              height: 15,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(2),
+                ),
+                color: AppColors.lightGreen,
+              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseUtils.getCartReference().snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text(
+                      '0',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontSize: AppFontSizes.smallSize,
+                      ),
+                    );
+                  }
+
+                  return Text(
+                    snapshot.data.docs.length.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: AppFontSizes.smallSize,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
